@@ -1,0 +1,19 @@
+package ea.core;
+
+
+/**
+ * Created by Kyrre on 22/2/2016.
+ */
+public class Individual {
+
+    final GenoType genotype;
+    Phenotype phenotype;
+
+    public Individual(GenoType genotype) {
+        this.genotype = genotype;
+    }
+
+    public void develop(Phenotype phenotype) {
+        this.phenotype = phenotype;
+    }
+}
