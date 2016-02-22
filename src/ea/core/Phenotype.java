@@ -13,4 +13,8 @@ public abstract class Phenotype {
     }
     protected abstract int fitness();
     protected abstract void develop(GenoType genoType);
+
+    public int getFitness() {
+        return fitness;
+    }
 }

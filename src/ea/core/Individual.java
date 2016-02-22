@@ -16,4 +16,8 @@ public class Individual {
     public void develop(Phenotype phenotype) {
         this.phenotype = phenotype;
     }
+
+    public double getFitness() {
+        return phenotype.getFitness();
+    }
 }
