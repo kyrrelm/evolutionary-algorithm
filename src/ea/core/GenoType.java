@@ -8,18 +8,21 @@ import java.util.Random;
  */
 public class GenoType {
 
-    //TODO: not thread safe?
-    private static Random rnd = new Random();
+    private Random rnd;
 
     private int length;
     private BitSet genome;
 
     public GenoType(int length) {
         this.length = length;
+        rnd = new Random();
         genome = new BitSet(length);
         for (int i = 0; i < length; i++){
             genome.set(i, rnd.nextBoolean());
         }
+    }
+    private GenoType(BitSet genome){
+        this.genome = genome;
     }
 
     public BitSet getGenome() {
@@ -27,9 +30,24 @@ public class GenoType {
     }
 
     public GenoType crossover(GenoType mate){
-        BitSet tmp = genome.get(0, length/2);
-        BitSet tmp2 = mate.genome.get(length/2, length);
-        tmp.or(tmp2);
-        return null;
+        BitSet partOne = (BitSet) genome.clone();
+        if (rnd.nextFloat()<Simulator.CROSSOVER_RATE){
+            int crossoverPoint = rnd.nextInt(length-1)+1;
+            partOne.clear(0, crossoverPoint);
+            BitSet partTwo = (BitSet) mate.genome.clone();
+            partTwo.clear(crossoverPoint, length);
+            partOne.or(partTwo);
+        }
+        mutate(partOne);
+        return new GenoType(partOne);
+    }
+
+    //TODO: implement both types?
+    private void mutate(BitSet partOne) {
+        for (int i = 0; i < partOne.length(); i++) {
+            if (rnd.nextFloat()<Simulator.PER_COMPONENT_MUTATION_RATE){
+                partOne.flip(i);
+            }
+        }
     }
 }

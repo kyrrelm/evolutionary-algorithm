@@ -13,6 +13,9 @@ public class Simulator {
     private static ArrayList<Individual> childPopulation;
     private static ArrayList<Individual> adultPopulation;
     public static final int POPULATION_SIZE = 10;
+    public static final float CROSSOVER_RATE = 0.5f;
+    public static final float PER_COMPONENT_MUTATION_RATE = 0.01f;
+
 
     public static void init(){
         childPopulation = new ArrayList<Individual>();
@@ -37,7 +40,7 @@ public class Simulator {
             totalFitness += i.getFitness();
         }
 
-        for (int i = 0; i < POPULATION_SIZE; i++) {
+        for (int i = 0; i < POPULATION_SIZE/2; i++) {
             Individual firstPick = spinWheel(totalFitness);
             Individual secondPick = null;
             boolean duplicate = true;
@@ -52,7 +55,7 @@ public class Simulator {
     }
 
     private static void mate(Individual firstPick, Individual secondPick) {
-        firstPick.genotype.crossover(secondPick.genotype);
+        childPopulation.add(new Individual(firstPick.genotype.crossover(secondPick.genotype)));
     }
 
     private static Individual spinWheel(int totalFitness){
