@@ -12,7 +12,7 @@ public class GenoType {
     private static Random rnd = new Random();
 
     private int length;
-    BitSet genome;
+    private BitSet genome;
 
     public GenoType(int length) {
         this.length = length;
@@ -24,5 +24,12 @@ public class GenoType {
 
     public BitSet getGenome() {
         return genome;
+    }
+
+    public GenoType crossover(GenoType mate){
+        BitSet tmp = genome.get(0, length/2);
+        BitSet tmp2 = mate.genome.get(length/2, length);
+        tmp.or(tmp2);
+        return null;
     }
 }

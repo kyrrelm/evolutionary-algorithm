@@ -38,10 +38,21 @@ public class Simulator {
         }
 
         for (int i = 0; i < POPULATION_SIZE; i++) {
-            
+            Individual firstPick = spinWheel(totalFitness);
+            Individual secondPick = null;
+            boolean duplicate = true;
+            while (duplicate){
+                secondPick = spinWheel(totalFitness);
+                duplicate = secondPick == firstPick;
+            }
+            mate(firstPick, secondPick);
         }
 
 
+    }
+
+    private static void mate(Individual firstPick, Individual secondPick) {
+        firstPick.genotype.crossover(secondPick.genotype);
     }
 
     private static Individual spinWheel(int totalFitness){
@@ -59,6 +70,8 @@ public class Simulator {
     private static void adultSelection() {
         //Full generational replacement
         adultPopulation = childPopulation;
+
+        childPopulation = new ArrayList<>();
     }
 
     private static void develop() {

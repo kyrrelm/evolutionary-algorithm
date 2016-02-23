@@ -1,6 +1,7 @@
 package sample;
 
 import ea.core.GenoType;
+import ea.core.Individual;
 import ea.core.Simulator;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
