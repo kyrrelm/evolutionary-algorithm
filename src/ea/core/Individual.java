@@ -20,4 +20,12 @@ public class Individual {
     public double getFitness() {
         return phenotype.getFitness();
     }
+
+    /**
+     * Must be called after develop
+     * @return
+     */
+    public boolean isFit(){
+        return phenotype.getFitness() >= phenotype.fitnessGoal;
+    }
 }

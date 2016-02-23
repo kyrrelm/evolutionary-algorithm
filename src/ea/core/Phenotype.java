@@ -6,8 +6,10 @@ package ea.core;
 public abstract class Phenotype {
 
     private int fitness = -1;
+    final int fitnessGoal;
 
-    public Phenotype(GenoType genoType) {
+    protected Phenotype(GenoType genoType, int fitnessGoal) {
+        this.fitnessGoal = fitnessGoal;
         develop(genoType);
         fitness = fitness();
     }

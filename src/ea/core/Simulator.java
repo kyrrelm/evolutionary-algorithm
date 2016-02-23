@@ -25,9 +25,15 @@ public class Simulator {
     }
 
     public static void run(){
-        develop();
-        adultSelection();
-        parentSelection();
+        while (true){
+            if (develop()){
+                break;
+            }
+            adultSelection();
+            parentSelection();
+        }
+        System.out.println("Done, make charts and shit");
+
     }
 
     private static void parentSelection() {
@@ -56,6 +62,10 @@ public class Simulator {
 
     private static void mate(Individual firstPick, Individual secondPick) {
         childPopulation.add(new Individual(firstPick.genotype.crossover(secondPick.genotype)));
+        if (childPopulation.size()<POPULATION_SIZE){
+            childPopulation.add(new Individual(secondPick.genotype.crossover(firstPick.genotype)));
+
+        }
     }
 
     private static Individual spinWheel(int totalFitness){
@@ -77,9 +87,18 @@ public class Simulator {
         childPopulation = new ArrayList<>();
     }
 
-    private static void develop() {
+    /**
+     *
+     * @return true if one of the developed child's meets fitness goal.
+     */
+    private static boolean develop() {
+        boolean goalReached = false;
         for (Individual i: childPopulation) {
             i.develop(new oneMaxPheno(i.genotype));
+            if (i.isFit()){
+                goalReached = true;
+            }
         }
+        return goalReached;
     }
 }

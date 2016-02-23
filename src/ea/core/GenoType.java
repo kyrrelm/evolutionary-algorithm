@@ -8,7 +8,7 @@ import java.util.Random;
  */
 public class GenoType {
 
-    private Random rnd;
+    private Random rnd = new Random();
 
     private int length;
     private BitSet genome;
@@ -23,6 +23,7 @@ public class GenoType {
     }
     private GenoType(BitSet genome){
         this.genome = genome;
+        this.length = genome.length();
     }
 
     public BitSet getGenome() {
@@ -31,6 +32,7 @@ public class GenoType {
 
     public GenoType crossover(GenoType mate){
         BitSet partOne = (BitSet) genome.clone();
+        rnd.nextFloat();
         if (rnd.nextFloat()<Simulator.CROSSOVER_RATE){
             int crossoverPoint = rnd.nextInt(length-1)+1;
             partOne.clear(0, crossoverPoint);
