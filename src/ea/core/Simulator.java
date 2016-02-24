@@ -55,6 +55,7 @@ public class Simulator {
         }
         childPopulation = new ArrayList<>();
         for (int i = 0; i < productionSize; i++) {
+            //childPopulation.add(new OneMaxPheno(new GenoType(40)));
             childPopulation.add(new OneMaxPheno(new GenoType(40)));
         }
     }
