@@ -8,11 +8,9 @@ public class Individual implements Comparable<Individual> {
 
     final GenoType genotype;
     Phenotype phenotype;
-    private double rouletteSpace;
 
     public Individual(GenoType genotype) {
         this.genotype = genotype;
-        this.rouletteSpace = -1;
     }
 
     public void develop(Phenotype phenotype) {
@@ -34,13 +32,5 @@ public class Individual implements Comparable<Individual> {
     @Override
     public int compareTo(Individual that) {
         return that.getFitness()-this.getFitness();
-    }
-
-    public double getRouletteSpace() {
-        return rouletteSpace;
-    }
-
-    public void setRouletteSpace(double rouletteSpace) {
-        this.rouletteSpace = rouletteSpace;
     }
 }

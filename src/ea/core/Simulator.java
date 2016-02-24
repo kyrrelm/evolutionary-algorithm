@@ -1,11 +1,11 @@
 package ea.core;
 
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import ea.oneMax.oneMaxPheno;
 
 import java.util.*;
 
 import static ea.core.Simulator.AdultSelection.*;
+import static ea.core.Simulator.ParentSelection.*;
 
 /**
  * Created by Kyrre on 22/2/2016.
@@ -23,12 +23,23 @@ public class Simulator {
     public static float perComponentMutationRate = 0.01f;
     public static float elitism = 0.1f;
     public static AdultSelection adultSelection = OVER_PRODUCED_GENERATIONAL_MIXING;
+    public static ParentSelection parentSelection = FITNESS_PROPORTIONAL;
+
+    public static double RANK_MAX = 1.5;
+    public static double RANK_MIN = 2-RANK_MAX;
 
    enum  AdultSelection {
        FULL_GENERATIONAL_REPLACEMENT,
        OVER_PRODUCTION,
        GENERATIONAL_MIXING,
        OVER_PRODUCED_GENERATIONAL_MIXING;
+    }
+
+    enum ParentSelection {
+        FITNESS_PROPORTIONAL,
+        SIGMA,
+        RANK;
+
     }
 
 
@@ -65,19 +76,40 @@ public class Simulator {
         for (Individual i: adultPopulation) {
             totalFitness += i.getFitness();
         }
-        double averageFitness = (double) totalFitness/adultPopulation.size();
-        double standardSum = 0;
-        for (Individual i: adultPopulation) {
-            standardSum+=Math.pow((i.getFitness()-averageFitness),2);
+        //Sigma------------------------
+        double averageFitness = -1;
+        double standardDeviation = -1;
+        if (parentSelection == SIGMA){
+            averageFitness = (double) totalFitness/adultPopulation.size();
+            double standardSum = 0;
+            for (Individual i: adultPopulation) {
+                standardSum+=Math.pow((i.getFitness()-averageFitness),2);
+            }
+            standardDeviation = Math.sqrt(standardSum/adultPopulation.size());
         }
-        double standardDeviation = Math.sqrt(standardSum/adultPopulation.size());
+
+
+        //Rank---------------------
+        ArrayList<RankWrapper> rankList = new ArrayList<>();
+        double rankTotal = 0;
+        if (parentSelection == RANK){
+            Collections.sort(adultPopulation);
+            int rank = adultPopulation.size();
+            for (Individual i: adultPopulation) {
+                double expVal = RANK_MIN+(RANK_MAX-RANK_MIN*((rank-1)/adultPopulation.size()));
+                rankTotal += expVal;
+                rankList.add(new RankWrapper(expVal, i));
+                rank--;
+            }
+        }
+
 
         for (int i = 0; i < productionSize /2; i++) {
-            Individual firstPick = spinWheel(totalFitness, averageFitness, standardDeviation);
+            Individual firstPick = spinWheel(totalFitness, averageFitness, standardDeviation, rankList, rankTotal);
             Individual secondPick = null;
             boolean duplicate = true;
             while (duplicate){
-                secondPick = spinWheel(totalFitness, averageFitness, standardDeviation);
+                secondPick = spinWheel(totalFitness, averageFitness, standardDeviation, rankList, rankTotal);
                 duplicate = secondPick == firstPick;
             }
             mate(firstPick, secondPick);
@@ -86,10 +118,13 @@ public class Simulator {
 
     }
 
-    private static Individual spinWheel(int totalFitness, double averageFitness, double standardDeviation) {
-        //return fitnessProportionate(totalFitness);
-        //return sigma(averageFitness,standardDeviation);
-        return rank(totalFitness);
+    private static Individual spinWheel(int totalFitness, double averageFitness, double standardDeviation, ArrayList<RankWrapper> rankList, double rankTotal) {
+        switch (parentSelection){
+            case FITNESS_PROPORTIONAL: return fitnessProportionate(totalFitness);
+            case SIGMA: return sigma(averageFitness,standardDeviation);
+            case RANK: return rank(rankList, rankTotal);
+        }
+        return null;
     }
 
     private static Individual sigma(double averageFitness, double standardDeviation){
@@ -116,21 +151,19 @@ public class Simulator {
         return null;
     }
 
-    static double RANK_MAX = 1.5;
-    static double RANK_MIN = 2-RANK_MAX;
-
-    private static Individual rank(int totalFitness){
-        Collections.sort(adultPopulation);
-        int rank = adultPopulation.size();
-        //ArrayList<RankWrapper> scaled =
-        for (Individual i: adultPopulation) {
-            double expVal = RANK_MIN+(RANK_MAX-RANK_MIN*((rank-1)/adultPopulation.size()));
-            rank--;
+    private static Individual rank(ArrayList<RankWrapper> rankList, double rankTotal){
+        double partialSum = 0;
+        double rand = new Random().nextDouble()*rankTotal;
+        for (RankWrapper r: rankList) {
+            partialSum += r.expVal;
+            if (partialSum > rand){
+                return r.individual;
+            }
         }
         return null;
     }
 
-    private class RankWrapper{
+    private static class RankWrapper{
         private final double expVal;
         private final Individual individual;
 
