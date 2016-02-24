@@ -19,7 +19,8 @@ public class Simulator {
     public static int productionSize = populationSize;
     public static float crossoverRate = 0.2f;
     public static float perComponentMutationRate = 0.01f;
-    public static AdultSelection adultSelection = OVER_PRODUCTION;
+    public static float elitism = 0.1f;
+    public static AdultSelection adultSelection = GENERATIONAL_MIXING;
 
    enum  AdultSelection {
         FULL_GENERATIONAL_REPLACEMENT,
@@ -102,13 +103,17 @@ public class Simulator {
                 adultPopulation = childPopulation;
                 break;
             }
+            case GENERATIONAL_MIXING:{
+                if (adultPopulation != null){
+                    Collections.sort(adultPopulation);
+                    childPopulation.addAll(adultPopulation.subList(0, (int) (populationSize*elitism)));
+                }
+            }
             case OVER_PRODUCTION:{
                 Collections.sort(childPopulation);
                 adultPopulation = childPopulation.subList(0, populationSize);
                 break;
             }
-            case GENERATIONAL_MIXING:
-                break;
         }
         childPopulation = new ArrayList<>();
     }
