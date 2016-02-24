@@ -22,11 +22,16 @@ public class Simulator {
     //0.01 Best for OneMax: 0.001f
     public static float perComponentMutationRate = 0.001f;
     public static float elitism = 0.1f;
-    public static AdultSelection adultSelection = OVER_PRODUCTION;
-    public static ParentSelection parentSelection = RANK;
+    public static AdultSelection adultSelection = FULL_GENERATIONAL_REPLACEMENT;
+    public static ParentSelection parentSelection = SIGMA;
 
+    //RANK
     public static double RANK_MAX = 1.5;
     public static double RANK_MIN = 2-RANK_MAX;
+
+    //TOURNAMENT
+    public static int K = 4;
+    public static float e = 0.3f;
 
    enum  AdultSelection {
        FULL_GENERATIONAL_REPLACEMENT,
@@ -38,7 +43,8 @@ public class Simulator {
     enum ParentSelection {
         FITNESS_PROPORTIONAL,
         SIGMA,
-        RANK;
+        RANK,
+        TOURNAMENT;
 
     }
 
@@ -68,10 +74,18 @@ public class Simulator {
     }
 
     private static void parentSelection() {
-        rouletteWheel();
+        if (parentSelection == TOURNAMENT){
+            tournamentSelection();
+        }else {
+            globalSelection();
+        }
     }
 
-    private static void rouletteWheel() {
+    private static void tournamentSelection() {
+
+    }
+
+    private static void globalSelection() {
         int totalFitness = 0;
         for (Individual i: adultPopulation) {
             totalFitness += i.getFitness();
@@ -105,11 +119,11 @@ public class Simulator {
 
 
         for (int i = 0; i < productionSize /2; i++) {
-            Individual firstPick = spinWheel(totalFitness, averageFitness, standardDeviation, rankList, rankTotal);
+            Individual firstPick = rouletteWheel(totalFitness, averageFitness, standardDeviation, rankList, rankTotal);
             Individual secondPick = null;
             boolean duplicate = true;
             while (duplicate){
-                secondPick = spinWheel(totalFitness, averageFitness, standardDeviation, rankList, rankTotal);
+                secondPick = rouletteWheel(totalFitness, averageFitness, standardDeviation, rankList, rankTotal);
                 duplicate = secondPick == firstPick;
             }
             mate(firstPick, secondPick);
@@ -118,7 +132,7 @@ public class Simulator {
 
     }
 
-    private static Individual spinWheel(int totalFitness, double averageFitness, double standardDeviation, ArrayList<RankWrapper> rankList, double rankTotal) {
+    private static Individual rouletteWheel(int totalFitness, double averageFitness, double standardDeviation, ArrayList<RankWrapper> rankList, double rankTotal) {
         switch (parentSelection){
             case FITNESS_PROPORTIONAL: return fitnessProportionate(totalFitness);
             case SIGMA: return sigma(averageFitness,standardDeviation);
@@ -132,7 +146,7 @@ public class Simulator {
         double rand = new Random().nextDouble()*adultPopulation.size();
         for (Individual i: adultPopulation) {
             partialSum += 1+((i.getFitness()-averageFitness)/(2*standardDeviation));
-            if (partialSum > rand){
+            if (partialSum > rand || standardDeviation == 0){
                 return i;
             }
         }
