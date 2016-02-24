@@ -16,6 +16,8 @@ public abstract class Phenotype implements Comparable<Phenotype> {
     protected abstract int fitness();
     protected abstract void develop(GenoType genoType);
 
+    public abstract Phenotype mate(Phenotype partner);
+
     public int getFitness() {
         return fitness;
     }

@@ -25,4 +25,9 @@ public class OneMaxPheno extends Phenotype {
     protected void develop(GenoType genoType) {
         penome = (BitSet) genoType.getGenome().clone();
     }
+
+    @Override
+    public Phenotype mate(Phenotype partner) {
+        return new OneMaxPheno(genoType.crossover(partner.genoType));
+    }
 }

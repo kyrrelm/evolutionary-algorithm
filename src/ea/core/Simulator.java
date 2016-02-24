@@ -74,6 +74,14 @@ public class Simulator {
         return goalReached;
     }
 
+    private static void mate(Phenotype firstPick, Phenotype secondPick) {
+        childPopulation.add(firstPick.mate(secondPick));
+        if (childPopulation.size()< productionSize){
+            childPopulation.add(secondPick.mate(firstPick));
+
+        }
+    }
+
     public static void run(){
         int iterations = 0;
         while (true){
@@ -203,7 +211,6 @@ public class Simulator {
         }
         return null;
     }
-
     private static Phenotype rank(ArrayList<RankWrapper> rankList, double rankTotal){
         double partialSum = 0;
         double rand = new Random().nextDouble()*rankTotal;
@@ -216,23 +223,16 @@ public class Simulator {
         return null;
     }
     private static class RankWrapper{
-        private final double expVal;
 
+        private final double expVal;
         private final Phenotype individual;
+
+
         RankWrapper(double expVal, Phenotype individual){
            this.expVal = expVal;
             this.individual = individual;
         }
 
-
-    }
-
-    private static void mate(Phenotype firstPick, Phenotype secondPick) {
-        childPopulation.add(new OneMaxPheno(firstPick.genoType.crossover(secondPick.genoType)));
-        if (childPopulation.size()< productionSize){
-            childPopulation.add(new OneMaxPheno(secondPick.genoType.crossover(firstPick.genoType)));
-
-        }
     }
 
     private static void adultSelection() {
