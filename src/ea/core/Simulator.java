@@ -88,7 +88,8 @@ public class Simulator {
 
     private static Individual spinWheel(int totalFitness, double averageFitness, double standardDeviation) {
         //return fitnessProportionate(totalFitness);
-        return sigma(averageFitness,standardDeviation);
+        //return sigma(averageFitness,standardDeviation);
+        return rank(totalFitness);
     }
 
     private static Individual sigma(double averageFitness, double standardDeviation){
@@ -114,6 +115,31 @@ public class Simulator {
         }
         return null;
     }
+
+    static double RANK_MAX = 1.5;
+    static double RANK_MIN = 2-RANK_MAX;
+
+    private static Individual rank(int totalFitness){
+        Collections.sort(adultPopulation);
+        int rank = adultPopulation.size();
+        //ArrayList<RankWrapper> scaled =
+        for (Individual i: adultPopulation) {
+            double expVal = RANK_MIN+(RANK_MAX-RANK_MIN*((rank-1)/adultPopulation.size()));
+            rank--;
+        }
+        return null;
+    }
+
+    private class RankWrapper{
+        private final double expVal;
+        private final Individual individual;
+
+        RankWrapper(double expVal, Individual individual){
+           this.expVal = expVal;
+            this.individual = individual;
+        }
+    }
+
 
     private static void mate(Individual firstPick, Individual secondPick) {
         childPopulation.add(new Individual(firstPick.genotype.crossover(secondPick.genotype)));
@@ -160,3 +186,4 @@ public class Simulator {
         return goalReached;
     }
 }
+
