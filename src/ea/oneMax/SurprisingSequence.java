@@ -18,6 +18,7 @@ public class SurprisingSequence extends Phenotype{
         this.numberOfBite = Integer.SIZE-Integer.numberOfLeadingZeros(S-1);
         this.global = global;
         phenome = new int[l];
+        develop(genoType);
     }
 
     @Override
@@ -27,11 +28,17 @@ public class SurprisingSequence extends Phenotype{
 
     @Override
     protected void develop(GenoType genoType) {
-
+        int bitsUsed = 0;
+        int number = 0;
         for (int i = 0; i < fitnessGoal; i++) {
-            while (i<genoType.getGenome().size()){
-
+            while (bitsUsed<numberOfBite){
+                if (true){
+                    number+= Math.pow(2,numberOfBite-1-bitsUsed++);
+                }
             }
+            phenome[i] = number;
+            bitsUsed = 0;
+            number = 0;
         }
     }
 
