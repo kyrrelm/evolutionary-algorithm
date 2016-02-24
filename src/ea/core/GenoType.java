@@ -10,7 +10,7 @@ public class GenoType {
 
     private Random rnd = new Random();
 
-    private int length;
+    public final int length;
     private BitSet genome;
 
     public GenoType(int length) {
@@ -21,9 +21,9 @@ public class GenoType {
             genome.set(i, rnd.nextBoolean());
         }
     }
-    private GenoType(BitSet genome){
+    private GenoType(BitSet genome, int length){
         this.genome = genome;
-        this.length = genome.length();
+        this.length = length;
     }
 
     public BitSet getGenome() {
@@ -41,12 +41,12 @@ public class GenoType {
             partOne.or(partTwo);
         }
         mutate(partOne);
-        return new GenoType(partOne);
+        return new GenoType(partOne, this.length);
     }
 
     //TODO: implement both types?
     private void mutate(BitSet partOne) {
-        for (int i = 0; i < partOne.length(); i++) {
+        for (int i = 0; i < this.length; i++) {
             if (rnd.nextFloat()<Simulator.perComponentMutationRate){
                 partOne.flip(i);
             }

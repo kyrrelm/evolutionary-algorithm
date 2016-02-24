@@ -2,6 +2,7 @@ package ea.core;
 
 import ea.oneMax.oneMaxPheno;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 import static ea.core.Simulator.AdultSelection.*;
@@ -15,7 +16,7 @@ public class Simulator {
     private static List<Individual> childPopulation;
     private static List<Individual> adultPopulation;
 
-    public static int populationSize = 100;
+    public static int populationSize = 500;
     public static int productionSize = populationSize;
     //0.2 Best for OneMax: 0.8f pop:300
     public static float crossoverRate = 0.7f;
@@ -23,14 +24,14 @@ public class Simulator {
     public static float perComponentMutationRate = 0.001f;
     public static float elitism = 0.1f;
     public static AdultSelection adultSelection = FULL_GENERATIONAL_REPLACEMENT;
-    public static ParentSelection parentSelection = SIGMA;
+    public static ParentSelection parentSelection = FITNESS_PROPORTIONAL;
 
     //RANK
     public static double RANK_MAX = 1.5;
     public static double RANK_MIN = 2-RANK_MAX;
 
     //TOURNAMENT
-    public static int K = 4;
+    public static int K = 5;
     public static float e = 0.3f;
 
    enum  AdultSelection {
@@ -82,7 +83,28 @@ public class Simulator {
     }
 
     private static void tournamentSelection() {
+        Individual firstPick = pickChampion();
+        Individual secondPick = null;
+        boolean duplicate = true;
+        while (duplicate){
+            secondPick = pickChampion();
+            duplicate = secondPick == firstPick;
+        }
+    }
 
+    private static Individual pickChampion(){
+        HashSet<Individual> fighters = new HashSet<>();
+        Random rnd = new Random();
+        while (fighters.size()<K){
+            int r = rnd.nextInt(adultPopulation.size());
+            fighters.add(adultPopulation.get(r));
+        }
+        Individual[] fightArray = fighters.toArray(new Individual[fighters.size()]);
+        Arrays.sort(fightArray);
+        if (1f-e>rnd.nextFloat()){
+            return fightArray[0];
+        }
+        return fightArray[rnd.nextInt(fightArray.length-1)+1];
     }
 
     private static void globalSelection() {

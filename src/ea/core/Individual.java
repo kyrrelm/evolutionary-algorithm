@@ -33,4 +33,5 @@ public class Individual implements Comparable<Individual> {
     public int compareTo(Individual that) {
         return that.getFitness()-this.getFitness();
     }
+
 }

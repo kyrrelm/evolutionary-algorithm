@@ -13,7 +13,7 @@ public class oneMaxPheno extends Phenotype {
     BitSet penome;
 
     public oneMaxPheno(GenoType genoType) {
-        super(genoType, genoType.getGenome().length());
+        super(genoType, genoType.length);
     }
 
     @Override
