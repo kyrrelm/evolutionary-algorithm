@@ -10,7 +10,7 @@ import java.util.BitSet;
  */
 public class OneMaxPheno extends Phenotype {
 
-    BitSet penome;
+    BitSet penome = null;
 
     public OneMaxPheno(GenoType genoType) {
         super(genoType, genoType.length);

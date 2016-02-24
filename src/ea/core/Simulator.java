@@ -1,5 +1,6 @@
 package ea.core;
 
+import ea.oneMax.LolzPrefix;
 import ea.oneMax.OneMaxPheno;
 
 import java.util.*;
@@ -15,15 +16,18 @@ public class Simulator {
     private static List<Phenotype> childPopulation;
     private static List<Phenotype> adultPopulation;
 
-    public static int populationSize = 500;
+    public static int populationSize = 1000;
     public static int productionSize = populationSize;
     //0.2 Best for OneMax: 0.8f pop:300
     public static float crossoverRate = 0.7f;
-    //0.01 Best for OneMax: 0.001f
-    public static float perComponentMutationRate = 0.001f;
+    //Best for OneMax: 0.001f
+    //Best for LOLZ:0.01f
+    public static float perComponentMutationRate = 0.01f;
+    //Best for OneMax: 0.1f
+    //Best for LOLZ:0.2f
     public static float elitism = 0.1f;
-    public static AdultSelection adultSelection = FULL_GENERATIONAL_REPLACEMENT;
-    public static ParentSelection parentSelection = TOURNAMENT;
+    public static AdultSelection adultSelection = OVER_PRODUCED_GENERATIONAL_MIXING;
+    public static ParentSelection parentSelection = SIGMA;
 
     //RANK
     public static double RANK_MAX = 1.5;
@@ -56,7 +60,7 @@ public class Simulator {
         childPopulation = new ArrayList<>();
         for (int i = 0; i < productionSize; i++) {
             //childPopulation.add(new OneMaxPheno(new GenoType(40)));
-            childPopulation.add(new OneMaxPheno(new GenoType(40)));
+            childPopulation.add(new LolzPrefix(new GenoType(40), 21));
         }
     }
 
