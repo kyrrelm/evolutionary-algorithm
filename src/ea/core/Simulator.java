@@ -1,8 +1,7 @@
 package ea.core;
 
-import ea.oneMax.oneMaxPheno;
+import ea.oneMax.OneMaxPheno;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 import static ea.core.Simulator.AdultSelection.*;
@@ -13,8 +12,8 @@ import static ea.core.Simulator.ParentSelection.*;
  */
 public class Simulator {
 
-    private static List<Individual> childPopulation;
-    private static List<Individual> adultPopulation;
+    private static List<Phenotype> childPopulation;
+    private static List<Phenotype> adultPopulation;
 
     public static int populationSize = 500;
     public static int productionSize = populationSize;
@@ -23,7 +22,7 @@ public class Simulator {
     //0.01 Best for OneMax: 0.001f
     public static float perComponentMutationRate = 0.001f;
     public static float elitism = 0.1f;
-    public static AdultSelection adultSelection = OVER_PRODUCED_GENERATIONAL_MIXING;
+    public static AdultSelection adultSelection = FULL_GENERATIONAL_REPLACEMENT;
     public static ParentSelection parentSelection = TOURNAMENT;
 
     //RANK
@@ -56,7 +55,7 @@ public class Simulator {
         }
         childPopulation = new ArrayList<>();
         for (int i = 0; i < productionSize; i++) {
-            childPopulation.add(new Individual(new GenoType(40)));
+            childPopulation.add(new OneMaxPheno(new GenoType(40)));
         }
     }
 
@@ -66,8 +65,8 @@ public class Simulator {
      */
     private static boolean develop() {
         boolean goalReached = false;
-        for (Individual i: childPopulation) {
-            i.develop(new oneMaxPheno(i.genotype));
+        for (Phenotype i: childPopulation) {
+            i.mature();
             if (i.isFit()){
                 goalReached = true;
             }
@@ -99,8 +98,8 @@ public class Simulator {
 
     private static void tournamentSelection() {
         for (int i = 0; i < productionSize /2; i++) {
-            Individual firstPick = pickChampion();
-            Individual secondPick = null;
+            Phenotype firstPick = pickChampion();
+            Phenotype secondPick = null;
             boolean duplicate = true;
             while (duplicate){
                 secondPick = pickChampion();
@@ -110,14 +109,14 @@ public class Simulator {
         }
     }
 
-    private static Individual pickChampion(){
-        HashSet<Individual> fighters = new HashSet<>();
+    private static Phenotype pickChampion(){
+        HashSet<Phenotype> fighters = new HashSet<>();
         Random rnd = new Random();
         while (fighters.size()<K){
             int r = rnd.nextInt(adultPopulation.size());
             fighters.add(adultPopulation.get(r));
         }
-        Individual[] fightArray = fighters.toArray(new Individual[fighters.size()]);
+        Phenotype[] fightArray = fighters.toArray(new Phenotype[fighters.size()]);
         Arrays.sort(fightArray);
         if (1f-e>rnd.nextFloat()){
             return fightArray[0];
@@ -127,7 +126,7 @@ public class Simulator {
 
     private static void globalSelection() {
         int totalFitness = 0;
-        for (Individual i: adultPopulation) {
+        for (Phenotype i: adultPopulation) {
             totalFitness += i.getFitness();
         }
         //Sigma------------------------
@@ -136,7 +135,7 @@ public class Simulator {
         if (parentSelection == SIGMA){
             averageFitness = (double) totalFitness/adultPopulation.size();
             double standardSum = 0;
-            for (Individual i: adultPopulation) {
+            for (Phenotype i: adultPopulation) {
                 standardSum+=Math.pow((i.getFitness()-averageFitness),2);
             }
             standardDeviation = Math.sqrt(standardSum/adultPopulation.size());
@@ -149,7 +148,7 @@ public class Simulator {
         if (parentSelection == RANK){
             Collections.sort(adultPopulation);
             double rank = adultPopulation.size();
-            for (Individual i: adultPopulation) {
+            for (Phenotype i: adultPopulation) {
                 double expVal = RANK_MIN+((RANK_MAX-RANK_MIN)*((rank-1d)/((double) adultPopulation.size()-1d)));
                 rankTotal += expVal;
                 rankList.add(new RankWrapper(expVal, i));
@@ -159,8 +158,8 @@ public class Simulator {
 
 
         for (int i = 0; i < productionSize /2; i++) {
-            Individual firstPick = rouletteWheel(totalFitness, averageFitness, standardDeviation, rankList, rankTotal);
-            Individual secondPick = null;
+            Phenotype firstPick = rouletteWheel(totalFitness, averageFitness, standardDeviation, rankList, rankTotal);
+            Phenotype secondPick = null;
             boolean duplicate = true;
             while (duplicate){
                 secondPick = rouletteWheel(totalFitness, averageFitness, standardDeviation, rankList, rankTotal);
@@ -172,7 +171,7 @@ public class Simulator {
 
     }
 
-    private static Individual rouletteWheel(int totalFitness, double averageFitness, double standardDeviation, ArrayList<RankWrapper> rankList, double rankTotal) {
+    private static Phenotype rouletteWheel(int totalFitness, double averageFitness, double standardDeviation, ArrayList<RankWrapper> rankList, double rankTotal) {
         switch (parentSelection){
             case FITNESS_PROPORTIONAL: return fitnessProportionate(totalFitness);
             case SIGMA: return sigma(averageFitness,standardDeviation);
@@ -181,10 +180,10 @@ public class Simulator {
         return null;
     }
 
-    private static Individual sigma(double averageFitness, double standardDeviation){
+    private static Phenotype sigma(double averageFitness, double standardDeviation){
         double partialSum = 0;
         double rand = new Random().nextDouble()*adultPopulation.size();
-        for (Individual i: adultPopulation) {
+        for (Phenotype i: adultPopulation) {
             partialSum += 1+((i.getFitness()-averageFitness)/(2*standardDeviation));
             if (partialSum > rand || standardDeviation == 0){
                 return i;
@@ -193,10 +192,10 @@ public class Simulator {
         return null;
     }
 
-    private static Individual fitnessProportionate(int totalFitness){
+    private static Phenotype fitnessProportionate(int totalFitness){
         int partialSum = 0;
         int rand = new Random().nextInt(totalFitness);
-        for (Individual i: adultPopulation) {
+        for (Phenotype i: adultPopulation) {
             partialSum += i.getFitness();
             if (partialSum > rand){
                 return i;
@@ -205,7 +204,7 @@ public class Simulator {
         return null;
     }
 
-    private static Individual rank(ArrayList<RankWrapper> rankList, double rankTotal){
+    private static Phenotype rank(ArrayList<RankWrapper> rankList, double rankTotal){
         double partialSum = 0;
         double rand = new Random().nextDouble()*rankTotal;
         for (RankWrapper r: rankList) {
@@ -219,8 +218,8 @@ public class Simulator {
     private static class RankWrapper{
         private final double expVal;
 
-        private final Individual individual;
-        RankWrapper(double expVal, Individual individual){
+        private final Phenotype individual;
+        RankWrapper(double expVal, Phenotype individual){
            this.expVal = expVal;
             this.individual = individual;
         }
@@ -228,10 +227,10 @@ public class Simulator {
 
     }
 
-    private static void mate(Individual firstPick, Individual secondPick) {
-        childPopulation.add(new Individual(firstPick.genotype.crossover(secondPick.genotype)));
+    private static void mate(Phenotype firstPick, Phenotype secondPick) {
+        childPopulation.add(new OneMaxPheno(firstPick.genoType.crossover(secondPick.genoType)));
         if (childPopulation.size()< productionSize){
-            childPopulation.add(new Individual(secondPick.genotype.crossover(firstPick.genotype)));
+            childPopulation.add(new OneMaxPheno(secondPick.genoType.crossover(firstPick.genoType)));
 
         }
     }

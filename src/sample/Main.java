@@ -1,15 +1,11 @@
 package sample;
 
-import ea.core.GenoType;
-import ea.core.Individual;
 import ea.core.Simulator;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.util.BitSet;
 
 public class Main extends Application {
 

@@ -8,11 +8,11 @@ import java.util.BitSet;
 /**
  * Created by Kyrre on 22/2/2016.
  */
-public class oneMaxPheno extends Phenotype {
+public class OneMaxPheno extends Phenotype {
 
     BitSet penome;
 
-    public oneMaxPheno(GenoType genoType) {
+    public OneMaxPheno(GenoType genoType) {
         super(genoType, genoType.length);
     }
 
@@ -22,7 +22,7 @@ public class oneMaxPheno extends Phenotype {
     }
 
     @Override
-    public void develop(GenoType genoType) {
+    protected void develop(GenoType genoType) {
         penome = (BitSet) genoType.getGenome().clone();
     }
 }
