@@ -15,15 +15,15 @@ public class Simulator {
     private static List<Individual> childPopulation;
     private static List<Individual> adultPopulation;
 
-    public static int populationSize = 1000;
+    public static int populationSize = 100;
     public static int productionSize = populationSize;
-    //0.2 Best for OneMax: 1f
-    public static float crossoverRate = 0.5f;
-    //0.01 Best for OneMax: 0f
-    public static float perComponentMutationRate = 0.01f;
+    //0.2 Best for OneMax: 0.8f pop:300
+    public static float crossoverRate = 0.7f;
+    //0.01 Best for OneMax: 0.001f
+    public static float perComponentMutationRate = 0.001f;
     public static float elitism = 0.1f;
-    public static AdultSelection adultSelection = OVER_PRODUCED_GENERATIONAL_MIXING;
-    public static ParentSelection parentSelection = FITNESS_PROPORTIONAL;
+    public static AdultSelection adultSelection = OVER_PRODUCTION;
+    public static ParentSelection parentSelection = RANK;
 
     public static double RANK_MAX = 1.5;
     public static double RANK_MIN = 2-RANK_MAX;
@@ -94,9 +94,9 @@ public class Simulator {
         double rankTotal = 0;
         if (parentSelection == RANK){
             Collections.sort(adultPopulation);
-            int rank = adultPopulation.size();
+            double rank = adultPopulation.size();
             for (Individual i: adultPopulation) {
-                double expVal = RANK_MIN+(RANK_MAX-RANK_MIN*((rank-1)/adultPopulation.size()));
+                double expVal = RANK_MIN+((RANK_MAX-RANK_MIN)*((rank-1d)/((double) adultPopulation.size()-1d)));
                 rankTotal += expVal;
                 rankList.add(new RankWrapper(expVal, i));
                 rank--;
