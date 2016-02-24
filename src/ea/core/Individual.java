@@ -4,7 +4,7 @@ package ea.core;
 /**
  * Created by Kyrre on 22/2/2016.
  */
-public class Individual {
+public class Individual implements Comparable<Individual> {
 
     final GenoType genotype;
     Phenotype phenotype;
@@ -17,7 +17,7 @@ public class Individual {
         this.phenotype = phenotype;
     }
 
-    public double getFitness() {
+    public int getFitness() {
         return phenotype.getFitness();
     }
 
@@ -27,5 +27,10 @@ public class Individual {
      */
     public boolean isFit(){
         return phenotype.getFitness() >= phenotype.fitnessGoal;
+    }
+
+    @Override
+    public int compareTo(Individual that) {
+        return that.getFitness()-this.getFitness();
     }
 }

@@ -1,38 +1,54 @@
 package ea.core;
 
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import ea.oneMax.oneMaxPheno;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
+
+import static ea.core.Simulator.AdultSelection.*;
 
 /**
  * Created by Kyrre on 22/2/2016.
  */
 public class Simulator {
 
-    private static ArrayList<Individual> childPopulation;
-    private static ArrayList<Individual> adultPopulation;
-    public static final int POPULATION_SIZE = 10;
-    public static final float CROSSOVER_RATE = 0.5f;
-    public static final float PER_COMPONENT_MUTATION_RATE = 0.01f;
+    private static List<Individual> childPopulation;
+    private static List<Individual> adultPopulation;
+
+    public static int populationSize = 100;
+    public static int productionSize = populationSize;
+    public static float crossoverRate = 0.2f;
+    public static float perComponentMutationRate = 0.01f;
+    public static AdultSelection adultSelection = OVER_PRODUCTION;
+
+   enum  AdultSelection {
+        FULL_GENERATIONAL_REPLACEMENT,
+        OVER_PRODUCTION,
+        GENERATIONAL_MIXING;
+    }
 
 
     public static void init(){
-        childPopulation = new ArrayList<Individual>();
-        for (int i = 0; i < POPULATION_SIZE; i++) {
-            childPopulation.add(new Individual(new GenoType(20)));
+        if (adultSelection == OVER_PRODUCTION){
+            productionSize = populationSize*2;
+        }
+        childPopulation = new ArrayList<>();
+        for (int i = 0; i < productionSize; i++) {
+            childPopulation.add(new Individual(new GenoType(40)));
         }
     }
 
     public static void run(){
+        int iterations = 0;
         while (true){
             if (develop()){
                 break;
             }
             adultSelection();
             parentSelection();
+            iterations++;
         }
-        System.out.println("Done, make charts and shit");
+        System.out.println("Done after: "+iterations+" iterations, make charts and shit");
 
     }
 
@@ -46,7 +62,7 @@ public class Simulator {
             totalFitness += i.getFitness();
         }
 
-        for (int i = 0; i < POPULATION_SIZE/2; i++) {
+        for (int i = 0; i < productionSize /2; i++) {
             Individual firstPick = spinWheel(totalFitness);
             Individual secondPick = null;
             boolean duplicate = true;
@@ -62,7 +78,7 @@ public class Simulator {
 
     private static void mate(Individual firstPick, Individual secondPick) {
         childPopulation.add(new Individual(firstPick.genotype.crossover(secondPick.genotype)));
-        if (childPopulation.size()<POPULATION_SIZE){
+        if (childPopulation.size()< productionSize){
             childPopulation.add(new Individual(secondPick.genotype.crossover(firstPick.genotype)));
 
         }
@@ -81,9 +97,19 @@ public class Simulator {
     }
 
     private static void adultSelection() {
-        //Full generational replacement
-        adultPopulation = childPopulation;
-
+        switch (adultSelection){
+            case FULL_GENERATIONAL_REPLACEMENT:{
+                adultPopulation = childPopulation;
+                break;
+            }
+            case OVER_PRODUCTION:{
+                Collections.sort(childPopulation);
+                adultPopulation = childPopulation.subList(0, populationSize);
+                break;
+            }
+            case GENERATIONAL_MIXING:
+                break;
+        }
         childPopulation = new ArrayList<>();
     }
 

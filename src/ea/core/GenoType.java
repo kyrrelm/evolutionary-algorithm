@@ -33,7 +33,7 @@ public class GenoType {
     public GenoType crossover(GenoType mate){
         BitSet partOne = (BitSet) genome.clone();
         rnd.nextFloat();
-        if (rnd.nextFloat()<Simulator.CROSSOVER_RATE){
+        if (rnd.nextFloat()<Simulator.crossoverRate){
             int crossoverPoint = rnd.nextInt(length-1)+1;
             partOne.clear(0, crossoverPoint);
             BitSet partTwo = (BitSet) mate.genome.clone();
@@ -47,7 +47,7 @@ public class GenoType {
     //TODO: implement both types?
     private void mutate(BitSet partOne) {
         for (int i = 0; i < partOne.length(); i++) {
-            if (rnd.nextFloat()<Simulator.PER_COMPONENT_MUTATION_RATE){
+            if (rnd.nextFloat()<Simulator.perComponentMutationRate){
                 partOne.flip(i);
             }
         }
