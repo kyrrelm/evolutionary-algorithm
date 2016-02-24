@@ -20,17 +20,18 @@ public class Simulator {
     public static float crossoverRate = 0.2f;
     public static float perComponentMutationRate = 0.01f;
     public static float elitism = 0.1f;
-    public static AdultSelection adultSelection = GENERATIONAL_MIXING;
+    public static AdultSelection adultSelection = OVER_PRODUCED_GENERATIONAL_MIXING;
 
    enum  AdultSelection {
-        FULL_GENERATIONAL_REPLACEMENT,
-        OVER_PRODUCTION,
-        GENERATIONAL_MIXING;
+       FULL_GENERATIONAL_REPLACEMENT,
+       OVER_PRODUCTION,
+       GENERATIONAL_MIXING,
+       OVER_PRODUCED_GENERATIONAL_MIXING;
     }
 
 
     public static void init(){
-        if (adultSelection == OVER_PRODUCTION){
+        if (adultSelection == OVER_PRODUCTION || adultSelection == OVER_PRODUCED_GENERATIONAL_MIXING){
             productionSize = populationSize*2;
         }
         childPopulation = new ArrayList<>();
@@ -103,10 +104,11 @@ public class Simulator {
                 adultPopulation = childPopulation;
                 break;
             }
+            case OVER_PRODUCED_GENERATIONAL_MIXING:
             case GENERATIONAL_MIXING:{
                 if (adultPopulation != null){
                     Collections.sort(adultPopulation);
-                    childPopulation.addAll(adultPopulation.subList(0, (int) (populationSize*elitism)));
+                    childPopulation.addAll(adultPopulation.subList(0, (int) (productionSize*elitism)));
                 }
             }
             case OVER_PRODUCTION:{
