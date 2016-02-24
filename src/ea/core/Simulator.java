@@ -34,7 +34,7 @@ public class Simulator {
     public static int K = 5;
     public static float e = 0.3f;
 
-   enum  AdultSelection {
+    enum  AdultSelection {
        FULL_GENERATIONAL_REPLACEMENT,
        OVER_PRODUCTION,
        GENERATIONAL_MIXING,
@@ -58,6 +58,21 @@ public class Simulator {
         for (int i = 0; i < productionSize; i++) {
             childPopulation.add(new Individual(new GenoType(40)));
         }
+    }
+
+    /**
+     *
+     * @return true if one of the developed child's meets fitness goal.
+     */
+    private static boolean develop() {
+        boolean goalReached = false;
+        for (Individual i: childPopulation) {
+            i.develop(new oneMaxPheno(i.genotype));
+            if (i.isFit()){
+                goalReached = true;
+            }
+        }
+        return goalReached;
     }
 
     public static void run(){
@@ -201,17 +216,17 @@ public class Simulator {
         }
         return null;
     }
-
     private static class RankWrapper{
         private final double expVal;
-        private final Individual individual;
 
+        private final Individual individual;
         RankWrapper(double expVal, Individual individual){
            this.expVal = expVal;
             this.individual = individual;
         }
-    }
 
+
+    }
 
     private static void mate(Individual firstPick, Individual secondPick) {
         childPopulation.add(new Individual(firstPick.genotype.crossover(secondPick.genotype)));
@@ -241,21 +256,6 @@ public class Simulator {
             }
         }
         childPopulation = new ArrayList<>();
-    }
-
-    /**
-     *
-     * @return true if one of the developed child's meets fitness goal.
-     */
-    private static boolean develop() {
-        boolean goalReached = false;
-        for (Individual i: childPopulation) {
-            i.develop(new oneMaxPheno(i.genotype));
-            if (i.isFit()){
-                goalReached = true;
-            }
-        }
-        return goalReached;
     }
 }
 
