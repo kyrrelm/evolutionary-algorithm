@@ -23,8 +23,8 @@ public class Simulator {
     //0.01 Best for OneMax: 0.001f
     public static float perComponentMutationRate = 0.001f;
     public static float elitism = 0.1f;
-    public static AdultSelection adultSelection = FULL_GENERATIONAL_REPLACEMENT;
-    public static ParentSelection parentSelection = FITNESS_PROPORTIONAL;
+    public static AdultSelection adultSelection = OVER_PRODUCED_GENERATIONAL_MIXING;
+    public static ParentSelection parentSelection = TOURNAMENT;
 
     //RANK
     public static double RANK_MAX = 1.5;
@@ -83,12 +83,15 @@ public class Simulator {
     }
 
     private static void tournamentSelection() {
-        Individual firstPick = pickChampion();
-        Individual secondPick = null;
-        boolean duplicate = true;
-        while (duplicate){
-            secondPick = pickChampion();
-            duplicate = secondPick == firstPick;
+        for (int i = 0; i < productionSize /2; i++) {
+            Individual firstPick = pickChampion();
+            Individual secondPick = null;
+            boolean duplicate = true;
+            while (duplicate){
+                secondPick = pickChampion();
+                duplicate = secondPick == firstPick;
+            }
+            mate(firstPick, secondPick);
         }
     }
 
