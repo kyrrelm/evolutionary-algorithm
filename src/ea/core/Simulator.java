@@ -2,6 +2,7 @@ package ea.core;
 
 import ea.oneMax.LolzPrefix;
 import ea.oneMax.OneMaxPheno;
+import ea.oneMax.SurprisingSequence;
 
 import java.util.*;
 
@@ -60,7 +61,8 @@ public class Simulator {
         childPopulation = new ArrayList<>();
         for (int i = 0; i < productionSize; i++) {
             //childPopulation.add(new OneMaxPheno(new GenoType(40)));
-            childPopulation.add(new LolzPrefix(new GenoType(40), 21));
+            //childPopulation.add(new LolzPrefix(new GenoType(40), 21));
+            childPopulation.add(new SurprisingSequence(4,5,true));
         }
     }
 

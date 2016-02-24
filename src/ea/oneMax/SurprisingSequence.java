@@ -9,11 +9,15 @@ import ea.core.Phenotype;
 public class SurprisingSequence extends Phenotype{
     public final int S;
     public final boolean global;
+    private final int numberOfBite;
+    int[] phenome;
 
-    protected SurprisingSequence(GenoType genoType, int fitnessGoal, int S, boolean global) {
-        super(genoType, fitnessGoal);
+    public SurprisingSequence(int l, int S, boolean global) {
+        super(new GenoType((Integer.SIZE-Integer.numberOfLeadingZeros(S-1))*l), l);
         this.S = S;
+        this.numberOfBite = Integer.SIZE-Integer.numberOfLeadingZeros(S-1);
         this.global = global;
+        phenome = new int[l];
     }
 
     @Override
@@ -24,6 +28,11 @@ public class SurprisingSequence extends Phenotype{
     @Override
     protected void develop(GenoType genoType) {
 
+        for (int i = 0; i < fitnessGoal; i++) {
+            while (i<genoType.getGenome().size()){
+
+            }
+        }
     }
 
     @Override

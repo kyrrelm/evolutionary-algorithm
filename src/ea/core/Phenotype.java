@@ -6,7 +6,7 @@ package ea.core;
 public abstract class Phenotype implements Comparable<Phenotype> {
 
     private int fitness = -1;
-    final int fitnessGoal;
+    public final int fitnessGoal;
     public final GenoType genoType;
 
     protected Phenotype(GenoType genoType, int fitnessGoal) {

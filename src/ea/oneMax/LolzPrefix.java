@@ -11,7 +11,7 @@ import java.util.BitSet;
 public class LolzPrefix extends Phenotype {
 
     int z;
-    BitSet penome = null;
+    BitSet phenome = null;
 
     public LolzPrefix(GenoType genoType, int z) {
         super(genoType, genoType.length);
@@ -22,13 +22,13 @@ public class LolzPrefix extends Phenotype {
     protected int fitness() {
         int score = 1;
         int index = 1;
-        if (penome.get(0)){
-            while (index < penome.size() && penome.get(index)){
+        if (phenome.get(0)){
+            while (index < phenome.size() && phenome.get(index)){
                 score++;
                 index++;
             }
         }else {
-            while (index < z && index < penome.size() && !penome.get(index)){
+            while (index < z && index < phenome.size() && !phenome.get(index)){
                 score++;
                 index++;
             }
@@ -38,7 +38,7 @@ public class LolzPrefix extends Phenotype {
 
     @Override
     protected void develop(GenoType genoType) {
-        penome = (BitSet) genoType.getGenome().clone();
+        phenome = (BitSet) genoType.getGenome().clone();
     }
 
     @Override
