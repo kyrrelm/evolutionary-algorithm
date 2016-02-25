@@ -73,9 +73,6 @@ public class Simulator {
     private static boolean develop() {
         boolean goalReached = false;
         for (Phenotype i: childPopulation) {
-            if (i == null){
-                System.out.println("null");
-            }
             i.mature();
             if (i.isFit()){
                 goalReached = true;
