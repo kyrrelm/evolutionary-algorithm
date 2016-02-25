@@ -35,9 +35,15 @@ public class Main extends Application {
         for(Double p: Simulator.avgFitnessList){
             avgFitness.getData().add(new XYChart.Data(generations++, p));
         }
+        XYChart.Series standardDev = new XYChart.Series();
+        standardDev.setName("Standard deviation");
+        generations = 0;
+        for(Double p: Simulator.standardDeviationList){
+            standardDev.getData().add(new XYChart.Data(generations++, p));
+        }
 
         Scene scene  = new Scene(lineChart,800,600);
-        lineChart.getData().addAll(bestFitness, avgFitness);
+        lineChart.getData().addAll(bestFitness, avgFitness, standardDev);
 
         stage.setScene(scene);
         stage.show();
