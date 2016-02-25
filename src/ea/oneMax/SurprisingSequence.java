@@ -30,13 +30,16 @@ public class SurprisingSequence extends Phenotype{
     protected void develop(GenoType genoType) {
         int bitsUsed = 0;
         int number = 0;
-        for (int i = 0; i < fitnessGoal; i++) {
+        int i = 0;
+        while (i < genoType.length) {
             while (bitsUsed<numberOfBite){
-                if (true){
-                    number+= Math.pow(2,numberOfBite-1-bitsUsed++);
+                if (genoType.getGenome().get(i)){
+                    number+= Math.pow(2,numberOfBite-1-bitsUsed);
                 }
+                bitsUsed++;
+                i++;
             }
-            phenome[i] = number;
+            phenome[(i/numberOfBite)-1] = number;
             bitsUsed = 0;
             number = 0;
         }
