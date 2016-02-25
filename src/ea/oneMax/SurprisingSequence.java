@@ -39,7 +39,7 @@ public class SurprisingSequence extends Phenotype{
                 bitsUsed++;
                 i++;
             }
-            phenome[(i/numberOfBite)-1] = number;
+            phenome[(i/numberOfBite)-1] = number%S;
             bitsUsed = 0;
             number = 0;
         }
