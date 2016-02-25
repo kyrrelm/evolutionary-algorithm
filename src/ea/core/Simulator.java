@@ -32,26 +32,34 @@ public class Simulator {
     public static int iterations = 0;
 
     public static int populationSize = 500;
-    public static int loopLimit = 100;
+    public static int loopLimit = 200;
 
     //0.2 Best for OneMax: 0.8f pop:300
-    public static float crossoverRate = 0.7f;
+    public static float crossoverRate = 0.8f;
     //Best for OneMax: 0.001f
     //Best for LOLZ:0.01f
-    public static float perComponentMutationRate = 0.01f;
+    public static float perComponentMutationRate = 0.001f;
     //Best for OneMax: 0.1f
     //Best for LOLZ:0.2f
     public static float elitism = 0.1f;
     public static AdultSelection adultSelection = OVER_PRODUCED_GENERATIONAL_MIXING;
-    public static ParentSelection parentSelection = RANK;
-    public static Problem problem = ONE_MAX;
+    public static ParentSelection parentSelection = TOURNAMENT;
+    public static Problem problem = SURPRISE;
+
+    public static int oneMaxSize = 40;
+    public static int lolzSize = 40;
+    public static int lolzZ = 21;
+    public static int surpriseLength = 600;
+    public static int surpriseS = 20;
+    public static boolean global = false;
 
     //RANK
     public static double RANK_MAX = 1.5;
-    public static double RANK_MIN = 2-RANK_MAX;
 
+    public static double RANK_MIN = 2-RANK_MAX;
     //TOURNAMENT
     public static int K = 5;
+
     public static float e = 0.3f;
 
     public enum  AdultSelection {
@@ -59,7 +67,6 @@ public class Simulator {
        OVER_PRODUCTION,
        GENERATIONAL_MIXING,
        OVER_PRODUCED_GENERATIONAL_MIXING;
-
     }
     public enum ParentSelection {
         FITNESS_PROPORTIONAL,
@@ -71,14 +78,8 @@ public class Simulator {
         ONE_MAX,
         LOLZ,
         SURPRISE;
-    }
 
-    public static int oneMaxSize = 40;
-    public static int lolzSize = 40;
-    public static int lolzZ = 21;
-    public static int surpriseLength = 26;
-    public static int surpriseS = 21;
-    public static boolean global = true;
+    }
 
     public static void init(){
         bestPhenotype = null;
@@ -157,12 +158,11 @@ public class Simulator {
             }
             adultSelection();
             parentSelection();
-            if (iterations%1000 == 0){
-                System.out.println("Iteration: "+iterations);
-            }
+            System.out.println("Iteration: "+iterations);
             iterations++;
         }
-        System.out.println("Done after: "+iterations+" iterations, make charts and shit");
+        System.out.println("Done after: "+iterations+" iterations.");
+        System.out.println("Best fitness: "+bestPhenotype.getFitness()+" phenotype: "+bestPhenotype.getPhenome());
 
     }
 
