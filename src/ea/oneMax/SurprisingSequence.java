@@ -23,6 +23,14 @@ public class SurprisingSequence extends Phenotype{
         this.global = global;
         phenome = new int[l];
     }
+    private SurprisingSequence(GenoType genoType, int l, int S, boolean global) {
+        super(genoType,l);
+        this.S = S;
+        this.numberOfBite = Integer.SIZE-Integer.numberOfLeadingZeros(S-1);
+        this.global = global;
+        phenome = new int[l];
+    }
+
 
     @Override
     protected int fitness() {
@@ -32,6 +40,9 @@ public class SurprisingSequence extends Phenotype{
             for (int j = i+1; j < phenome.length; j++) {
                 if (!sequences.add(new Sequence(phenome[i],phenome[j],j-i))){
                     score--;
+                }
+                if (!global){
+                    break;
                 }
             }
         }
@@ -84,6 +95,6 @@ public class SurprisingSequence extends Phenotype{
 
     @Override
     public Phenotype mate(Phenotype partner) {
-        return null;
+        return new SurprisingSequence(genoType.crossover(partner.genoType), fitnessGoal, S, global);
     }
 }

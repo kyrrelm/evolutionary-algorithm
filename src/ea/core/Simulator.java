@@ -27,7 +27,7 @@ public class Simulator {
     //Best for OneMax: 0.1f
     //Best for LOLZ:0.2f
     public static float elitism = 0.1f;
-    public static AdultSelection adultSelection = OVER_PRODUCED_GENERATIONAL_MIXING;
+    public static AdultSelection adultSelection = OVER_PRODUCTION;
     public static ParentSelection parentSelection = SIGMA;
 
     //RANK
@@ -62,7 +62,7 @@ public class Simulator {
         for (int i = 0; i < productionSize; i++) {
             //childPopulation.add(new OneMaxPheno(new GenoType(40)));
             //childPopulation.add(new LolzPrefix(new GenoType(40), 21));
-            childPopulation.add(new SurprisingSequence(4,2,true));
+            childPopulation.add(new SurprisingSequence(5,2,false));
         }
     }
 
@@ -73,6 +73,9 @@ public class Simulator {
     private static boolean develop() {
         boolean goalReached = false;
         for (Phenotype i: childPopulation) {
+            if (i == null){
+                System.out.println("null");
+            }
             i.mature();
             if (i.isFit()){
                 goalReached = true;
