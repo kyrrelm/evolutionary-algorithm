@@ -18,7 +18,8 @@ public class Simulator {
     private static List<Phenotype> adultPopulation;
 
 
-    public static List<Phenotype> generationalBest;
+    public static List<Double> generationalBest;
+    public static List<Double> globalBest;
     public static List<Double> avgFitnessList;
     public static List<Double> standardDeviationList;
 
@@ -29,8 +30,10 @@ public class Simulator {
     public static int iterations = 0;
 
     public static int populationSize = 1000;
-    public static int loopLimit = 10000000/populationSize;
+    public static int loopLimit = 100;
+
     public static int productionSize = populationSize;
+
     //0.2 Best for OneMax: 0.8f pop:300
     public static float crossoverRate = 0.7f;
     //Best for OneMax: 0.001f
@@ -40,7 +43,7 @@ public class Simulator {
     //Best for LOLZ:0.2f
     public static float elitism = 0.1f;
     public static AdultSelection adultSelection = OVER_PRODUCED_GENERATIONAL_MIXING;
-    public static ParentSelection parentSelection = SIGMA;
+    public static ParentSelection parentSelection = RANK;
 
     //RANK
     public static double RANK_MAX = 1.5;
@@ -71,14 +74,15 @@ public class Simulator {
         generationalBest = new ArrayList<>();
         avgFitnessList = new ArrayList<>();
         standardDeviationList = new ArrayList<>();
-        if (adultSelection == OVER_PRODUCTION || adultSelection == OVER_PRODUCED_GENERATIONAL_MIXING){
+        globalBest = new ArrayList<>();
+        if (adultSelection == OVER_PRODUCTION || adultSelection == FULL_GENERATIONAL_REPLACEMENT){
             productionSize = populationSize*2;
         }
         childPopulation = new ArrayList<>();
         for (int i = 0; i < productionSize; i++) {
             //childPopulation.add(new OneMaxPheno(new GenoType(40)));
-            childPopulation.add(new LolzPrefix(new GenoType(40), 21));
-            //childPopulation.add(new SurprisingSequence(26,10,true));
+            //childPopulation.add(new LolzPrefix(new GenoType(40), 21));
+            childPopulation.add(new SurprisingSequence(26,10,true));
         }
     }
 
@@ -98,11 +102,15 @@ public class Simulator {
                 bestPhenotype = i;
                 System.out.println("Best Phenotype{ fitness: "+bestPhenotype.getFitness()+" phenome: "+bestPhenotype.getPhenome()+" }");
             }
+
             if (i.isFit()){
                 goalReached = true;
             }
         }
-        generationalBest.add(genBest);
+        generationalBest.add((double) genBest.getFitness());
+        if (bestPhenotype != null){
+            globalBest.add((double) bestPhenotype.getFitness());
+        }
         return goalReached;
     }
 

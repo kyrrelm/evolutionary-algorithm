@@ -26,8 +26,8 @@ public class Main extends Application {
         XYChart.Series bestFitness = new XYChart.Series();
         bestFitness.setName("Best fitness");
         int generations = 0;
-        for(Phenotype p: Simulator.generationalBest){
-            bestFitness.getData().add(new XYChart.Data(generations++, p.getFitness()));
+        for(Double p: Simulator.generationalBest){
+            bestFitness.getData().add(new XYChart.Data(generations++, p));
         }
         XYChart.Series avgFitness = new XYChart.Series();
         avgFitness.setName("Avg fitness");
@@ -41,9 +41,15 @@ public class Main extends Application {
         for(Double p: Simulator.standardDeviationList){
             standardDev.getData().add(new XYChart.Data(generations++, p));
         }
+        XYChart.Series globalBest = new XYChart.Series();
+        globalBest.setName("Global best");
+        generations = 0;
+        for(Double p: Simulator.globalBest){
+            globalBest.getData().add(new XYChart.Data(generations++, p));
+        }
 
         Scene scene  = new Scene(lineChart,800,600);
-        lineChart.getData().addAll(bestFitness, avgFitness, standardDev);
+        lineChart.getData().addAll(globalBest,bestFitness, avgFitness, standardDev);
 
         stage.setScene(scene);
         stage.show();
