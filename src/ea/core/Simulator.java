@@ -27,12 +27,11 @@ public class Simulator {
     public static double averageFitness = -1;
     public static double standardDeviation = -1;
     public static int totalFitness = -1;
+    public static int productionSize;
     public static int iterations = 0;
 
     public static int populationSize = 1000;
     public static int loopLimit = 100;
-
-    public static int productionSize = populationSize;
 
     //0.2 Best for OneMax: 0.8f pop:300
     public static float crossoverRate = 0.7f;
@@ -75,6 +74,7 @@ public class Simulator {
         avgFitnessList = new ArrayList<>();
         standardDeviationList = new ArrayList<>();
         globalBest = new ArrayList<>();
+        productionSize = populationSize;
         if (adultSelection == OVER_PRODUCTION || adultSelection == FULL_GENERATIONAL_REPLACEMENT){
             productionSize = populationSize*2;
         }
