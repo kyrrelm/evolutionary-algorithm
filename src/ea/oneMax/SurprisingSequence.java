@@ -4,6 +4,8 @@ import ea.core.GenoType;
 import ea.core.Phenotype;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * Created by Kyrre on 24/2/2016.
@@ -20,21 +22,20 @@ public class SurprisingSequence extends Phenotype{
         this.numberOfBite = Integer.SIZE-Integer.numberOfLeadingZeros(S-1);
         this.global = global;
         phenome = new int[l];
-        //TODO: remove this
-        develop(genoType);
-        fitness();
     }
 
     @Override
     protected int fitness() {
         HashSet<Sequence> sequences = new HashSet<>();
+        int score = fitnessGoal;
         for (int i = 0; i < phenome.length; i++) {
-            int a = phenome[i];
             for (int j = i+1; j < phenome.length; j++) {
-                int b = phenome[j];
+                if (!sequences.add(new Sequence(phenome[i],phenome[j],j-i))){
+                    score--;
+                }
             }
         }
-        return 0;
+        return Math.max(score, 0);
     }
 
     private class Sequence{

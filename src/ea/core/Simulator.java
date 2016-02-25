@@ -62,7 +62,7 @@ public class Simulator {
         for (int i = 0; i < productionSize; i++) {
             //childPopulation.add(new OneMaxPheno(new GenoType(40)));
             //childPopulation.add(new LolzPrefix(new GenoType(40), 21));
-            childPopulation.add(new SurprisingSequence(4,5,true));
+            childPopulation.add(new SurprisingSequence(4,2,true));
         }
     }
 
