@@ -8,6 +8,7 @@ import java.util.*;
 
 import static ea.core.Simulator.AdultSelection.*;
 import static ea.core.Simulator.ParentSelection.*;
+import static ea.core.Simulator.Problem.*;
 
 /**
  * Created by Kyrre on 22/2/2016.
@@ -30,7 +31,7 @@ public class Simulator {
     public static int productionSize;
     public static int iterations = 0;
 
-    public static int populationSize = 1000;
+    public static int populationSize = 500;
     public static int loopLimit = 100;
 
     //0.2 Best for OneMax: 0.8f pop:300
@@ -43,6 +44,7 @@ public class Simulator {
     public static float elitism = 0.1f;
     public static AdultSelection adultSelection = OVER_PRODUCED_GENERATIONAL_MIXING;
     public static ParentSelection parentSelection = RANK;
+    public static Problem problem = ONE_MAX;
 
     //RANK
     public static double RANK_MAX = 1.5;
@@ -52,21 +54,31 @@ public class Simulator {
     public static int K = 5;
     public static float e = 0.3f;
 
-    enum  AdultSelection {
+    public enum  AdultSelection {
        FULL_GENERATIONAL_REPLACEMENT,
        OVER_PRODUCTION,
        GENERATIONAL_MIXING,
        OVER_PRODUCED_GENERATIONAL_MIXING;
-    }
 
-    enum ParentSelection {
+    }
+    public enum ParentSelection {
         FITNESS_PROPORTIONAL,
         SIGMA,
         RANK,
         TOURNAMENT;
-
+    }
+    public enum Problem {
+        ONE_MAX,
+        LOLZ,
+        SURPRISE;
     }
 
+    public static int oneMaxSize = 40;
+    public static int lolzSize = 40;
+    public static int lolzZ = 21;
+    public static int surpriseLength = 26;
+    public static int surpriseS = 21;
+    public static boolean global = true;
 
     public static void init(){
         bestPhenotype = null;
@@ -74,15 +86,30 @@ public class Simulator {
         avgFitnessList = new ArrayList<>();
         standardDeviationList = new ArrayList<>();
         globalBest = new ArrayList<>();
+        averageFitness = -1;
+        standardDeviation = -1;
+        totalFitness = -1;
+        iterations = 0;
         productionSize = populationSize;
         if (adultSelection == OVER_PRODUCTION || adultSelection == FULL_GENERATIONAL_REPLACEMENT){
             productionSize = populationSize*2;
         }
         childPopulation = new ArrayList<>();
         for (int i = 0; i < productionSize; i++) {
-            childPopulation.add(new OneMaxPheno(new GenoType(40)));
-            //childPopulation.add(new LolzPrefix(new GenoType(40), 21));
-            //childPopulation.add(new SurprisingSequence(26,10,true));
+            switch (problem){
+                case ONE_MAX:{
+                    childPopulation.add(new OneMaxPheno(new GenoType(oneMaxSize)));
+                    break;
+                }
+                case LOLZ:{
+                    childPopulation.add(new LolzPrefix(new GenoType(lolzSize), lolzZ));
+                    break;
+                }
+                case SURPRISE:{
+                    childPopulation.add(new SurprisingSequence(surpriseLength, surpriseS, global));
+                    break;
+                }
+            }
         }
     }
 
