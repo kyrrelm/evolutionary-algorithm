@@ -3,6 +3,8 @@ package ea.oneMax;
 import ea.core.GenoType;
 import ea.core.Phenotype;
 
+import java.util.HashSet;
+
 /**
  * Created by Kyrre on 24/2/2016.
  */
@@ -18,12 +20,46 @@ public class SurprisingSequence extends Phenotype{
         this.numberOfBite = Integer.SIZE-Integer.numberOfLeadingZeros(S-1);
         this.global = global;
         phenome = new int[l];
+        //TODO: remove this
         develop(genoType);
+        fitness();
     }
 
     @Override
     protected int fitness() {
+        HashSet<Sequence> sequences = new HashSet<>();
+        for (int i = 0; i < phenome.length; i++) {
+            int a = phenome[i];
+            for (int j = i+1; j < phenome.length; j++) {
+                int b = phenome[j];
+            }
+        }
         return 0;
+    }
+
+    private class Sequence{
+        public final int a;
+        public final int b;
+        public final int distance;
+        public Sequence(int a, int b, int distance) {
+            this.a = a;
+            this.b = b;
+            this.distance = distance;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            Sequence other = (Sequence) obj;
+            if (a == other.a && b == other.b && distance == other.distance){
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return a+(b+1)*10000+(distance+1)*100000000;
+        }
     }
 
     @Override
