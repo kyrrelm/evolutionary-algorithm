@@ -80,9 +80,9 @@ public class Simulator {
         }
         childPopulation = new ArrayList<>();
         for (int i = 0; i < productionSize; i++) {
-            //childPopulation.add(new OneMaxPheno(new GenoType(40)));
+            childPopulation.add(new OneMaxPheno(new GenoType(40)));
             //childPopulation.add(new LolzPrefix(new GenoType(40), 21));
-            childPopulation.add(new SurprisingSequence(26,10,true));
+            //childPopulation.add(new SurprisingSequence(26,10,true));
         }
     }
 

@@ -3,6 +3,7 @@ package sample;
 import ea.core.Phenotype;
 import ea.core.Simulator;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.chart.CategoryAxis;
@@ -10,9 +11,12 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 
+import java.util.Scanner;
+
 public class Main extends Application {
 
     @Override public void start(Stage stage) {
+        Platform.setImplicitExit(false);
         stage.setTitle("Line Chart Sample");
         //defining the axes
         final NumberAxis xAxis = new NumberAxis();
@@ -53,6 +57,19 @@ public class Main extends Application {
 
         stage.setScene(scene);
         stage.show();
+
+        Platform.runLater(new Runnable() {
+            @Override public void run() {
+                System.out.println("scan scanner");
+                Scanner sc = new Scanner(System.in);
+                sc.next();
+                System.out.println("past");
+                Simulator.init();
+                Simulator.run();
+            }
+        });
+
+
     }
 
 
