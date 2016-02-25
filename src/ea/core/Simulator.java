@@ -19,6 +19,8 @@ public class Simulator {
 
 
     public static List<Phenotype> generationalBest;
+    public static List<Double> avgFitnessList;
+    public static List<Double> standardDeviationList;
 
     public static Phenotype bestPhenotype;
     public static double averageFitness = -1;
@@ -67,6 +69,8 @@ public class Simulator {
     public static void init(){
         bestPhenotype = null;
         generationalBest = new ArrayList<>();
+        avgFitnessList = new ArrayList<>();
+        standardDeviationList = new ArrayList<>();
         if (adultSelection == OVER_PRODUCTION || adultSelection == OVER_PRODUCED_GENERATIONAL_MIXING){
             productionSize = populationSize*2;
         }
@@ -134,11 +138,13 @@ public class Simulator {
         }
         //Sigma------------------------
         averageFitness = (double) totalFitness/adultPopulation.size();
+        avgFitnessList.add(averageFitness);
         double standardSum = 0;
         for (Phenotype i: adultPopulation) {
             standardSum+=Math.pow((i.getFitness()-averageFitness),2);
         }
         standardDeviation = Math.sqrt(standardSum/adultPopulation.size());
+        standardDeviationList.add(standardDeviation);
         if (parentSelection == TOURNAMENT){
             tournamentSelection();
         }else {
