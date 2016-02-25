@@ -16,9 +16,17 @@ public class Simulator {
 
     private static List<Phenotype> childPopulation;
     private static List<Phenotype> adultPopulation;
-    private static Phenotype bestPhenotype;
 
-    public static int populationSize = 100;
+
+    public static List<Phenotype> generationalBest;
+
+    public static Phenotype bestPhenotype;
+    public static double averageFitness = -1;
+    public static double standardDeviation = -1;
+    public static int totalFitness = -1;
+    public static int iterations = 0;
+
+    public static int populationSize = 1000;
     public static int loopLimit = 10000000/populationSize;
     public static int productionSize = populationSize;
     //0.2 Best for OneMax: 0.8f pop:300
@@ -30,7 +38,7 @@ public class Simulator {
     //Best for LOLZ:0.2f
     public static float elitism = 0.1f;
     public static AdultSelection adultSelection = OVER_PRODUCED_GENERATIONAL_MIXING;
-    public static ParentSelection parentSelection = RANK;
+    public static ParentSelection parentSelection = SIGMA;
 
     //RANK
     public static double RANK_MAX = 1.5;
@@ -58,6 +66,7 @@ public class Simulator {
 
     public static void init(){
         bestPhenotype = null;
+        generationalBest = new ArrayList<>();
         if (adultSelection == OVER_PRODUCTION || adultSelection == OVER_PRODUCED_GENERATIONAL_MIXING){
             productionSize = populationSize*2;
         }
@@ -75,8 +84,12 @@ public class Simulator {
      */
     private static boolean develop() {
         boolean goalReached = false;
+        Phenotype genBest = null;
         for (Phenotype i: childPopulation) {
             int score = i.mature();
+            if (genBest == null || score>genBest.getFitness()){
+                genBest = i;
+            }
             if (bestPhenotype == null || score>bestPhenotype.getFitness()){
                 bestPhenotype = i;
                 System.out.println("Best Phenotype{ fitness: "+bestPhenotype.getFitness()+" phenome: "+bestPhenotype.getPhenome()+" }");
@@ -85,6 +98,7 @@ public class Simulator {
                 goalReached = true;
             }
         }
+        generationalBest.add(genBest);
         return goalReached;
     }
 
@@ -97,7 +111,6 @@ public class Simulator {
     }
 
     public static void run(){
-        int iterations = 0;
         System.out.println("Running up to: "+loopLimit+" iterations");
         while (iterations<loopLimit){
             if (develop()){
@@ -106,7 +119,7 @@ public class Simulator {
             adultSelection();
             parentSelection();
             if (iterations%1000 == 0){
-                System.out.println("Number of iterations: "+ iterations);
+                System.out.println("Iteration: "+iterations);
             }
             iterations++;
         }
@@ -115,6 +128,17 @@ public class Simulator {
     }
 
     private static void parentSelection() {
+        totalFitness = 0;
+        for (Phenotype i: adultPopulation) {
+            totalFitness += i.getFitness();
+        }
+        //Sigma------------------------
+        averageFitness = (double) totalFitness/adultPopulation.size();
+        double standardSum = 0;
+        for (Phenotype i: adultPopulation) {
+            standardSum+=Math.pow((i.getFitness()-averageFitness),2);
+        }
+        standardDeviation = Math.sqrt(standardSum/adultPopulation.size());
         if (parentSelection == TOURNAMENT){
             tournamentSelection();
         }else {
@@ -151,23 +175,6 @@ public class Simulator {
     }
 
     private static void globalSelection() {
-        int totalFitness = 0;
-        for (Phenotype i: adultPopulation) {
-            totalFitness += i.getFitness();
-        }
-        //Sigma------------------------
-        double averageFitness = -1;
-        double standardDeviation = -1;
-        if (parentSelection == SIGMA){
-            averageFitness = (double) totalFitness/adultPopulation.size();
-            double standardSum = 0;
-            for (Phenotype i: adultPopulation) {
-                standardSum+=Math.pow((i.getFitness()-averageFitness),2);
-            }
-            standardDeviation = Math.sqrt(standardSum/adultPopulation.size());
-        }
-
-
         //Rank---------------------
         ArrayList<RankWrapper> rankList = new ArrayList<>();
         double rankTotal = 0;
