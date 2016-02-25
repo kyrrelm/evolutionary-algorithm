@@ -27,6 +27,11 @@ public class OneMaxPheno extends Phenotype {
     }
 
     @Override
+    protected Object getPhenome() {
+        return phenome;
+    }
+
+    @Override
     public Phenotype mate(Phenotype partner) {
         return new OneMaxPheno(genoType.crossover(partner.genoType));
     }

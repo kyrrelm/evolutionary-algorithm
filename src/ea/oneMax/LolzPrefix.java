@@ -42,6 +42,11 @@ public class LolzPrefix extends Phenotype {
     }
 
     @Override
+    protected Object getPhenome() {
+        return phenome;
+    }
+
+    @Override
     public Phenotype mate(Phenotype partner) {
         return new LolzPrefix(genoType.crossover(partner.genoType),z);
     }

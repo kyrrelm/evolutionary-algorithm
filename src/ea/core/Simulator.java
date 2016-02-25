@@ -16,8 +16,10 @@ public class Simulator {
 
     private static List<Phenotype> childPopulation;
     private static List<Phenotype> adultPopulation;
+    private static Phenotype bestPhenotype;
 
-    public static int populationSize = 1000;
+    public static int populationSize = 100;
+    public static int loopLimit = 10000000/populationSize;
     public static int productionSize = populationSize;
     //0.2 Best for OneMax: 0.8f pop:300
     public static float crossoverRate = 0.7f;
@@ -27,8 +29,8 @@ public class Simulator {
     //Best for OneMax: 0.1f
     //Best for LOLZ:0.2f
     public static float elitism = 0.1f;
-    public static AdultSelection adultSelection = OVER_PRODUCTION;
-    public static ParentSelection parentSelection = SIGMA;
+    public static AdultSelection adultSelection = OVER_PRODUCED_GENERATIONAL_MIXING;
+    public static ParentSelection parentSelection = RANK;
 
     //RANK
     public static double RANK_MAX = 1.5;
@@ -55,14 +57,15 @@ public class Simulator {
 
 
     public static void init(){
+        bestPhenotype = null;
         if (adultSelection == OVER_PRODUCTION || adultSelection == OVER_PRODUCED_GENERATIONAL_MIXING){
             productionSize = populationSize*2;
         }
         childPopulation = new ArrayList<>();
         for (int i = 0; i < productionSize; i++) {
             //childPopulation.add(new OneMaxPheno(new GenoType(40)));
-            //childPopulation.add(new LolzPrefix(new GenoType(40), 21));
-            childPopulation.add(new SurprisingSequence(5,2,false));
+            childPopulation.add(new LolzPrefix(new GenoType(40), 21));
+            //childPopulation.add(new SurprisingSequence(26,10,true));
         }
     }
 
@@ -73,7 +76,11 @@ public class Simulator {
     private static boolean develop() {
         boolean goalReached = false;
         for (Phenotype i: childPopulation) {
-            i.mature();
+            int score = i.mature();
+            if (bestPhenotype == null || score>bestPhenotype.getFitness()){
+                bestPhenotype = i;
+                System.out.println("Best Phenotype{ fitness: "+bestPhenotype.getFitness()+" phenome: "+bestPhenotype.getPhenome()+" }");
+            }
             if (i.isFit()){
                 goalReached = true;
             }
@@ -91,12 +98,16 @@ public class Simulator {
 
     public static void run(){
         int iterations = 0;
-        while (true){
+        System.out.println("Running up to: "+loopLimit+" iterations");
+        while (iterations<loopLimit){
             if (develop()){
                 break;
             }
             adultSelection();
             parentSelection();
+            if (iterations%1000 == 0){
+                System.out.println("Number of iterations: "+ iterations);
+            }
             iterations++;
         }
         System.out.println("Done after: "+iterations+" iterations, make charts and shit");

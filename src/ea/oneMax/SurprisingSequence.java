@@ -94,6 +94,11 @@ public class SurprisingSequence extends Phenotype{
     }
 
     @Override
+    protected Object getPhenome() {
+        return phenome;
+    }
+
+    @Override
     public Phenotype mate(Phenotype partner) {
         return new SurprisingSequence(genoType.crossover(partner.genoType), fitnessGoal, S, global);
     }
