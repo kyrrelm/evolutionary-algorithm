@@ -102,4 +102,13 @@ public class SurprisingSequence extends Phenotype{
     public Phenotype mate(Phenotype partner) {
         return new SurprisingSequence(genoType.crossover(partner.genoType), fitnessGoal, S, global);
     }
+
+    @Override
+    public String toString() {
+        String tmp = "";
+        for (int i = 0; i < phenome.length; i++) {
+            tmp += phenome[i]+", ";
+        }
+        return tmp;
+    }
 }

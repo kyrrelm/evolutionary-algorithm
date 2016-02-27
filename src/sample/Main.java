@@ -79,18 +79,18 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
-
         Scanner sc = new Scanner(System.in);
-        System.out.println("Number of iterations default("+Simulator.loopLimit+"): ");
-        Simulator.loopLimit = sc.nextInt();
-        System.out.println("Population size default("+Simulator.populationSize+"): ");
-        Simulator.populationSize = sc.nextInt();
-        System.out.println("Crossover rate default("+Simulator.crossoverRate+"): ");
-        Simulator.crossoverRate = sc.nextFloat();
-        System.out.println("PerComponentMutationRate default("+Simulator.perComponentMutationRate+"): ");
-        Simulator.perComponentMutationRate = sc.nextFloat();
-        System.out.println("Elitism default("+Simulator.elitism+"): ");
-        Simulator.elitism = sc.nextFloat();
+        System.out.println("Run default values: (Y/N)");
+        if (!sc.next().toLowerCase().equals("y")){
+            System.out.println("Number of iterations default("+Simulator.loopLimit+"): ");
+            Simulator.loopLimit = sc.nextInt();
+            System.out.println("Population size default("+Simulator.populationSize+"): ");
+            Simulator.populationSize = sc.nextInt();
+            System.out.println("Crossover rate default("+Simulator.crossoverRate+"): ");
+            Simulator.crossoverRate = sc.nextFloat();
+            System.out.println("PerComponentMutationRate default("+Simulator.perComponentMutationRate+"): ");
+            Simulator.perComponentMutationRate = sc.nextFloat();
+        }
         System.out.println("adultSelection default("+Simulator.adultSelection+"):");
         System.out.println("1) FULL_GENERATIONAL_REPLACEMENT");
         System.out.println("2) OVER_PRODUCTION");
@@ -107,10 +107,14 @@ public class Main extends Application {
             }
             case 3: {
                 Simulator.adultSelection = GENERATIONAL_MIXING;
+                System.out.println("Elitism default("+Simulator.elitism+"): ");
+                Simulator.elitism = sc.nextFloat();
                 break;
             }
             case 4: {
                 Simulator.adultSelection = OVER_PRODUCED_GENERATIONAL_MIXING;
+                System.out.println("Elitism default("+Simulator.elitism+"): ");
+                Simulator.elitism = sc.nextFloat();
                 break;
             }
         }
@@ -137,6 +141,10 @@ public class Main extends Application {
             }
             case 4: {
                 Simulator.parentSelection = ParentSelection.TOURNAMENT;
+                System.out.println("Size of K default("+Simulator.K+"): ");
+                Simulator.K = sc.nextInt();
+                System.out.println("Size of e default("+Simulator.e+"): ");
+                Simulator.e = sc.nextFloat();
                 break;
             }
         }

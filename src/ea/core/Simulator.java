@@ -32,7 +32,7 @@ public class Simulator {
     public static int iterations = 0;
 
     public static int populationSize = 500;
-    public static int loopLimit = 200;
+    public static int loopLimit = 100;
 
     //0.2 Best for OneMax: 0.8f pop:300
     public static float crossoverRate = 0.8f;
@@ -163,6 +163,7 @@ public class Simulator {
         }
         System.out.println("Done after: "+iterations+" iterations.");
         System.out.println("Best fitness: "+bestPhenotype.getFitness()+" phenotype: "+bestPhenotype.getPhenome());
+        System.out.println("Best fitness: "+bestPhenotype.getFitness()+" phenotype: "+bestPhenotype);
 
     }
 
