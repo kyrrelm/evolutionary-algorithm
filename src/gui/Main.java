@@ -1,4 +1,4 @@
-package sample;
+package gui;
 
 import ea.core.Simulator;
 import ea.core.Simulator.ParentSelection;
