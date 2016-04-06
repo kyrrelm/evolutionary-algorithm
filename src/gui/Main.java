@@ -21,7 +21,7 @@ public class Main extends Application {
 
     @Override public void start(Stage stage) {
         Platform.setImplicitExit(false);
-        stage.setTitle("");
+        stage.setTitle("Hurr dur");
         runEa(stage);
     }
 
