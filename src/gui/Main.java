@@ -4,6 +4,9 @@ import ea.core.Simulator;
 import ea.core.Simulator.ParentSelection;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.chart.LineChart;
@@ -19,6 +22,26 @@ public class Main extends Application {
     @Override public void start(Stage stage) {
         Platform.setImplicitExit(false);
         stage.setTitle("");
+        runEa(stage);
+    }
+
+    protected void runEa(Stage stage){
+        Task<Void> task = new Task<Void>() {
+            @Override
+            public Void call() {
+                simulatorRun();
+                return null;
+            }
+        };
+        task.setOnSucceeded(e -> {
+            stage.setScene(new Scene(createChart(),800,300));
+            stage.show();
+            runEa(stage);
+        });
+        new Thread(task).start();
+    }
+
+    protected LineChart<Number,Number> createChart(){
         //defining the axes
         final NumberAxis xAxis = new NumberAxis();
         final NumberAxis yAxis = new NumberAxis();
@@ -53,32 +76,12 @@ public class Main extends Application {
             globalBest.getData().add(new XYChart.Data(generations++, p));
         }
 
-        Scene scene  = new Scene(lineChart,800,600);
         lineChart.getData().addAll(globalBest,bestFitness, avgFitness, standardDev);
 
-        stage.setScene(scene);
-        stage.show();
-
-//        Platform.runLater(new Runnable() {
-//            @Override public void run() {
-//                Scanner sc = new Scanner(System.in);
-//                System.out.println("Input");
-//                Simulator.loopLimit = sc.nextInt();
-//                Simulator.init();
-//                Simulator.run();
-//                int generations = 0;
-//                //bestFitness.getData().clear();
-////                for(Double p: Simulator.generationalBest){
-////                    bestFitness.getData().add(new XYChart.Data(generations++, p));
-////                }
-//            }
-//        });
-
-
+        return lineChart;
     }
 
-
-    public static void main(String[] args) {
+    protected void simulatorRun(){
         Scanner sc = new Scanner(System.in);
         System.out.println("Run default values: (Y/N)");
         if (!sc.next().toLowerCase().equals("y")){
@@ -180,6 +183,10 @@ public class Main extends Application {
         }
         Simulator.init();
         Simulator.run();
+    }
+
+
+    public static void main(String[] args) {
         launch(args);
     }
 }
