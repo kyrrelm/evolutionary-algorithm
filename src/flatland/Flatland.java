@@ -20,24 +20,25 @@ public class Flatland extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        Button[] cells = new Button[9];
-        Image imgBlank = new Image("flatland/img/blank.png");
+        Button[] cells = new Button[1000];
+        Image imgBlank = new Image("flatland/img/blank.png", 50, 50, false, false);
         for (int i = 0; i < cells.length; i++) {
             cells[i] = new Button("", new ImageView(imgBlank));
             registerOnAction(cells[i]);
         }
 
         GridPane board = new GridPane();
-        for (int row = 1, col = 1, cell = 0; row <= 3; row++, col -=2) {
-            board.add(cells[cell++], row, col++);
-            board.add(cells[cell++], row, col++);
-            board.add(cells[cell++], row, col);
+        int num = 0;
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                board.add(cells[num++], i, j);
+            }
         }
 
         Scene scene = new Scene(board);
         primaryStage.setScene(scene);
         primaryStage.setTitle("TicTacToe By Legato");
-        primaryStage.getIcons().add(new Image("flatland/img/icons.png"));
+        primaryStage.getIcons().add(new Image("flatland/img/icons.png", 50, 50, false, false));
         primaryStage.show();
     }
 
@@ -53,8 +54,8 @@ public class Flatland extends Application {
     }
 
     public enum Player {
-        X_PLAYER(new ImageView(new Image("flatland/img/x.png"))),
-        O_PLAYER(new ImageView(new Image("flatland/img/o.png")));
+        X_PLAYER(new ImageView(new Image("flatland/img/x.png", 50, 50, false, false))),
+        O_PLAYER(new ImageView(new Image("flatland/img/o.png", 50, 50, false, false)));
 
         private final ImageView view;
 
