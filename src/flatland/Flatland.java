@@ -31,7 +31,6 @@ public class Flatland extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        Image imgBlank = new Image("flatland/img/blank.png", 50, 50, false, false);
         cells = new Cell[100];
         for (int i = 0; i < cells.length; i++) {
             cells[i] = new Cell(Cell.Type.BLANK);
