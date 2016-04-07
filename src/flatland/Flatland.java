@@ -19,7 +19,7 @@ import javafx.stage.Stage;
 public class Flatland extends Application {
 
     Player player = Player.O_PLAYER;
-    Button[] cells;
+    HBox[] cells;
     double playbackInterval = 3000;
     final double MAX_PLAYBACK_INTERVAL = 3000;
     final double MIN_PLAYBACK_INTERVAL = 100;
@@ -32,15 +32,19 @@ public class Flatland extends Application {
     @Override
     public void start(Stage primaryStage) {
         Image imgBlank = new Image("flatland/img/blank.png", 50, 50, false, false);
-        cells = new Button[100];
+        cells = new HBox[100];
         for (int i = 0; i < cells.length; i++) {
-            cells[i] = new Button("", new ImageView(imgBlank));
-            registerOnAction(cells[i]);
+            HBox box = new HBox();
+            box.setStyle("-fx-border-color: black;");
+            box.getChildren().add(new ImageView(imgBlank));
+            cells[i] = box;
+            //registerOnAction(cells[i]);
         }
 
         GridPane board = new GridPane();
-        int num = 0;
-        for (int i = 0; i < 10; i++) {
+        board.setPadding(new Insets(5, 5, 5, 5));
+
+        for (int i = 0,num = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 board.add(cells[num++], i, j);
             }
@@ -86,7 +90,9 @@ public class Flatland extends Application {
 
     private void setButton(int index){
         //System.out.println("setButton");
-        cells[index].setGraphic(new ImageView(retrieveMarker()));
+        //cells[index].setGraphic(new ImageView(retrieveMarker()));
+        cells[index].getChildren().clear();
+        cells[index].getChildren().add(new ImageView(retrieveMarker()));
     }
 
     private Image retrieveMarker() {
