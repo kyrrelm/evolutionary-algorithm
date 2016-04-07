@@ -2,6 +2,7 @@ package flatland;/**
  * Created by Kyrre on 06.04.2016.
  */
 
+import flatland.sprites.Cell;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -18,8 +19,7 @@ import javafx.stage.Stage;
 
 public class Flatland extends Application {
 
-    Player player = Player.O_PLAYER;
-    HBox[] cells;
+    Cell[] cells;
     double playbackInterval = 3000;
     final double MAX_PLAYBACK_INTERVAL = 3000;
     final double MIN_PLAYBACK_INTERVAL = 100;
@@ -32,13 +32,9 @@ public class Flatland extends Application {
     @Override
     public void start(Stage primaryStage) {
         Image imgBlank = new Image("flatland/img/blank.png", 50, 50, false, false);
-        cells = new HBox[100];
+        cells = new Cell[100];
         for (int i = 0; i < cells.length; i++) {
-            HBox box = new HBox();
-            box.setStyle("-fx-border-color: black;");
-            box.getChildren().add(new ImageView(imgBlank));
-            cells[i] = box;
-            //registerOnAction(cells[i]);
+            cells[i] = new Cell(Cell.Type.BLANK);
         }
 
         GridPane board = new GridPane();
@@ -84,46 +80,15 @@ public class Flatland extends Application {
         speedSlider.valueProperty().addListener(cl -> {
             playbackInterval = MAX_PLAYBACK_INTERVAL-speedSlider.getValue()+MIN_PLAYBACK_INTERVAL;
             System.out.println("speed slider: "+ playbackInterval);
-            //resetTimer(timer, playbackInterval);
         });
     }
 
+    boolean turn = true;
+
     private void setButton(int index){
-        //System.out.println("setButton");
-        //cells[index].setGraphic(new ImageView(retrieveMarker()));
-        cells[index].getChildren().clear();
-        cells[index].getChildren().add(new ImageView(retrieveMarker()));
-    }
-
-    private Image retrieveMarker() {
-        player = player == Player.X_PLAYER ? Player.O_PLAYER : Player.X_PLAYER;
-        return player.marker();
-    }
-
-    private void registerOnAction(Button button) {
-        button.setOnAction(e ->
-                button.setGraphic(new ImageView(retrieveMarker()))
-        );
-    }
-
-    public enum Player {
-        X_PLAYER(new ImageView(new Image("flatland/img/x.png", 50, 50, false, false))),
-        O_PLAYER(new ImageView(new Image("flatland/img/o.png", 50, 50, false, false)));
-
-        private final ImageView view;
-
-        Player(ImageView view) {
-            this.view = view;
-        }
-
-        public Image marker() {
-            return view.getImage();
-        }
-
-        @Override
-        public String toString() {
-            return name().charAt(0) + name().substring(2).toLowerCase();
-        }
+        Cell.Type type = turn ? Cell.Type.FOOD : Cell.Type.POISON;
+        turn = !turn;
+        cells[index].changeType(type);
     }
 
 }
