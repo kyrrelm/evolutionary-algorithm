@@ -38,7 +38,7 @@ public class BoardState {
             }
         }
     }
-    
+
     public Cell.Type move(Cell.Type direction){
         currentDir = direction;
         Cell.Type value = board[moleY][moleX].getType();
@@ -76,6 +76,24 @@ public class BoardState {
     public Cell.Type getType(int x, int y) {
         return board[y][x].getType();
     }
+
+    public BoardState deepCopy(){
+        RawCell[][] copy = new RawCell[BOARD_SIZE][BOARD_SIZE];
+        for (int y = 0; y < BOARD_SIZE; y++) {
+            for (int x = 0; x < BOARD_SIZE; x++) {
+                copy[y][x] = new RawCell(board[y][x].getType());
+            }
+        }
+        return new BoardState(moleX, moleY, currentDir, copy);
+    }
+
+    private BoardState(int moleX, int moleY, Cell.Type currentDir, RawCell[][] copy) {
+        this.board = new RawCell[BOARD_SIZE][BOARD_SIZE];
+        this.moleX = moleX;
+        this.moleY = moleY;
+        this.currentDir = currentDir;
+    }
+
 
     public enum Direction {
         UP,
