@@ -23,15 +23,19 @@ public class BoardState {
         Random r = new Random();
         for (int y = 0; y < board.length; y++) {
             for (int x = 0; x < board[0].length; x++) {
-                board[y][x] = r.nextFloat() < foodRate && !(moleX == x && moleY == y) ? new Cell(Cell.Type.FOOD) : new Cell(Cell.Type.BLANK);
+                if (moleX == x && moleY == y)continue;
+                board[y][x] = r.nextFloat() < foodRate ? new Cell(Cell.Type.FOOD) : new Cell(Cell.Type.BLANK);
             }
         }
         for (int y = 0; y < board.length; y++) {
             for (int x = 0; x < board[0].length; x++) {
                 if (r.nextFloat() < poisonRate && board[y][x].getType() == Cell.Type.BLANK)
-                    board[y][x] = new Cell(Cell.Type.BLANK);
+                    board[y][x] = new Cell(Cell.Type.POISON);
             }
         }
     }
 
+    public Cell getCell(int x, int y) {
+        return board[y][x];
+    }
 }
