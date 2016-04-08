@@ -99,8 +99,8 @@ public class Flatland extends Application {
     }
 
     private void updateBoard(BoardState boardState){
-        for (int y = 0, index = 0; y < 10; y++) {
-            for (int x = 0; x < 10; x++, index++) {
+        for (int y = 0, index = 0; y < boardState.BOARD_SIZE; y++) {
+            for (int x = 0; x < boardState.BOARD_SIZE; x++, index++) {
                 cells[index].setType(boardState.getType(x,y));
             }
         }

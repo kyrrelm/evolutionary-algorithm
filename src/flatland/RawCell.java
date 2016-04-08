@@ -14,4 +14,8 @@ public class RawCell {
     public Cell.Type getType() {
         return type;
     }
+
+    public void setType(Cell.Type type) {
+        this.type = type;
+    }
 }

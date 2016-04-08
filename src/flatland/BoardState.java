@@ -7,15 +7,19 @@ import java.util.Random;
  */
 public class BoardState {
 
-    RawCell[][] board;
-    int moleX;
-    int moleY;
+    public final int BOARD_SIZE = 10;
+
+    private RawCell[][] board;
+    private int moleX;
+    private int moleY;
+    private Cell.Type currentDir;
 
     public BoardState(int moleX, int moleY, float foodRate, float poisonRate) {
-        this.board = new RawCell[10][10];
+        this.board = new RawCell[BOARD_SIZE][BOARD_SIZE];
         this.moleX = moleX;
         this.moleY = moleY;
-        board[moleY][moleX] = new RawCell(Cell.Type.MOLE_UP);
+        currentDir = Cell.Type.MOLE_UP;
+        board[moleY][moleX] = new RawCell(currentDir);
         initBoard(foodRate, poisonRate);
     }
 
@@ -34,8 +38,49 @@ public class BoardState {
             }
         }
     }
+    
+    public Cell.Type move(Cell.Type direction){
+        currentDir = direction;
+        Cell.Type value = board[moleY][moleX].getType();
+        board[moleY][moleX].setType(Cell.Type.BLANK);
+        switch (direction){
+            case MOLE_RIGHT: {
+                moleX = moleX+1%BOARD_SIZE;
+                break;
+            }
+            case MOLE_DOWN:{
+                moleY = moleY+1%BOARD_SIZE;
+                break;
+            }
+            case MOLE_LEFT:{
+                if (moleX>0){
+                    --moleX;
+                }else {
+                    moleX = BOARD_SIZE;
+                }
+                break;
+            }
+            case MOLE_UP:{
+                if (moleY>0){
+                    --moleY;
+                }else {
+                    moleY = BOARD_SIZE;
+                }
+                break;
+            }
+        }
+        board[moleY][moleX].setType(direction);
+        return value;
+    }
 
     public Cell.Type getType(int x, int y) {
         return board[y][x].getType();
+    }
+
+    public enum Direction {
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT;
     }
 }
