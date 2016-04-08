@@ -2,28 +2,31 @@ package flatland;/**
  * Created by Kyrre on 06.04.2016.
  */
 
-import flatland.sprites.Cell;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.concurrent.LinkedBlockingQueue;
+
 public class Flatland extends Application {
 
-    Cell[] cells;
+    Cell[] gameBoard;
     double playbackInterval = 3000;
     final double MAX_PLAYBACK_INTERVAL = 3000;
     final double MIN_PLAYBACK_INTERVAL = 100;
     long sinceLast = 0;
+
+    public LinkedBlockingQueue<BoardState> playback;
 
     public static void main(String[] args) {
         launch(args);
@@ -31,9 +34,10 @@ public class Flatland extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        cells = new Cell[100];
-        for (int i = 0; i < cells.length; i++) {
-            cells[i] = new Cell(Cell.Type.BLANK);
+        playback = new LinkedBlockingQueue<>();
+        gameBoard = new Cell[100];
+        for (int i = 0; i < gameBoard.length; i++) {
+            gameBoard[i] = new Cell(Cell.Type.BLANK);
         }
 
         GridPane board = new GridPane();
@@ -41,7 +45,7 @@ public class Flatland extends Application {
 
         for (int i = 0,num = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
-                board.add(cells[num++], i, j);
+                board.add(gameBoard[num++], i, j);
             }
         }
         //GUI setup
@@ -69,12 +73,25 @@ public class Flatland extends Application {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                if (now - sinceLast > playbackInterval *1000000){
-                    sinceLast = now;
-                    setButton((int) (Math.random()*100));
+                if (!playback.isEmpty()){
+                    if (now - sinceLast > playbackInterval *1000000){
+                        sinceLast = now;
+                        System.out.println("weeeee");
+                        //setButton((int) (Math.random()*100));
+
+                    }
                 }
             }
         }.start();
+
+        new Thread(new Task<ArrayList<BoardState>>() {
+            @Override
+            protected ArrayList<BoardState> call() throws Exception {
+                BoardState bs = new BoardState(5,9, 0.33f, 0.33f);
+                playback.add(bs);
+                return null;
+            }
+        }).start();
 
         speedSlider.valueProperty().addListener(cl -> {
             playbackInterval = MAX_PLAYBACK_INTERVAL-speedSlider.getValue()+MIN_PLAYBACK_INTERVAL;
@@ -82,12 +99,14 @@ public class Flatland extends Application {
         });
     }
 
+    updateBoard
+
     boolean turn = true;
 
     private void setButton(int index){
         Cell.Type type = turn ? Cell.Type.FOOD : Cell.Type.POISON;
         turn = !turn;
-        cells[index].changeType(type);
+        gameBoard[index].setType(type);
     }
 
 }
