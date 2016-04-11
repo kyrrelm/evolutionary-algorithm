@@ -45,7 +45,7 @@ public class Flatland extends Application {
 
         for (int i = 0,num = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
-                board.add(cells[num++], i, j);
+                board.add(cells[num++], j, i);
             }
         }
         //GUI setup
@@ -87,8 +87,9 @@ public class Flatland extends Application {
         new Thread(new Task<ArrayList<BoardState>>() {
             @Override
             protected ArrayList<BoardState> call() throws Exception {
-                BoardState bs = new BoardState(9,5, 0.33f, 0.33f);
+                BoardState bs = new BoardState(5,9, 0.33f, 0.33f);
                 playback.add(bs);
+//                bs.move(Cell.Type.MOLE_LEFT);
                 return null;
             }
         }).start();

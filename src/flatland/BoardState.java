@@ -19,7 +19,7 @@ public class BoardState {
         this.moleX = moleX;
         this.moleY = moleY;
         currentDir = Cell.Type.MOLE_UP;
-        board[moleY][moleX] = new RawCell(currentDir);
+        board[moleX][moleY] = new RawCell(currentDir);
         initBoard(foodRate, poisonRate);
     }
 
@@ -28,21 +28,21 @@ public class BoardState {
         for (int y = 0; y < board.length; y++) {
             for (int x = 0; x < board[0].length; x++) {
                 if (moleX == x && moleY == y)continue;
-                board[y][x] = r.nextFloat() < foodRate ? new RawCell(Cell.Type.FOOD) : new RawCell(Cell.Type.BLANK);
+                board[x][y] = r.nextFloat() < foodRate ? new RawCell(Cell.Type.FOOD) : new RawCell(Cell.Type.BLANK);
             }
         }
         for (int y = 0; y < board.length; y++) {
             for (int x = 0; x < board[0].length; x++) {
-                if (r.nextFloat() < poisonRate && board[y][x].getType() == Cell.Type.BLANK)
-                    board[y][x] = new RawCell(Cell.Type.POISON);
+                if (r.nextFloat() < poisonRate && board[x][y].getType() == Cell.Type.BLANK)
+                    board[x][y] = new RawCell(Cell.Type.POISON);
             }
         }
     }
 
     public Cell.Type move(Cell.Type direction){
         currentDir = direction;
-        Cell.Type value = board[moleY][moleX].getType();
-        board[moleY][moleX].setType(Cell.Type.BLANK);
+        Cell.Type value = board[moleX][moleY].getType();
+        board[moleX][moleY].setType(Cell.Type.BLANK);
         switch (direction){
             case MOLE_RIGHT: {
                 moleX = moleX+1%BOARD_SIZE;
@@ -69,19 +69,19 @@ public class BoardState {
                 break;
             }
         }
-        board[moleY][moleX].setType(direction);
+        board[moleX][moleY].setType(direction);
         return value;
     }
 
     public Cell.Type getType(int x, int y) {
-        return board[y][x].getType();
+        return board[x][y].getType();
     }
 
     public BoardState deepCopy(){
         RawCell[][] copy = new RawCell[BOARD_SIZE][BOARD_SIZE];
         for (int y = 0; y < BOARD_SIZE; y++) {
             for (int x = 0; x < BOARD_SIZE; x++) {
-                copy[y][x] = new RawCell(board[y][x].getType());
+                copy[y][x] = new RawCell(board[x][y].getType());
             }
         }
         return new BoardState(moleX, moleY, currentDir, copy);
