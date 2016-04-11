@@ -41,22 +41,21 @@ public class BoardState {
 
     public Cell.Type move(Cell.Type direction){
         currentDir = direction;
-        Cell.Type value = board[moleX][moleY].getType();
         board[moleX][moleY].setType(Cell.Type.BLANK);
         switch (direction){
             case MOLE_RIGHT: {
-                moleX = moleX+1%BOARD_SIZE;
+                moleX = (moleX+1)%BOARD_SIZE;
                 break;
             }
             case MOLE_DOWN:{
-                moleY = moleY+1%BOARD_SIZE;
+                moleY = (moleY+1)%BOARD_SIZE;
                 break;
             }
             case MOLE_LEFT:{
                 if (moleX>0){
                     --moleX;
                 }else {
-                    moleX = BOARD_SIZE;
+                    moleX = BOARD_SIZE-1;
                 }
                 break;
             }
@@ -64,11 +63,12 @@ public class BoardState {
                 if (moleY>0){
                     --moleY;
                 }else {
-                    moleY = BOARD_SIZE;
+                    moleY = BOARD_SIZE-1;
                 }
                 break;
             }
         }
+        Cell.Type value = board[moleX][moleY].getType();
         board[moleX][moleY].setType(direction);
         return value;
     }

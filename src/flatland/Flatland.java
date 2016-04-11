@@ -21,7 +21,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class Flatland extends Application {
 
     Cell[] cells;
-    double playbackInterval = 3000;
+    double playbackInterval = 1000;
     final double MAX_PLAYBACK_INTERVAL = 3000;
     final double MIN_PLAYBACK_INTERVAL = 100;
     long sinceLast = 0;
@@ -87,9 +87,13 @@ public class Flatland extends Application {
         new Thread(new Task<ArrayList<BoardState>>() {
             @Override
             protected ArrayList<BoardState> call() throws Exception {
-                BoardState bs = new BoardState(5,9, 0.33f, 0.33f);
+                BoardState bs = new BoardState(2,1, 0.33f, 0.33f);
+                Cell.Type type = null;
                 playback.add(bs);
-//                bs.move(Cell.Type.MOLE_LEFT);
+                Thread.sleep(900);
+                type = bs.move(Cell.Type.MOLE_UP);
+                playback.add(bs);
+                Thread.sleep(3000);
                 return null;
             }
         }).start();
