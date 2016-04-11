@@ -20,11 +20,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class Flatland extends Application {
 
-    Cell[] cells;
-    double playbackInterval = 1000;
+    private Cell[] cells;
+    private double playbackInterval = 1000;
     final double MAX_PLAYBACK_INTERVAL = 3000;
     final double MIN_PLAYBACK_INTERVAL = 100;
-    long sinceLast = 0;
+    private long sinceLast = 0;
 
     public LinkedBlockingQueue<BoardState> playback;
 
@@ -88,12 +88,12 @@ public class Flatland extends Application {
             @Override
             protected ArrayList<BoardState> call() throws Exception {
                 BoardState bs = new BoardState(2,1, 0.33f, 0.33f);
-                Cell.Type type = null;
+                Agent a = new Agent(bs, true);
                 playback.add(bs);
-                Thread.sleep(900);
-                type = bs.move(Cell.Type.MOLE_UP);
-                playback.add(bs);
-                Thread.sleep(3000);
+                for (int i = 0; i < 10; i++) {
+                    a.act();
+                }
+                playback.addAll(a.getHistory());
                 return null;
             }
         }).start();

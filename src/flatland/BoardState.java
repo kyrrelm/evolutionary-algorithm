@@ -81,17 +81,17 @@ public class BoardState {
         RawCell[][] copy = new RawCell[BOARD_SIZE][BOARD_SIZE];
         for (int y = 0; y < BOARD_SIZE; y++) {
             for (int x = 0; x < BOARD_SIZE; x++) {
-                copy[y][x] = new RawCell(board[x][y].getType());
+                copy[x][y] = new RawCell(board[x][y].getType());
             }
         }
         return new BoardState(moleX, moleY, currentDir, copy);
     }
 
     private BoardState(int moleX, int moleY, Cell.Type currentDir, RawCell[][] copy) {
-        this.board = new RawCell[BOARD_SIZE][BOARD_SIZE];
         this.moleX = moleX;
         this.moleY = moleY;
         this.currentDir = currentDir;
+        this.board = copy;
     }
 
 
