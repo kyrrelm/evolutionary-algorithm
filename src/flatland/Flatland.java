@@ -21,7 +21,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class Flatland extends Application {
 
     private Cell[] cells;
-    private double playbackInterval = 1000;
+    private double playbackInterval = 2000;
     final double MAX_PLAYBACK_INTERVAL = 3000;
     final double MIN_PLAYBACK_INTERVAL = 100;
     private long sinceLast = 0;
@@ -89,8 +89,7 @@ public class Flatland extends Application {
             protected ArrayList<BoardState> call() throws Exception {
                 BoardState bs = new BoardState(2,1, 0.33f, 0.33f);
                 Agent a = new Agent(bs, true);
-                playback.add(bs);
-                for (int i = 0; i < 10; i++) {
+                for (int i = 0; i < 2; i++) {
                     a.act();
                 }
                 playback.addAll(a.getHistory());

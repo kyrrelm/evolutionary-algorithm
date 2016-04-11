@@ -15,33 +15,29 @@ public class Agent {
 
 
     public Agent(BoardState state, boolean recordRun) {
-        this.prevState = state.deepCopy();
-        this.currentState = this.prevState;
+        this.currentState = state.deepCopy();
         this.recordRun = recordRun;
         this.history = new ArrayList<>();
+        this.prevState = null;
         if (recordRun){
+            this.prevState = currentState.deepCopy();
             history.add(prevState);
         }
     }
 
     public void act(){
-        if (recordRun){
-            currentState = prevState.deepCopy();
-        }
         Random r = new Random();
-        switch (r.nextInt(4)){
+        switch (1){
             case 0:{
                 currentState.move(Cell.Type.MOLE_LEFT);
                 break;
             }
             case 1:{
                 currentState.move(Cell.Type.MOLE_RIGHT);
-
                 break;
             }
             case 2:{
                 currentState.move(Cell.Type.MOLE_UP);
-
                 break;
             }
             case 3:{
@@ -50,7 +46,9 @@ public class Agent {
             }
         }
         if (recordRun){
-            history.add(currentState);
+            prevState = currentState.deepCopy();
+            history.add(prevState);
+
         }
     }
 
