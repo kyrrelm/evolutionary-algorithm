@@ -39,8 +39,8 @@ public class FlatlandNetwork extends Phenotype{
             float[] input = generateInputs();
             float[] result = network.run(function, input);
             Cell.Type consumed = agent.act(calculateMove(result));
-            if (consumed == Cell.Type.FOOD) fitnessHax += 5;
-            else if (consumed == Cell.Type.POISON) fitnessHax -= 5;
+            if (consumed == Cell.Type.FOOD) fitnessHax += 10;
+            else if (consumed == Cell.Type.POISON) fitnessHax -= 10;
             else if (consumed == Cell.Type.BLANK) fitnessHax += 1;
         }
         return agent.getHistory();
