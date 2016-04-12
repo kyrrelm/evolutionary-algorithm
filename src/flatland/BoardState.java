@@ -97,7 +97,7 @@ public class BoardState {
             }
             case MOLE_LEFT:{
                 if (moleX>0){
-                    --moleX;
+                    moleX--;
                 }else {
                     moleX = BOARD_SIZE-1;
                 }
@@ -105,7 +105,7 @@ public class BoardState {
             }
             case MOLE_UP:{
                 if (moleY>0){
-                    --moleY;
+                    moleY--;
                 }else {
                     moleY = BOARD_SIZE-1;
                 }
@@ -123,7 +123,7 @@ public class BoardState {
         if (moleX>0){
             left = board[moleX-1][moleY].getType();
         }else {
-            left = board[moleX = BOARD_SIZE-1][moleY].getType();
+            left = board[BOARD_SIZE-1][moleY].getType();
         }
         Cell.Type down = board[moleX][(moleY+1)%BOARD_SIZE].getType();
         Cell.Type up;

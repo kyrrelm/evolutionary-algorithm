@@ -95,7 +95,7 @@ public class Flatland extends Application {
             @Override
             protected ArrayList<BoardState> call() throws Exception {
                 try {
-                    FlatlandNetwork fl = new FlatlandNetwork(null, 100, new Agent(new BoardState(2, 1, 0.33f, 0.33f), false), Neuron.Function.HYPERBOLIC);
+                    FlatlandNetwork fl = new FlatlandNetwork(null, 100, new Agent(new BoardState(4, 4, 0.33f, 0.33f), false), Neuron.Function.HYPERBOLIC);
                     fl.develop(null);
                     //fl.fitness();
                     playback.addAll(fl.runAgent(true));
