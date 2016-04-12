@@ -86,9 +86,9 @@ public class Neuron {
         left.connect(new Connection(inputLeft, -1.0f), new Connection(inputRight, -1.0f));
         right.connect(new Connection(inputLeft, 1.0f), new Connection(inputRight, 1.0f));
 
-        inputLeft.setValue(1f);
-        inputRight.setValue(1f);
-        xor.activate(Function.STEP);
+        inputLeft.setValue(0f);
+        inputRight.setValue(0f);
+        xor.activate(Function.SIGMOID);
 
         System.out.println("Result: " + xor.getValue());
 
