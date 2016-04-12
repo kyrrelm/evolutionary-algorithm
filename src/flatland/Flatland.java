@@ -2,6 +2,7 @@ package flatland;/**
  * Created by Kyrre on 06.04.2016.
  */
 
+import ann.Neuron;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.concurrent.Task;
@@ -94,9 +95,10 @@ public class Flatland extends Application {
             @Override
             protected ArrayList<BoardState> call() throws Exception {
                 try {
-                    FlatlandNetwork fl = new FlatlandNetwork(null, 100, new Agent(new BoardState(2, 1, 0.33f, 0.33f), false));
+                    FlatlandNetwork fl = new FlatlandNetwork(null, 100, new Agent(new BoardState(2, 1, 0.33f, 0.33f), false), Neuron.Function.HYPERBOLIC);
                     fl.develop(null);
-                    fl.fitness();
+                    //fl.fitness();
+                    playback.addAll(fl.runAgent(true));
                     System.out.println("here here");
                 }catch (Exception e){
                     System.out.println("Error in work thread:");

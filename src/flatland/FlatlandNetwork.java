@@ -5,6 +5,7 @@ import ann.Neuron;
 import ea.core.GenoType;
 import ea.core.Phenotype;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -12,25 +13,33 @@ import java.util.Random;
  */
 public class FlatlandNetwork extends Phenotype{
 
+    private final Neuron.Function function;
     private Network network;
     private Agent agent;
-    private final int TIME_STEPS = 10;
+    private final int TIME_STEPS = 60;
 
-    protected FlatlandNetwork(GenoType genoType, int fitnessGoal, Agent agent) {
+    protected FlatlandNetwork(GenoType genoType, int fitnessGoal, Agent agent, Neuron.Function function) {
         super(genoType, fitnessGoal);
+        this.function = function;
         this.agent = agent;
         network = null;
     }
 
     @Override
     protected int fitness() {
+        runAgent(agent.isRecordingRun());
+        return 0;
+    }
+
+    public ArrayList<BoardState> runAgent(boolean recordRun){
         agent.reset();
+        agent.setRecordRun(recordRun);
         for (int i = 0; i < TIME_STEPS; i++) {
             float[] input = generateInputs();
-            float[] result = network.run(Neuron.Function.HYPERBOLIC, input);
+            float[] result = network.run(function, input);
             agent.act(move(result));
         }
-        return 0;
+        return agent.getHistory();
     }
 
     private BoardState.Direction move(float[] result) {

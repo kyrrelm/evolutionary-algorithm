@@ -28,7 +28,13 @@ public class Agent {
     }
 
     public Cell.Type act(BoardState.Direction direction){
-        return currentState.move(direction);
+        Cell.Type type = currentState.move(direction);
+        if (recordRun){
+            prevState = currentState.deepCopy();
+            history.add(prevState);
+
+        }
+        return type;
     }
 
 
@@ -65,5 +71,13 @@ public class Agent {
 
     public Cell.Type[] sense() {
         return currentState.sense();
+    }
+
+    public boolean isRecordingRun() {
+        return recordRun;
+    }
+
+    public void setRecordRun(boolean recordRun) {
+        this.recordRun = recordRun;
     }
 }
