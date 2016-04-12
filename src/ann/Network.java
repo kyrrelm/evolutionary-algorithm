@@ -42,13 +42,13 @@ public class Network {
         }
     }
 
-    public float[] run(float... inputs){
+    public float[] run(Neuron.Function function, float... inputs){
         for (int i = 0; i <inputs.length; i++) {
             inputNodes.get(i).setValue(inputs[i]);
         }
         float[] result = new float[outputNodes.size()];
         for (int i = 0; i < result.length; i++) {
-            outputNodes.get(i).activate(Neuron.Function.STEP);
+            outputNodes.get(i).activate(function);
             result[i] = outputNodes.get(i).getValue();
         }
         return result;
@@ -61,7 +61,7 @@ public class Network {
             weights[i] = r.nextFloat();
         }
         Network net = new Network(2,2,weights,2,3);
-        float[] result = net.run(1f,0.5f);
+        float[] result = net.run(Neuron.Function.SIGMOID, 1f,0.5f);
         System.out.print("Result: ");
         for (float f:result) {
             System.out.print(f+", ");

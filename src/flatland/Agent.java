@@ -10,11 +10,13 @@ public class Agent {
 
     private BoardState prevState;
     private BoardState currentState;
+    private final BoardState initState;
     private boolean recordRun;
     private ArrayList<BoardState> history;
 
 
     public Agent(BoardState state, boolean recordRun) {
+        this.initState = state.deepCopy();
         this.currentState = state.deepCopy();
         this.recordRun = recordRun;
         this.history = new ArrayList<>();
@@ -58,5 +60,9 @@ public class Agent {
 
     public ArrayList<BoardState> getHistory() {
         return history;
+    }
+
+    public void reset() {
+        currentState = initState.deepCopy();
     }
 }

@@ -73,6 +73,38 @@ public class BoardState {
         return value;
     }
 
+    public Cell.Type[] sense(){
+        Cell.Type right = board[(moleX+1)%BOARD_SIZE][moleY].getType();
+        Cell.Type left;
+        if (moleX>0){
+            left = board[moleX-1][moleY].getType();
+        }else {
+            left = board[moleX = BOARD_SIZE-1][moleY].getType();
+        }
+        Cell.Type down = board[moleX][(moleY+1)%BOARD_SIZE].getType();
+        Cell.Type up;
+        if (moleY>0){
+            up = board[moleX][moleY-1].getType();
+        }else {
+            up = board[moleX][BOARD_SIZE-1].getType();
+        }
+        switch (currentDir){
+            case MOLE_UP:{
+                return new Cell.Type[]{left,up,right};
+            }
+            case MOLE_RIGHT:{
+                return new Cell.Type[]{up,right,down};
+            }
+            case MOLE_DOWN:{
+                return new Cell.Type[]{right,down,left};
+            }
+            case MOLE_LEFT:{
+                return new Cell.Type[]{down,left,up};
+            }
+        }
+        return null;
+    }
+
     public Cell.Type getType(int x, int y) {
         return board[x][y].getType();
     }
@@ -96,8 +128,7 @@ public class BoardState {
 
 
     public enum Direction {
-        UP,
-        DOWN,
+        STRAGHT,
         LEFT,
         RIGHT;
     }

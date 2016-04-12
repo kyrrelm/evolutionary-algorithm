@@ -302,6 +302,7 @@ public class Simulator {
 
     }
 
+    //TODO: FIX bug with break
     private static void adultSelection() {
         switch (adultSelection){
             case FULL_GENERATIONAL_REPLACEMENT:{
