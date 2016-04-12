@@ -17,32 +17,36 @@ public class FlatlandNetwork extends Phenotype{
     private Network network;
     private Agent agent;
     private final int TIME_STEPS = 60;
-
     protected FlatlandNetwork(GenoType genoType, int fitnessGoal, Agent agent, Neuron.Function function) {
         super(genoType, fitnessGoal);
         this.function = function;
         this.agent = agent;
+        this.fitnessHax = 0;
         network = null;
     }
-
+    private int fitnessHax;
     @Override
     protected int fitness() {
         runAgent(agent.isRecordingRun());
-        return 0;
+        return fitnessHax;
     }
 
     public ArrayList<BoardState> runAgent(boolean recordRun){
+        fitnessHax = 0;
         agent.reset();
         agent.setRecordRun(recordRun);
         for (int i = 0; i < TIME_STEPS; i++) {
             float[] input = generateInputs();
             float[] result = network.run(function, input);
-            agent.act(move(result));
+            Cell.Type consumed = agent.act(calculateMove(result));
+            if (consumed == Cell.Type.FOOD) fitnessHax += 5;
+            else if (consumed == Cell.Type.POISON) fitnessHax -= 5;
+            else if (consumed == Cell.Type.BLANK) fitnessHax += 1;
         }
         return agent.getHistory();
     }
 
-    private BoardState.Direction move(float[] result) {
+    private BoardState.Direction calculateMove(float[] result) {
         BoardState.Direction dir = BoardState.Direction.STAY;
         float best = 0;
         if (result[0] > best){

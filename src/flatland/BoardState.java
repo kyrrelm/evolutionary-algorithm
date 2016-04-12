@@ -42,7 +42,7 @@ public class BoardState {
     public Cell.Type move (Direction direction){
         switch (direction){
             case STAY:{
-                return Cell.Type.BLANK;
+                return null;
             }
             case STRAGHT:{
                 return move(currentDir);
