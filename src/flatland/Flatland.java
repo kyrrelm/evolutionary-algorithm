@@ -78,7 +78,12 @@ public class Flatland extends Application {
                         sinceLast = now;
                         System.out.println("weeeee");
                         //setButton((int) (Math.random()*100));
-                        updateBoard(playback.poll());
+                        BoardState boardState = playback.poll();
+                        updateBoard(boardState);
+                        for (Cell.Type t: boardState.sense()){
+                            System.out.print(t+", ");
+                        }
+                        System.out.println();
                     }
                 }
             }
@@ -90,7 +95,7 @@ public class Flatland extends Application {
                 BoardState bs = new BoardState(2,1, 0.33f, 0.33f);
                 Agent a = new Agent(bs, true);
                 for (int i = 0; i < 20; i++) {
-                    a.act();
+                    a.actRand();
                 }
                 playback.addAll(a.getHistory());
                 return null;

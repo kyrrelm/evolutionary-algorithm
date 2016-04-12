@@ -65,4 +65,8 @@ public class Agent {
     public void reset() {
         currentState = initState.deepCopy();
     }
+
+    public Cell.Type[] sense() {
+        return currentState.sense();
+    }
 }
