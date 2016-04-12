@@ -1,8 +1,12 @@
 package ea.core;
 
+import ann.Neuron;
 import ea.oneMax.LolzPrefix;
 import ea.oneMax.OneMaxPheno;
 import ea.oneMax.SurprisingSequence;
+import flatland.Agent;
+import flatland.BoardState;
+import flatland.FlatlandNetwork;
 
 import java.util.*;
 
@@ -77,7 +81,8 @@ public class Simulator {
     public enum Problem {
         ONE_MAX,
         LOLZ,
-        SURPRISE;
+        SURPRISE,
+        FLATLAND;
 
     }
 
@@ -110,8 +115,33 @@ public class Simulator {
                     childPopulation.add(new SurprisingSequence(surpriseLength, surpriseS, global));
                     break;
                 }
+                case FLATLAND:{
+                    childPopulation.add(new FlatlandNetwork(new GenoType(270), 200, new Agent(new BoardState(4, 4, 0.33f, 0.33f), false), Neuron.Function.HYPERBOLIC));
+                    break;
+                }
             }
         }
+    }
+    public static void init(Problem p){
+        problem = p;
+        init();
+    }
+
+    public static void run(){
+        System.out.println("Running up to: "+loopLimit+" iterations");
+        while (iterations<loopLimit){
+            if (develop()){
+                break;
+            }
+            adultSelection();
+            parentSelection();
+            System.out.println("Iteration: "+iterations);
+            iterations++;
+        }
+        System.out.println("Done after: "+iterations+" iterations.");
+        System.out.println("Best fitness: "+bestPhenotype.getFitness()+" phenotype: "+bestPhenotype.getPhenome());
+        System.out.println("Best fitness: "+bestPhenotype.getFitness()+" phenotype: "+bestPhenotype);
+
     }
 
     /**
@@ -148,23 +178,6 @@ public class Simulator {
             childPopulation.add(secondPick.mate(firstPick));
 
         }
-    }
-
-    public static void run(){
-        System.out.println("Running up to: "+loopLimit+" iterations");
-        while (iterations<loopLimit){
-            if (develop()){
-                break;
-            }
-            adultSelection();
-            parentSelection();
-            System.out.println("Iteration: "+iterations);
-            iterations++;
-        }
-        System.out.println("Done after: "+iterations+" iterations.");
-        System.out.println("Best fitness: "+bestPhenotype.getFitness()+" phenotype: "+bestPhenotype.getPhenome());
-        System.out.println("Best fitness: "+bestPhenotype.getFitness()+" phenotype: "+bestPhenotype);
-
     }
 
     private static void parentSelection() {

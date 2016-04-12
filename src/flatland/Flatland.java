@@ -4,6 +4,7 @@ package flatland;/**
 
 import ann.Neuron;
 import ea.core.GenoType;
+import ea.core.Simulator;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.concurrent.Task;
@@ -96,10 +97,14 @@ public class Flatland extends Application {
             @Override
             protected ArrayList<BoardState> call() throws Exception {
                 try {
-                    FlatlandNetwork fl = new FlatlandNetwork(new GenoType(270), 100, new Agent(new BoardState(4, 4, 0.33f, 0.33f), false), Neuron.Function.HYPERBOLIC);
-                    fl.develop(fl.genoType);
-                    //fl.fitness();
-                    playback.addAll(fl.runAgent(true));
+//                    FlatlandNetwork fl = new FlatlandNetwork(new GenoType(270), 200, new Agent(new BoardState(4, 4, 0.33f, 0.33f), false), Neuron.Function.HYPERBOLIC);
+//                    fl.develop(fl.genoType);
+//                    //fl.fitness();
+//                    playback.addAll(fl.runAgent(true));
+                    Simulator.init(Simulator.Problem.FLATLAND);
+                    Simulator.run();
+                    FlatlandNetwork best = (FlatlandNetwork) Simulator.bestPhenotype;
+                    playback.addAll(best.runAgent(turn));
                     System.out.println("here here");
                 }catch (Exception e){
                     System.out.println("Error in work thread:");

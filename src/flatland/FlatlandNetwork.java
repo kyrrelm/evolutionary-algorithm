@@ -18,7 +18,7 @@ public class FlatlandNetwork extends Phenotype{
     private Agent agent;
     private final int TIME_STEPS = 60;
     private final int numberOfBite;
-    protected FlatlandNetwork(GenoType genoType, int fitnessGoal, Agent agent, Neuron.Function function) {
+    public FlatlandNetwork(GenoType genoType, int fitnessGoal, Agent agent, Neuron.Function function) {
         super(genoType, fitnessGoal);
         this.function = function;
         this.agent = agent;
