@@ -3,6 +3,7 @@ package flatland;/**
  */
 
 import ann.Neuron;
+import ea.core.GenoType;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.concurrent.Task;
@@ -95,8 +96,8 @@ public class Flatland extends Application {
             @Override
             protected ArrayList<BoardState> call() throws Exception {
                 try {
-                    FlatlandNetwork fl = new FlatlandNetwork(null, 100, new Agent(new BoardState(4, 4, 0.33f, 0.33f), false), Neuron.Function.HYPERBOLIC);
-                    fl.develop(null);
+                    FlatlandNetwork fl = new FlatlandNetwork(new GenoType(270), 100, new Agent(new BoardState(4, 4, 0.33f, 0.33f), false), Neuron.Function.HYPERBOLIC);
+                    fl.develop(fl.genoType);
                     //fl.fitness();
                     playback.addAll(fl.runAgent(true));
                     System.out.println("here here");
