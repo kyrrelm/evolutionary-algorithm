@@ -55,7 +55,7 @@ public class Network {
     }
 
     public static void main(String[] args) {
-        float[] weights = new float[18];
+        float[] weights = new float[16];
         Random r = new Random();
         for (int i = 0; i < weights.length; i++) {
             weights[i] = r.nextFloat();
