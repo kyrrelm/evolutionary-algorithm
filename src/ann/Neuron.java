@@ -91,6 +91,11 @@ public class Neuron {
 
     }
 
+    public void reset() {
+        fired = false;
+        value = 0.0f;
+    }
+
     public enum Function{
         STEP,
         HYPERBOLIC,

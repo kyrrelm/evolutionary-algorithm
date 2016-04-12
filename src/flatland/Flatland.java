@@ -92,12 +92,15 @@ public class Flatland extends Application {
         new Thread(new Task<ArrayList<BoardState>>() {
             @Override
             protected ArrayList<BoardState> call() throws Exception {
-                BoardState bs = new BoardState(2,1, 0.33f, 0.33f);
-                Agent a = new Agent(bs, true);
-                for (int i = 0; i < 20; i++) {
-                    a.actRand();
-                }
-                playback.addAll(a.getHistory());
+                FlatlandNetwork fl = new FlatlandNetwork(null, 100, new Agent(new BoardState(2,1, 0.33f, 0.33f), false));
+                fl.develop(null);
+                fl.fitness();
+//                BoardState bs = new BoardState(2,1, 0.33f, 0.33f);
+//                Agent a = new Agent(bs, true);
+//                for (int i = 0; i < 20; i++) {
+//                    a.actRand();
+//                }
+//                playback.addAll(a.getHistory());
                 return null;
             }
         }).start();

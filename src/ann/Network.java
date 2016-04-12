@@ -11,14 +11,17 @@ public class Network {
     private ArrayList<Neuron> inputNodes;
     private ArrayList<ArrayList<Neuron>> hiddenLayers;
     private ArrayList<Neuron> outputNodes;
+    private ArrayList<Neuron> allNodes;
 
     public Network(int numberOfInputNodes, int numberOfOutputNodes, float standardThreshold, float[] weights, int... hiddenNodesInLayer) {
         this.inputNodes = new ArrayList<>();
         this.hiddenLayers = new ArrayList<>();
         this.outputNodes = new ArrayList<>();
+        this.allNodes = new ArrayList<>();
         for (int i = 0; i < numberOfInputNodes; i++) {
             inputNodes.add(new Neuron(standardThreshold));
         }
+        allNodes.addAll(inputNodes);
         int weightIndex = 0;
         ArrayList<Neuron> previousLayer = inputNodes;
         for (int hiddenNodes: hiddenNodesInLayer) {
@@ -31,6 +34,7 @@ public class Network {
                 layer.add(n);
             }
             hiddenLayers.add(layer);
+            allNodes.addAll(layer);
             previousLayer = layer;
         }
         for (int i = 0; i <numberOfOutputNodes; i++) {
@@ -40,6 +44,7 @@ public class Network {
             }
             outputNodes.add(outputNode);
         }
+        allNodes.addAll(outputNodes);
     }
 
     public float[] run(Neuron.Function function, float... inputs){
@@ -51,7 +56,12 @@ public class Network {
             outputNodes.get(i).activate(function);
             result[i] = outputNodes.get(i).getValue();
         }
+        reset();
         return result;
+    }
+
+    private void reset() {
+        allNodes.forEach(Neuron::reset);
     }
 
     public static void main(String[] args) {
