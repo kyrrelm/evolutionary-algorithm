@@ -6,8 +6,8 @@ import java.util.ArrayList;
  * Created by Kyrre on 05.04.2016.
  */
 public class Neuron {
-    private ArrayList<Neuron> inputs;
-    private float weight;
+    private ArrayList<Connection> inputs;
+    private float value;
     private float threshold;
     private boolean fired;
 
@@ -15,40 +15,51 @@ public class Neuron {
         this.threshold = threshold;
         fired = false;
         inputs = new ArrayList();
+        this.value = 0.0f;
     }
 
-    public void connect (Neuron ... ns) {
-        for (Neuron n : ns) inputs.add(n);
-        //inputs.addAll(Arrays.asList(ns));
+    public void connect (Connection ... cs) {
+        for (Connection c : cs) inputs.add(c);
+    }
+    public void connect (ArrayList<Connection> connections) {
+        inputs.addAll(connections);
     }
 
-    public void setWeight (float newWeight) {
-        weight = newWeight;
+    public void setValue(float newWeight) {
+        value = newWeight;
     }
 
-    public float getWeight () {
-        return weight;
+    public float getValue() {
+        return value;
     }
 
-    public float activate() {
-        if (inputs.size() > 0) {
-            float totalWeight = 0.0f;
-            for (Neuron n : inputs) {
-                if (!n.hasFired()){
-                    n.activate();
-                }
-                totalWeight += (n.hasFired()) ? n.getWeight() : 0.0f;
+    public float activate(Function f) {
+        switch (f){
+            case STEP:{
+                return stepFunction();
             }
-            fired = totalWeight > threshold;
-            return totalWeight;
         }
-        else if (weight != 0.0f) {
-            fired = weight > threshold;
-            return weight;
+        return -1;
+    }
+
+    private float stepFunction(){
+        if (inputs.size() > 0) {
+            value = 0.0f;
+            for (Connection connection : inputs) {
+                Neuron n = connection.n;
+                if (!n.hasFired()){
+                    n.stepFunction();
+                }
+                value += n.getValue()* connection.getWeight();
+            }
         }
-        else {
-            return 0.0f;
+        fired = value > threshold;
+        if (fired){
+            value = 1;
+        }else {
+            value = 0;
         }
+        return value;
     }
 
     public boolean hasFired() {
@@ -57,23 +68,28 @@ public class Neuron {
 
     public static void main (String [] args) {
         //XOR test
-        Neuron xor = new Neuron(0.5f);
-        Neuron left = new Neuron(1.5f);
+        Neuron xor = new Neuron(1.5f);
+        Neuron left = new Neuron(-1.5f);
         Neuron right = new Neuron(0.5f);
-        left.setWeight(-1.0f);
-        right.setWeight(1.0f);
-        xor.connect(left, right);
+        xor.connect(new Connection(left, 1.0f), new Connection(right, 1.0f));
 
-        Neuron inputLeft = new Neuron(.0f);
-        inputLeft.setWeight(1f);
-        Neuron inputRight = new Neuron(1.0f);
-        inputRight.setWeight(1f);
-        left.connect(inputLeft, inputRight);
-        right.connect(inputLeft, inputRight);
 
-        xor.activate();
+        Neuron inputLeft = new Neuron(0.0f);
+        Neuron inputRight = new Neuron(0.0f);
+        left.connect(new Connection(inputLeft, -1.0f), new Connection(inputRight, -1.0f));
+        right.connect(new Connection(inputLeft, 1.0f), new Connection(inputRight, 1.0f));
+
+        inputLeft.setValue(1f);
+        inputRight.setValue(0f);
+        xor.activate(Function.STEP);
 
         System.out.println("Result: " + xor.hasFired());
 
+    }
+
+    public enum Function{
+        STEP,
+        HYPERBOLIC,
+        SIGMOIDS;
     }
 }

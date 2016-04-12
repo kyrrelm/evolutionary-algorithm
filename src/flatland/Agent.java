@@ -26,8 +26,12 @@ public class Agent {
     }
 
     public void act(){
+
+    }
+
+    public void actRand(){
         Random r = new Random();
-        switch (1){
+        switch (r.nextInt(4)){
             case 0:{
                 currentState.move(Cell.Type.MOLE_LEFT);
                 break;

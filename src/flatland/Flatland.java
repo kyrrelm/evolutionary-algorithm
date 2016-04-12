@@ -89,7 +89,7 @@ public class Flatland extends Application {
             protected ArrayList<BoardState> call() throws Exception {
                 BoardState bs = new BoardState(2,1, 0.33f, 0.33f);
                 Agent a = new Agent(bs, true);
-                for (int i = 0; i < 2; i++) {
+                for (int i = 0; i < 20; i++) {
                     a.act();
                 }
                 playback.addAll(a.getHistory());
