@@ -14,7 +14,7 @@ public class FlatlandNetwork extends Phenotype{
 
     private Network network;
     private Agent agent;
-    private final int TIME_STEPS = 60;
+    private final int TIME_STEPS = 10;
 
     protected FlatlandNetwork(GenoType genoType, int fitnessGoal, Agent agent) {
         super(genoType, fitnessGoal);
@@ -30,11 +30,12 @@ public class FlatlandNetwork extends Phenotype{
             float[] result = network.run(Neuron.Function.HYPERBOLIC, input);
             agent.act(move(result));
         }
+        System.out.println("done");
         return 0;
     }
 
     private BoardState.Direction move(float[] result) {
-        BoardState.Direction dir = null;
+        BoardState.Direction dir = BoardState.Direction.STAY;
         float best = 0;
         if (result[0] > best){
             dir = BoardState.Direction.LEFT;

@@ -16,6 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class Flatland extends Application {
@@ -89,12 +90,19 @@ public class Flatland extends Application {
             }
         }.start();
 
-        new Thread(new Task<ArrayList<BoardState>>() {
+        Task task = new Task<ArrayList<BoardState>>() {
             @Override
             protected ArrayList<BoardState> call() throws Exception {
-                FlatlandNetwork fl = new FlatlandNetwork(null, 100, new Agent(new BoardState(2,1, 0.33f, 0.33f), false));
-                fl.develop(null);
-                fl.fitness();
+                try {
+                    FlatlandNetwork fl = new FlatlandNetwork(null, 100, new Agent(new BoardState(2, 1, 0.33f, 0.33f), false));
+                    fl.develop(null);
+                    fl.fitness();
+                    System.out.println("here here");
+                }catch (Exception e){
+                    System.out.println("Error");
+                    e.printStackTrace();
+                }
+
 //                BoardState bs = new BoardState(2,1, 0.33f, 0.33f);
 //                Agent a = new Agent(bs, true);
 //                for (int i = 0; i < 20; i++) {
@@ -103,7 +111,10 @@ public class Flatland extends Application {
 //                playback.addAll(a.getHistory());
                 return null;
             }
-        }).start();
+        };
+        task.setOnFailed(event -> System.out.println("failed" ));
+        Thread thread = new Thread(task);
+        thread.start();
 
         speedSlider.valueProperty().addListener(cl -> {
             playbackInterval = MAX_PLAYBACK_INTERVAL-speedSlider.getValue()+MIN_PLAYBACK_INTERVAL;

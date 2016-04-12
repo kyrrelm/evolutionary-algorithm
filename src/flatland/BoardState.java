@@ -41,6 +41,9 @@ public class BoardState {
 
     public Cell.Type move (Direction direction){
         switch (direction){
+            case STAY:{
+                return Cell.Type.BLANK;
+            }
             case STRAGHT:{
                 return move(currentDir);
             }
@@ -174,6 +177,7 @@ public class BoardState {
     public enum Direction {
         STRAGHT,
         LEFT,
-        RIGHT;
+        RIGHT,
+        STAY;
     }
 }
