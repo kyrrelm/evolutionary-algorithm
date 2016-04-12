@@ -63,6 +63,9 @@ public class FlatlandNetwork extends Phenotype{
     private float[] generateInputs(){
         Cell.Type[] sensors = agent.sense();
         float[] inputs = new float[6];
+        for (int i = 0; i <inputs.length; i++) {
+            inputs[i] = 0.0001f;
+        }
         for (int j = 0; j < sensors.length; j++) {
             if (sensors[j] == Cell.Type.FOOD){
                 inputs[j] = 1;
