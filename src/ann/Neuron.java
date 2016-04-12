@@ -52,21 +52,16 @@ public class Neuron {
     private float activationFunction(Function f, float value){
         switch (f){
             case STEP:{
-                return stepFunction(value);
+                return value > threshold ? 1 : 0;
             }
             case SIGMOID:{
-                return sigmoid(value);
+                return (float) (1 / (1 + Math.exp(-value)));
+            }
+            case HYPERBOLIC:{
+                return (float) Math.tanh(value);
             }
         }
         return -1;
-    }
-
-    private float sigmoid(float value){
-        return (float) (1 / (1 + Math.exp(-value)));
-    }
-
-    private float stepFunction(float value){
-        return value > threshold ? 1 : 0;
     }
 
     public boolean hasFired() {
