@@ -24,13 +24,12 @@ public class FlatlandNetwork extends Phenotype{
 
     @Override
     protected int fitness() {
-        //agent.reset();
+        agent.reset();
         for (int i = 0; i < TIME_STEPS; i++) {
             float[] input = generateInputs();
             float[] result = network.run(Neuron.Function.HYPERBOLIC, input);
             agent.act(move(result));
         }
-        System.out.println("done");
         return 0;
     }
 

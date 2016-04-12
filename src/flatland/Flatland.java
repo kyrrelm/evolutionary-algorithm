@@ -99,7 +99,7 @@ public class Flatland extends Application {
                     fl.fitness();
                     System.out.println("here here");
                 }catch (Exception e){
-                    System.out.println("Error");
+                    System.out.println("Error in work thread:");
                     e.printStackTrace();
                 }
 
@@ -112,7 +112,6 @@ public class Flatland extends Application {
                 return null;
             }
         };
-        task.setOnFailed(event -> System.out.println("failed" ));
         Thread thread = new Thread(task);
         thread.start();
 
