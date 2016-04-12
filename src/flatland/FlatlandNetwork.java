@@ -37,7 +37,7 @@ public class FlatlandNetwork extends Phenotype{
         for (int i = 0; i < weights.length; i++) {
             weights[i] = r.nextFloat();
         }
-        network = new Network(6,3,weights,6);
+        network = new Network(6,3,0.5f,weights,6);
     }
 
     @Override

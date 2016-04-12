@@ -39,6 +39,47 @@ public class BoardState {
         }
     }
 
+    public Cell.Type move (Direction direction){
+        switch (direction){
+            case STRAGHT:{
+                return move(currentDir);
+            }
+            case LEFT:{
+                switch (currentDir){
+                    case MOLE_UP:{
+                        return move(Cell.Type.MOLE_LEFT);
+                    }
+                    case MOLE_RIGHT:{
+                        return move(Cell.Type.MOLE_UP);
+                    }
+                    case MOLE_DOWN:{
+                        return move(Cell.Type.MOLE_RIGHT);
+                    }
+                    case MOLE_LEFT:{
+                        return move(Cell.Type.MOLE_DOWN);
+                    }
+                }
+            }
+            case RIGHT:{
+                switch (currentDir){
+                    case MOLE_UP:{
+                        return move(Cell.Type.MOLE_RIGHT);
+                    }
+                    case MOLE_RIGHT:{
+                        return move(Cell.Type.MOLE_DOWN);
+                    }
+                    case MOLE_DOWN:{
+                        return move(Cell.Type.MOLE_LEFT);
+                    }
+                    case MOLE_LEFT:{
+                        return move(Cell.Type.MOLE_UP);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     public Cell.Type move(Cell.Type direction){
         currentDir = direction;
         board[moleX][moleY].setType(Cell.Type.BLANK);
@@ -126,6 +167,9 @@ public class BoardState {
         this.board = copy;
     }
 
+    public Cell.Type getCurrentDir() {
+        return currentDir;
+    }
 
     public enum Direction {
         STRAGHT,

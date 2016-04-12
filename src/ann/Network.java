@@ -12,12 +12,12 @@ public class Network {
     private ArrayList<ArrayList<Neuron>> hiddenLayers;
     private ArrayList<Neuron> outputNodes;
 
-    public Network(int numberOfInputNodes, int numberOfOutputNodes, float[] weights, int... hiddenNodesInLayer) {
+    public Network(int numberOfInputNodes, int numberOfOutputNodes, float standardThreshold, float[] weights, int... hiddenNodesInLayer) {
         this.inputNodes = new ArrayList<>();
         this.hiddenLayers = new ArrayList<>();
         this.outputNodes = new ArrayList<>();
         for (int i = 0; i < numberOfInputNodes; i++) {
-            inputNodes.add(new Neuron(0.5f));
+            inputNodes.add(new Neuron(standardThreshold));
         }
         int weightIndex = 0;
         ArrayList<Neuron> previousLayer = inputNodes;
@@ -60,7 +60,7 @@ public class Network {
         for (int i = 0; i < weights.length; i++) {
             weights[i] = r.nextFloat();
         }
-        Network net = new Network(2,2,weights,2,3);
+        Network net = new Network(2,2,0.5f,weights,2,3);
         float[] result = net.run(Neuron.Function.SIGMOID, 1f,0.5f);
         System.out.print("Result: ");
         for (float f:result) {

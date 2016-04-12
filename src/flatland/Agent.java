@@ -27,27 +27,24 @@ public class Agent {
         }
     }
 
-    public void act(){
-
+    public Cell.Type act(BoardState.Direction direction){
+        return currentState.move(direction);
     }
+
 
     public void actRand(){
         Random r = new Random();
-        switch (r.nextInt(4)){
+        switch (r.nextInt(3)){
             case 0:{
-                currentState.move(Cell.Type.MOLE_LEFT);
+                currentState.move(BoardState.Direction.LEFT);
                 break;
             }
             case 1:{
-                currentState.move(Cell.Type.MOLE_RIGHT);
+                currentState.move(BoardState.Direction.RIGHT);
                 break;
             }
             case 2:{
-                currentState.move(Cell.Type.MOLE_UP);
-                break;
-            }
-            case 3:{
-                currentState.move(Cell.Type.MOLE_DOWN);
+                currentState.move(BoardState.Direction.STRAGHT);
                 break;
             }
         }
