@@ -34,32 +34,39 @@ public class Neuron {
     }
 
     public float activate(Function f) {
-        switch (f){
-            case STEP:{
-                return stepFunction();
-            }
-        }
-        return -1;
-    }
-
-    private float stepFunction(){
         if (inputs.size() > 0) {
             value = 0.0f;
             for (Connection connection : inputs) {
                 Neuron n = connection.n;
                 if (!n.hasFired()){
-                    n.stepFunction();
+                    n.activate(f);
                 }
                 value += n.getValue()* connection.getWeight();
             }
         }
-        fired = value > threshold;
-        if (fired){
-            value = 1;
-        }else {
-            value = 0;
-        }
+        value = activationFunction(f, value);
+        fired = true;
         return value;
+    }
+
+    private float activationFunction(Function f, float value){
+        switch (f){
+            case STEP:{
+                return stepFunction(value);
+            }
+            case SIGMOID:{
+                return sigmoid(value);
+            }
+        }
+        return -1;
+    }
+
+    private float sigmoid(float value){
+        return (float) (1 / (1 + Math.exp(-value)));
+    }
+
+    private float stepFunction(float value){
+        return value > threshold ? 1 : 0;
     }
 
     public boolean hasFired() {
@@ -80,16 +87,18 @@ public class Neuron {
         right.connect(new Connection(inputLeft, 1.0f), new Connection(inputRight, 1.0f));
 
         inputLeft.setValue(1f);
-        inputRight.setValue(0f);
+        inputRight.setValue(1f);
         xor.activate(Function.STEP);
 
-        System.out.println("Result: " + xor.hasFired());
+        System.out.println("Result: " + xor.getValue());
+
+
 
     }
 
     public enum Function{
         STEP,
         HYPERBOLIC,
-        SIGMOIDS;
+        SIGMOID;
     }
 }
