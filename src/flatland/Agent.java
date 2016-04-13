@@ -50,8 +50,11 @@ public class Agent {
 
     public void reset(int index) {
         currentState = initStates.get(index).deepCopy();
-        history.clear();
         history.add(currentState.deepCopy());
+    }
+
+    public void resetHistory(){
+        history.clear();
     }
 
     public Cell.Type[] sense() {

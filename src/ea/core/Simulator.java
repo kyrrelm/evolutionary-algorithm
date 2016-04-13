@@ -87,7 +87,7 @@ public class Simulator {
     }
     static Agent a;
     public static void init(){
-         a = new Agent(true, false, false);
+         a = new Agent(true, true, false);
         bestPhenotype = null;
         generationalBest = new ArrayList<>();
         avgFitnessList = new ArrayList<>();

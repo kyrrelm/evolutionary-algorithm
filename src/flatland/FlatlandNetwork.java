@@ -34,6 +34,8 @@ public class FlatlandNetwork extends Phenotype{
 
     public ArrayList<BoardState> runAgent(boolean recordRun){
         fitnessHax = 0;
+        int tmp = 0;
+        agent.resetHistory();
         for (int y = 0; y < agent.getNumberOfRuns(); y++) {
             agent.reset(y);
             agent.setRecordRun(recordRun);
@@ -41,12 +43,16 @@ public class FlatlandNetwork extends Phenotype{
                 float[] input = generateInputs();
                 float[] result = network.run(function, input);
                 Cell.Type consumed = agent.act(calculateMove(result));
-                if (consumed == Cell.Type.FOOD) fitnessHax += 10;
-                else if (consumed == Cell.Type.POISON) fitnessHax -= 10;
-                else if (consumed == Cell.Type.BLANK) fitnessHax += 1;
+                if (consumed == Cell.Type.FOOD) tmp += 10;
+                else if (consumed == Cell.Type.POISON) tmp -= 10;
+                else if (consumed == Cell.Type.BLANK) tmp += 1;
+            }
+            if (tmp>fitnessHax){
+                fitnessHax = tmp;
+                tmp = 0;
             }
         }
-        fitnessHax = fitnessHax/agent.getNumberOfRuns();
+//        fitnessHax = fitnessHax/agent.getNumberOfRuns();
         return agent.getHistory();
     }
 
