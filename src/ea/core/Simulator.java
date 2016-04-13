@@ -88,7 +88,7 @@ public class Simulator {
     static Agent agent;
     static Network network;
     public static void init(){
-        agent = new Agent(true, false, false);
+        agent = new Agent(false, true, false);
         network = new Network(6,3,0.5f,6);
         bestPhenotype = null;
         generationalBest = new ArrayList<>();

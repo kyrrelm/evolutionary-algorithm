@@ -51,12 +51,8 @@ public class FlatlandNetwork extends Phenotype{
                 else if (consumed == Cell.Type.POISON) tmp -= 10;
                 else if (consumed == Cell.Type.BLANK) tmp += 1;
             }
-            if (tmp>fitnessHax){
-                fitnessHax = tmp;
-                tmp = 0;
-            }
         }
-//        fitnessHax = fitnessHax/agent.getNumberOfRuns();
+        fitnessHax = tmp/agent.getNumberOfRuns();
         return agent.getHistory();
     }
 
