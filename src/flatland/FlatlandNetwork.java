@@ -51,13 +51,13 @@ public class FlatlandNetwork extends Phenotype{
     private BoardState.Direction calculateMove(float[] result) {
         BoardState.Direction dir = BoardState.Direction.STAY;
         float best = 0;
-        if (result[0] > best){
-            dir = BoardState.Direction.LEFT;
-            best = result[0];
-        }
         if (result[1] > best){
             dir = BoardState.Direction.STRAGHT;
             best = result[1];
+        }
+        if (result[0] > best){
+            dir = BoardState.Direction.LEFT;
+            best = result[0];
         }
         if (result[2] > best){
             dir = BoardState.Direction.RIGHT;
@@ -102,6 +102,10 @@ public class FlatlandNetwork extends Phenotype{
             bitsUsed = 0;
             number = 0;
         }
+//        Random r = new Random();
+//        for (int i = 0; i < weights.length; i++) {
+//            weights[i] = r.nextInt(32);
+//        }
         network = new Network(6,3,0.5f,weights,6);
     }
 
