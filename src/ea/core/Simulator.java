@@ -47,7 +47,7 @@ public class Simulator {
     //Best for LOLZ:0.2f
     public static float elitism = 0.1f;
     public static AdultSelection adultSelection = OVER_PRODUCED_GENERATIONAL_MIXING;
-    public static ParentSelection parentSelection = TOURNAMENT;
+    public static ParentSelection parentSelection = SIGMA;
     public static Problem problem = SURPRISE;
 
     public static int oneMaxSize = 40;
