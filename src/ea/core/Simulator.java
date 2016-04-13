@@ -6,7 +6,6 @@ import ea.oneMax.LolzPrefix;
 import ea.oneMax.OneMaxPheno;
 import ea.oneMax.SurprisingSequence;
 import flatland.Agent;
-import flatland.BoardState;
 import flatland.FlatlandNetwork;
 
 import java.util.*;
@@ -86,10 +85,10 @@ public class Simulator {
         FLATLAND;
 
     }
-    static Agent a;
+    static Agent agent;
     static Network network;
     public static void init(){
-        a = new Agent(true, true, false);
+        agent = new Agent(false, true, false);
         network = new Network(6,3,0.5f,6);
         bestPhenotype = null;
         generationalBest = new ArrayList<>();
@@ -120,7 +119,7 @@ public class Simulator {
                     break;
                 }
                 case FLATLAND:{
-                    childPopulation.add(new FlatlandNetwork(new GenoType(810), 1000, a, network, Neuron.Function.HYPERBOLIC));
+                    childPopulation.add(new FlatlandNetwork(new GenoType(810), 1000, agent, network, Neuron.Function.HYPERBOLIC));
                     break;
                 }
             }
@@ -139,6 +138,7 @@ public class Simulator {
             }
             adultSelection();
             parentSelection();
+            agent.changeBoards();
             System.out.println("Iteration: "+iterations);
             iterations++;
         }

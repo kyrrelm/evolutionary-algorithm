@@ -21,13 +21,18 @@ public class Agent {
         this.staticRun = staticRun;
         this.initStates = new ArrayList<>();
         this.numberOfRuns = (fiveRuns?5:1);
-        for (int i = 0; i <numberOfRuns; i++) {
-            initStates.add(new BoardState(4, 4, 0.33f, 0.33f));
-        }
+        setInitStates();
         this.currentState = null;
         this.recordRun = recordRun;
         this.history = new ArrayList<>();
         this.prevState = null;
+    }
+
+    private void setInitStates(){
+        initStates.clear();
+        for (int i = 0; i <numberOfRuns; i++) {
+            initStates.add(new BoardState(4, 4, 0.33f, 0.33f));
+        }
     }
 
     public Cell.Type act(BoardState.Direction direction){
@@ -67,5 +72,10 @@ public class Agent {
 
     public void setRecordRun(boolean recordRun) {
         this.recordRun = recordRun;
+    }
+
+    public void changeBoards() {
+        if (staticRun) return;
+        setInitStates();
     }
 }
