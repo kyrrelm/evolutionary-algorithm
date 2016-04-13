@@ -101,6 +101,7 @@ public class Simulator {
             productionSize = populationSize*2;
         }
         childPopulation = new ArrayList<>();
+        Agent a = new Agent(new BoardState(4, 4, 0.33f, 0.33f), false);
         for (int i = 0; i < productionSize; i++) {
             switch (problem){
                 case ONE_MAX:{
@@ -116,7 +117,7 @@ public class Simulator {
                     break;
                 }
                 case FLATLAND:{
-                    childPopulation.add(new FlatlandNetwork(new GenoType(270), 1000, new Agent(new BoardState(4, 4, 0.33f, 0.33f), false), Neuron.Function.HYPERBOLIC));
+                    childPopulation.add(new FlatlandNetwork(new GenoType(270), 1000, a, Neuron.Function.HYPERBOLIC));
                     break;
                 }
             }
