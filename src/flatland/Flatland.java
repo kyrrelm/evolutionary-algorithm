@@ -12,6 +12,9 @@ import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -59,8 +62,8 @@ public class Flatland extends Application {
         Label labelSpeedSlider = new Label("Animation speed:");
         Slider speedSlider = new Slider(100, MAX_PLAYBACK_INTERVAL, playbackInterval);
         speedSlider.setOrientation(Orientation.HORIZONTAL);
-        speedSlider.setMaxWidth(300);
-        speedSlider.setPrefWidth(300);
+        speedSlider.setMaxWidth(250);
+        speedSlider.setPrefWidth(250);
         speedSlider.setBlockIncrement(1000);
         speedSlider.setValue(MAX_PLAYBACK_INTERVAL- playbackInterval +MIN_PLAYBACK_INTERVAL);
 
@@ -70,11 +73,17 @@ public class Flatland extends Application {
             best.freshBoards();
             playback.addAll(best.runAgent(true));
         });
+        Button graph = new Button("Show graph");
+        graph.setOnAction(event ->{
+            Stage graphStage = new Stage();
+            graphStage.setScene(new Scene(createChart(),800,300));
+            graphStage.show();
+        });
 
         HBox hbox = new HBox();
         hbox.setPadding(new Insets(5, 5, 5, 5));
         hbox.setSpacing(5);
-        hbox.getChildren().addAll(labelSpeedSlider,speedSlider, newBoard);
+        hbox.getChildren().addAll(labelSpeedSlider,speedSlider, newBoard, graph);
         board.add(hbox,0,10,10,1);
 
         Scene scene = new Scene(board);
@@ -130,5 +139,45 @@ public class Flatland extends Application {
                 cells[index].setType(boardState.getType(x,y));
             }
         }
+    }
+    @SuppressWarnings("Duplicates")
+    protected LineChart<Number,Number> createChart(){
+        //defining the axes
+        final NumberAxis xAxis = new NumberAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        xAxis.setLabel("Generations");
+        //creating the chart
+        final LineChart<Number,Number> lineChart =
+                new LineChart<Number,Number>(xAxis,yAxis);
+        lineChart.setTitle("");
+
+        XYChart.Series bestFitness = new XYChart.Series();
+        bestFitness.setName("Best fitness");
+        int generations = 0;
+        for(Double p: Simulator.generationalBest){
+            bestFitness.getData().add(new XYChart.Data(generations++, p));
+        }
+        XYChart.Series avgFitness = new XYChart.Series();
+        avgFitness.setName("Avg fitness");
+        generations = 0;
+        for(Double p: Simulator.avgFitnessList){
+            avgFitness.getData().add(new XYChart.Data(generations++, p));
+        }
+        XYChart.Series standardDev = new XYChart.Series();
+        standardDev.setName("Standard deviation");
+        generations = 0;
+        for(Double p: Simulator.standardDeviationList){
+            standardDev.getData().add(new XYChart.Data(generations++, p));
+        }
+        XYChart.Series globalBest = new XYChart.Series();
+        globalBest.setName("Global best");
+        generations = 0;
+        for(Double p: Simulator.globalBest){
+            globalBest.getData().add(new XYChart.Data(generations++, p));
+        }
+
+        lineChart.getData().addAll(globalBest,bestFitness, avgFitness, standardDev);
+
+        return lineChart;
     }
 }
