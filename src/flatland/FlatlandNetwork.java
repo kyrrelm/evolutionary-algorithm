@@ -18,12 +18,15 @@ public class FlatlandNetwork extends Phenotype{
     private Network network;
     private Agent agent;
     private final int TIME_STEPS = 60;
+    private float[] weights;
+
     public FlatlandNetwork(GenoType genoType, int fitnessGoal, Agent agent, Network network, Neuron.Function function) {
         super(genoType, fitnessGoal);
         this.function = function;
         this.agent = agent;
         this.fitnessHax = 0;
         this.network = network;
+        this.weights = null;
     }
     private int fitnessHax;
     @Override
@@ -41,6 +44,7 @@ public class FlatlandNetwork extends Phenotype{
             agent.setRecordRun(recordRun);
             for (int i = 0; i < TIME_STEPS; i++) {
                 float[] input = generateInputs();
+                network.setWeights(weights);
                 float[] result = network.run(function, input);
                 Cell.Type consumed = agent.act(calculateMove(result));
                 if (consumed == Cell.Type.FOOD) tmp += 10;
@@ -108,7 +112,7 @@ public class FlatlandNetwork extends Phenotype{
 //            weights[i] = r.nextInt(32);
 //            weights[i] = r.nextFloat();
 //        }
-        network.setWeights(weights);
+        this.weights = weights;
     }
 
 

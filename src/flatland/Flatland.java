@@ -8,9 +8,11 @@ import ea.core.Simulator;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.concurrent.Task;
+import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
@@ -61,10 +63,16 @@ public class Flatland extends Application {
         speedSlider.setBlockIncrement(1000);
         speedSlider.setValue(MAX_PLAYBACK_INTERVAL- playbackInterval +MIN_PLAYBACK_INTERVAL);
 
+        Button newBoard = new Button("New Board(s)");
+        newBoard.setOnAction(event ->{
+            FlatlandNetwork best = (FlatlandNetwork) Simulator.bestPhenotype;
+            playback.addAll(best.runAgent(true));
+        });
+
         HBox hbox = new HBox();
         hbox.setPadding(new Insets(5, 5, 5, 5));
         hbox.setSpacing(5);
-        hbox.getChildren().addAll(labelSpeedSlider,speedSlider);
+        hbox.getChildren().addAll(labelSpeedSlider,speedSlider, newBoard);
         board.add(hbox,0,10,10,1);
 
         Scene scene = new Scene(board);
@@ -97,7 +105,7 @@ public class Flatland extends Application {
                     Simulator.init(Simulator.Problem.FLATLAND);
                     Simulator.run();
                     FlatlandNetwork best = (FlatlandNetwork) Simulator.bestPhenotype;
-                    playback.addAll(best.runAgent(turn));
+                    playback.addAll(best.runAgent(true));
                     System.out.println("here here");
                 }catch (Exception e){
                     System.out.println("Error in work thread:");
@@ -128,13 +136,4 @@ public class Flatland extends Application {
             }
         }
     }
-
-    boolean turn = true;
-
-    private void setButton(int index){
-        Cell.Type type = turn ? Cell.Type.FOOD : Cell.Type.POISON;
-        turn = !turn;
-        cells[index].setType(type);
-    }
-
 }

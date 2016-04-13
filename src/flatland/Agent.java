@@ -78,4 +78,7 @@ public class Agent {
         if (staticRun) return;
         setInitStates();
     }
+    public void freshBoards(){
+        setInitStates();
+    }
 }
