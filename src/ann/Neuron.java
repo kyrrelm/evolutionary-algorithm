@@ -100,6 +100,6 @@ public class Neuron {
     public enum Function{
         STEP,
         HYPERBOLIC,
-        SIGMOID, function;
+        SIGMOID;
     }
 }

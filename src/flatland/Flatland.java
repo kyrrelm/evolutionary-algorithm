@@ -62,8 +62,8 @@ public class Flatland extends Application {
         Label labelSpeedSlider = new Label("Animation speed:");
         Slider speedSlider = new Slider(100, MAX_PLAYBACK_INTERVAL, playbackInterval);
         speedSlider.setOrientation(Orientation.HORIZONTAL);
-        speedSlider.setMaxWidth(250);
-        speedSlider.setPrefWidth(250);
+        speedSlider.setMaxWidth(230);
+        speedSlider.setPrefWidth(230);
         speedSlider.setBlockIncrement(1000);
         speedSlider.setValue(MAX_PLAYBACK_INTERVAL- playbackInterval +MIN_PLAYBACK_INTERVAL);
 
