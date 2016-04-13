@@ -8,23 +8,26 @@ import java.util.Random;
  */
 public class Agent {
 
+    private final boolean staticRun;
+    private final int numberOfRuns;
     private BoardState prevState;
     private BoardState currentState;
-    private final BoardState initState;
+    private final ArrayList<BoardState> initStates;
     private boolean recordRun;
     private ArrayList<BoardState> history;
 
 
-    public Agent(boolean recordRun) {
-        this.initState = new BoardState(4, 4, 0.33f, 0.33f);
-        this.currentState = initState.deepCopy();
+    public Agent(boolean staticRun, boolean fiveRuns, boolean recordRun) {
+        this.staticRun = staticRun;
+        this.initStates = new ArrayList<>();
+        this.numberOfRuns = (fiveRuns?5:1);
+        for (int i = 0; i <numberOfRuns; i++) {
+            initStates.add(new BoardState(4, 4, 0.33f, 0.33f));
+        }
+        this.currentState = null;
         this.recordRun = recordRun;
         this.history = new ArrayList<>();
         this.prevState = null;
-        if (recordRun){
-            this.prevState = currentState.deepCopy();
-            history.add(prevState);
-        }
     }
 
     public Cell.Type act(BoardState.Direction direction){
@@ -37,37 +40,18 @@ public class Agent {
         return type;
     }
 
-
-    public void actRand(){
-        Random r = new Random();
-        switch (r.nextInt(3)){
-            case 0:{
-                currentState.move(BoardState.Direction.LEFT);
-                break;
-            }
-            case 1:{
-                currentState.move(BoardState.Direction.RIGHT);
-                break;
-            }
-            case 2:{
-                currentState.move(BoardState.Direction.STRAGHT);
-                break;
-            }
-        }
-        if (recordRun){
-            prevState = currentState.deepCopy();
-            history.add(prevState);
-
-        }
+    public int getNumberOfRuns() {
+        return numberOfRuns;
     }
 
     public ArrayList<BoardState> getHistory() {
         return history;
     }
 
-    public void reset() {
-        currentState = initState.deepCopy();
+    public void reset(int index) {
+        currentState = initStates.get(index).deepCopy();
         history.clear();
+        history.add(currentState.deepCopy());
     }
 
     public Cell.Type[] sense() {

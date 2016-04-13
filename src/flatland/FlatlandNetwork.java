@@ -18,13 +18,11 @@ public class FlatlandNetwork extends Phenotype{
     private Network network;
     private Agent agent;
     private final int TIME_STEPS = 60;
-    private final int numberOfBite;
     public FlatlandNetwork(GenoType genoType, int fitnessGoal, Agent agent, Neuron.Function function) {
         super(genoType, fitnessGoal);
         this.function = function;
         this.agent = agent;
         this.fitnessHax = 0;
-        this.numberOfBite = 5;
         network = null;
     }
     private int fitnessHax;
@@ -36,16 +34,19 @@ public class FlatlandNetwork extends Phenotype{
 
     public ArrayList<BoardState> runAgent(boolean recordRun){
         fitnessHax = 0;
-        agent.reset();
-        agent.setRecordRun(recordRun);
-        for (int i = 0; i < TIME_STEPS; i++) {
-            float[] input = generateInputs();
-            float[] result = network.run(function, input);
-            Cell.Type consumed = agent.act(calculateMove(result));
-            if (consumed == Cell.Type.FOOD) fitnessHax += 10;
-            else if (consumed == Cell.Type.POISON) fitnessHax -= 10;
-            else if (consumed == Cell.Type.BLANK) fitnessHax += 1;
+        for (int y = 0; y < agent.getNumberOfRuns(); y++) {
+            agent.reset(y);
+            agent.setRecordRun(recordRun);
+            for (int i = 0; i < TIME_STEPS; i++) {
+                float[] input = generateInputs();
+                float[] result = network.run(function, input);
+                Cell.Type consumed = agent.act(calculateMove(result));
+                if (consumed == Cell.Type.FOOD) fitnessHax += 10;
+                else if (consumed == Cell.Type.POISON) fitnessHax -= 10;
+                else if (consumed == Cell.Type.BLANK) fitnessHax += 1;
+            }
         }
+        fitnessHax = fitnessHax/agent.getNumberOfRuns();
         return agent.getHistory();
     }
 
@@ -103,6 +104,7 @@ public class FlatlandNetwork extends Phenotype{
 //        }
         network = new Network(6,3,0.5f,weights,6);
     }
+
 
     @Override
     protected Object getPhenome() {
