@@ -8,6 +8,7 @@ import java.util.Random;
  */
 public class Network {
 
+    private final int[] hiddenNodesInLayer;
     private ArrayList<Neuron> inputNodes;
     private ArrayList<ArrayList<Neuron>> hiddenLayers;
     private ArrayList<Neuron> outputNodes;
@@ -18,6 +19,7 @@ public class Network {
         this.hiddenLayers = new ArrayList<>();
         this.outputNodes = new ArrayList<>();
         this.allNodes = new ArrayList<>();
+        this.hiddenNodesInLayer = hiddenNodesInLayer;
         for (int i = 0; i < numberOfInputNodes; i++) {
             inputNodes.add(new Neuron(standardThreshold));
         }
@@ -45,6 +47,27 @@ public class Network {
             outputNodes.add(outputNode);
         }
         allNodes.addAll(outputNodes);
+    }
+
+    public void setWeights(float[] weights){
+        int weightIndex = 0;
+        ArrayList<Neuron> previousLayer = inputNodes;
+        for (ArrayList<Neuron> layer: hiddenLayers) {
+            for (Neuron n: layer) {
+                n.clearConnections();
+                for (Neuron parent : previousLayer) {
+                    n.connect(new Connection(parent, weights[weightIndex++]));
+                }
+            }
+            previousLayer = layer;
+        }
+        for (Neuron outputNode: outputNodes) {
+            outputNode.clearConnections();
+            for (Neuron parent:previousLayer) {
+                outputNode.connect(new Connection(parent,weights[weightIndex++]));
+            }
+        }
+
     }
 
     public float[] run(Neuron.Function function, float... inputs){

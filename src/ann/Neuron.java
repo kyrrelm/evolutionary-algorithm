@@ -21,9 +21,6 @@ public class Neuron {
     public void connect (Connection ... cs) {
         for (Connection c : cs) inputs.add(c);
     }
-    public void connect (ArrayList<Connection> connections) {
-        inputs.addAll(connections);
-    }
 
     public void setValue(float newWeight) {
         value = newWeight;
@@ -94,6 +91,10 @@ public class Neuron {
     public void reset() {
         fired = false;
         value = 0.0f;
+    }
+
+    public void clearConnections() {
+        inputs.clear();
     }
 
     public enum Function{
