@@ -4,6 +4,7 @@ import ann.Network;
 import ann.Neuron;
 import ea.core.GenoType;
 import ea.core.Phenotype;
+import sun.security.provider.SHA;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -103,11 +104,21 @@ public class FlatlandNetwork extends Phenotype{
 //            bitsUsed = 0;
 //            number = 0;
 //        }
-        Random r = new Random();
-        for (int i = 0; i < weights.length; i++) {
-//            weights[i] = r.nextInt(32);
-            weights[i] = r.nextFloat();
+
+        StringBuilder b = new StringBuilder();
+        for (int i = 0, count = 0; i < genoType.length; i++) {
+            b.append((genoType.getGenome().get(i)) ? 1 : 0);
+            if (b.length() == 15){
+                weights[count++] = (float) Integer.parseInt(b.toString(), 2)/Short.MAX_VALUE;
+                b.setLength(0);
+            }
         }
+
+//        Random r = new Random();
+//        for (int i = 0; i < weights.length; i++) {
+//            weights[i] = r.nextInt(32);
+//            weights[i] = r.nextFloat();
+//        }
         network = new Network(6,3,0.5f,weights,6);
     }
 
@@ -119,6 +130,12 @@ public class FlatlandNetwork extends Phenotype{
     @Override
     public Phenotype mate(Phenotype partner) {
         return new FlatlandNetwork(genoType.crossover(partner.genoType), fitnessGoal, agent, function);
+    }
+
+    public static void main(String[] args) {
+        float s = 10000;
+        float f = s/Short.MAX_VALUE;
+        System.out.println(f);
     }
 
 }

@@ -117,7 +117,7 @@ public class Simulator {
                     break;
                 }
                 case FLATLAND:{
-                    childPopulation.add(new FlatlandNetwork(new GenoType(270), 1000, a, Neuron.Function.HYPERBOLIC));
+                    childPopulation.add(new FlatlandNetwork(new GenoType(810), 1000, a, Neuron.Function.HYPERBOLIC));
                     break;
                 }
             }
