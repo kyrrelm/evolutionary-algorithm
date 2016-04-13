@@ -80,14 +80,7 @@ public class Flatland extends Application {
                 if (!playback.isEmpty()){
                     if (now - sinceLast > playbackInterval *1000000){
                         sinceLast = now;
-                        System.out.println("weeeee");
-                        //setButton((int) (Math.random()*100));
-                        BoardState boardState = playback.poll();
-                        updateBoard(boardState);
-                        for (Cell.Type t: boardState.sense()){
-                            System.out.print(t+", ");
-                        }
-                        System.out.println();
+                        updateBoard(playback.poll());
                     }
                 }
             }

@@ -52,13 +52,13 @@ public class FlatlandNetwork extends Phenotype{
     private BoardState.Direction calculateMove(float[] result) {
         BoardState.Direction dir = BoardState.Direction.STAY;
         float best = 0;
-        if (result[1] > best){
-            dir = BoardState.Direction.STRAGHT;
-            best = result[1];
-        }
         if (result[0] > best){
             dir = BoardState.Direction.LEFT;
             best = result[0];
+        }
+        if (result[1] > best){
+            dir = BoardState.Direction.STRAGHT;
+            best = result[1];
         }
         if (result[2] > best){
             dir = BoardState.Direction.RIGHT;
