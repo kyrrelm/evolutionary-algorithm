@@ -23,7 +23,7 @@ public class FlatlandNetwork extends Phenotype{
         this.function = function;
         this.agent = agent;
         this.fitnessHax = 0;
-        network = null;
+        network = new Network(6,3,0.5f,6);
     }
     private int fitnessHax;
     @Override
@@ -108,7 +108,7 @@ public class FlatlandNetwork extends Phenotype{
 //            weights[i] = r.nextInt(32);
 //            weights[i] = r.nextFloat();
 //        }
-        network = new Network(6,3,0.5f,weights,6);
+        network.setWeights(weights);
     }
 
 

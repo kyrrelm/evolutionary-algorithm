@@ -14,7 +14,7 @@ public class Network {
     private ArrayList<Neuron> outputNodes;
     private ArrayList<Neuron> allNodes;
 
-    public Network(int numberOfInputNodes, int numberOfOutputNodes, float standardThreshold, float[] weights, int... hiddenNodesInLayer) {
+    public Network(int numberOfInputNodes, int numberOfOutputNodes, float standardThreshold, int... hiddenNodesInLayer) {
         this.inputNodes = new ArrayList<>();
         this.hiddenLayers = new ArrayList<>();
         this.outputNodes = new ArrayList<>();
@@ -24,26 +24,17 @@ public class Network {
             inputNodes.add(new Neuron(standardThreshold));
         }
         allNodes.addAll(inputNodes);
-        int weightIndex = 0;
-        ArrayList<Neuron> previousLayer = inputNodes;
         for (int hiddenNodes: hiddenNodesInLayer) {
             ArrayList<Neuron> layer = new ArrayList<>();
             for (int i = 0; i < hiddenNodes; i++) {
                 Neuron n = new Neuron(0.5f);
-                for (Neuron parent : previousLayer) {
-                    n.connect(new Connection(parent, weights[weightIndex++]));
-                }
                 layer.add(n);
             }
             hiddenLayers.add(layer);
             allNodes.addAll(layer);
-            previousLayer = layer;
         }
         for (int i = 0; i <numberOfOutputNodes; i++) {
             Neuron outputNode = new Neuron(0.5f);
-            for (Neuron parent:previousLayer) {
-                outputNode.connect(new Connection(parent,weights[weightIndex++]));
-            }
             outputNodes.add(outputNode);
         }
         allNodes.addAll(outputNodes);
@@ -93,7 +84,8 @@ public class Network {
         for (int i = 0; i < weights.length; i++) {
             weights[i] = r.nextFloat();
         }
-        Network net = new Network(2,2,0.5f,weights,2,3);
+        Network net = new Network(2,2,0.5f,2,3);
+        net.setWeights(weights);
         float[] result = net.run(Neuron.Function.SIGMOID, 1f,0.5f);
         System.out.print("Result: ");
         for (float f:result) {
