@@ -18,12 +18,12 @@ public class FlatlandNetwork extends Phenotype{
     private Network network;
     private Agent agent;
     private final int TIME_STEPS = 60;
-    public FlatlandNetwork(GenoType genoType, int fitnessGoal, Agent agent, Neuron.Function function) {
+    public FlatlandNetwork(GenoType genoType, int fitnessGoal, Agent agent, Network network, Neuron.Function function) {
         super(genoType, fitnessGoal);
         this.function = function;
         this.agent = agent;
         this.fitnessHax = 0;
-        network = new Network(6,3,0.5f,6);
+        this.network = network;
     }
     private int fitnessHax;
     @Override
@@ -119,7 +119,7 @@ public class FlatlandNetwork extends Phenotype{
 
     @Override
     public Phenotype mate(Phenotype partner) {
-        return new FlatlandNetwork(genoType.crossover(partner.genoType), fitnessGoal, agent, function);
+        return new FlatlandNetwork(genoType.crossover(partner.genoType), fitnessGoal, agent, network, function);
     }
 
     public static void main(String[] args) {

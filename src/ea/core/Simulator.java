@@ -1,5 +1,6 @@
 package ea.core;
 
+import ann.Network;
 import ann.Neuron;
 import ea.oneMax.LolzPrefix;
 import ea.oneMax.OneMaxPheno;
@@ -86,8 +87,10 @@ public class Simulator {
 
     }
     static Agent a;
+    static Network network;
     public static void init(){
-         a = new Agent(true, false, false);
+        a = new Agent(true, true, false);
+        network = new Network(6,3,0.5f,6);
         bestPhenotype = null;
         generationalBest = new ArrayList<>();
         avgFitnessList = new ArrayList<>();
@@ -117,7 +120,7 @@ public class Simulator {
                     break;
                 }
                 case FLATLAND:{
-                    childPopulation.add(new FlatlandNetwork(new GenoType(810), 1000, a, Neuron.Function.HYPERBOLIC));
+                    childPopulation.add(new FlatlandNetwork(new GenoType(810), 1000, a, network, Neuron.Function.HYPERBOLIC));
                     break;
                 }
             }
