@@ -85,8 +85,9 @@ public class Simulator {
         FLATLAND;
 
     }
-
+    static Agent a;
     public static void init(){
+         a = new Agent(false);
         bestPhenotype = null;
         generationalBest = new ArrayList<>();
         avgFitnessList = new ArrayList<>();
@@ -101,7 +102,6 @@ public class Simulator {
             productionSize = populationSize*2;
         }
         childPopulation = new ArrayList<>();
-        Agent a = new Agent(new BoardState(4, 4, 0.33f, 0.33f), false);
         for (int i = 0; i < productionSize; i++) {
             switch (problem){
                 case ONE_MAX:{

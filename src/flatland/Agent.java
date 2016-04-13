@@ -15,9 +15,9 @@ public class Agent {
     private ArrayList<BoardState> history;
 
 
-    public Agent(BoardState state, boolean recordRun) {
-        this.initState = state.deepCopy();
-        this.currentState = state.deepCopy();
+    public Agent(boolean recordRun) {
+        this.initState = new BoardState(4, 4, 0.33f, 0.33f);
+        this.currentState = initState.deepCopy();
         this.recordRun = recordRun;
         this.history = new ArrayList<>();
         this.prevState = null;
