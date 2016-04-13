@@ -66,6 +66,7 @@ public class Flatland extends Application {
         Button newBoard = new Button("New Board(s)");
         newBoard.setOnAction(event ->{
             FlatlandNetwork best = (FlatlandNetwork) Simulator.bestPhenotype;
+            best.freshBoards();
             playback.addAll(best.runAgent(true));
         });
 

@@ -132,4 +132,7 @@ public class FlatlandNetwork extends Phenotype{
         System.out.println(f);
     }
 
+    public void freshBoards() {
+        agent.freshBoards();
+    }
 }
