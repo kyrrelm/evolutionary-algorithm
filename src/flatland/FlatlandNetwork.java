@@ -88,23 +88,6 @@ public class FlatlandNetwork extends Phenotype{
 
         float[] weights = new float[54];
 
-//        int bitsUsed = 0;
-//        int number = 0;
-//        int i = 0;
-//        while (i < genoType.length) {
-//            //noinspection Duplicates
-//            while (bitsUsed<numberOfBite){
-//                if (genoType.getGenome().get(i)){
-//                    number+= Math.pow(2,numberOfBite-1-bitsUsed);
-//                }
-//                bitsUsed++;
-//                i++;
-//            }
-//            weights[(i/numberOfBite)-1] = number;
-//            bitsUsed = 0;
-//            number = 0;
-//        }
-
         StringBuilder b = new StringBuilder();
         for (int i = 0, count = 0; i < genoType.length; i++) {
             b.append((genoType.getGenome().get(i)) ? 1 : 0);
@@ -113,7 +96,6 @@ public class FlatlandNetwork extends Phenotype{
                 b.setLength(0);
             }
         }
-
 //        Random r = new Random();
 //        for (int i = 0; i < weights.length; i++) {
 //            weights[i] = r.nextInt(32);
