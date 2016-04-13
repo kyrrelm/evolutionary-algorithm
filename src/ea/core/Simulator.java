@@ -36,7 +36,7 @@ public class Simulator {
     public static int iterations = 0;
 
     public static int populationSize = 500;
-    public static int loopLimit = 100;
+    public static int loopLimit = 50;
 
     //0.2 Best for OneMax: 0.8f pop:300
     public static float crossoverRate = 0.8f;
@@ -87,8 +87,10 @@ public class Simulator {
     }
     static Agent agent;
     static Network network;
+    public static boolean staticRun = true;
+    public static boolean fiveRuns = false;
     public static void init(){
-        agent = new Agent(false, true, false);
+        agent = new Agent(staticRun, fiveRuns, false);
         network = new Network(6,3,0.5f,6);
         bestPhenotype = null;
         generationalBest = new ArrayList<>();

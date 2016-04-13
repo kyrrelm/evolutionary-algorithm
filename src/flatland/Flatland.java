@@ -21,6 +21,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -99,26 +100,19 @@ public class Flatland extends Application {
             @Override
             protected ArrayList<BoardState> call() throws Exception {
                 try {
-//                    FlatlandNetwork fl = new FlatlandNetwork(new GenoType(270), 200, new Agent(new BoardState(4, 4, 0.33f, 0.33f), false), Neuron.Function.HYPERBOLIC);
-//                    fl.develop(fl.genoType);
-//                    //fl.fitness();
-//                    playback.addAll(fl.runAgent(true));
+                    Scanner sc = new Scanner(System.in);
+                    System.out.println("Static run: (Y/N)");
+                    Simulator.staticRun = (sc.next().toLowerCase().equals("y"));
+                    System.out.println("Five runs: (Y/N)");
+                    Simulator.fiveRuns = (sc.next().toLowerCase().equals("y"));
                     Simulator.init(Simulator.Problem.FLATLAND);
                     Simulator.run();
                     FlatlandNetwork best = (FlatlandNetwork) Simulator.bestPhenotype;
                     playback.addAll(best.runAgent(true));
-                    System.out.println("here here");
                 }catch (Exception e){
                     System.out.println("Error in work thread:");
                     e.printStackTrace();
                 }
-
-//                BoardState bs = new BoardState(2,1, 0.33f, 0.33f);
-//                Agent a = new Agent(bs, true);
-//                for (int i = 0; i < 20; i++) {
-//                    a.actRand();
-//                }
-//                playback.addAll(a.getHistory());
                 return null;
             }
         };
