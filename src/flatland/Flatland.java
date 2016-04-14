@@ -2,13 +2,10 @@ package flatland;/**
  * Created by Kyrre on 06.04.2016.
  */
 
-import ann.Neuron;
-import ea.core.GenoType;
 import ea.core.Simulator;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.concurrent.Task;
-import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
@@ -25,7 +22,6 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class Flatland extends Application {
@@ -116,7 +112,7 @@ public class Flatland extends Application {
                     Simulator.fiveRuns = (sc.next().toLowerCase().equals("y"));
                     Simulator.init(Simulator.Problem.FLATLAND);
                     Simulator.run();
-                    FlatlandNetwork best = (FlatlandNetwork) Simulator.bestPhenotype;
+                    FlatlandNetwork best = (FlatlandNetwork) Simulator.lastGenerationalBest;
                     playback.addAll(best.runAgent(true));
                 }catch (Exception e){
                     System.out.println("Error in work thread:");
@@ -154,7 +150,7 @@ public class Flatland extends Application {
         XYChart.Series bestFitness = new XYChart.Series();
         bestFitness.setName("Best fitness");
         int generations = 0;
-        for(Double p: Simulator.generationalBest){
+        for(Double p: Simulator.generationalBestFitness){
             bestFitness.getData().add(new XYChart.Data(generations++, p));
         }
         XYChart.Series avgFitness = new XYChart.Series();

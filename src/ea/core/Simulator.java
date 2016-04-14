@@ -23,21 +23,23 @@ public class Simulator {
     private static List<Phenotype> adultPopulation;
 
 
-    public static List<Double> generationalBest;
+    public static List<Double> generationalBestFitness;
     public static List<Double> globalBest;
     public static List<Double> avgFitnessList;
     public static List<Double> standardDeviationList;
 
+    public static Phenotype lastGenerationalBest;
     public static Phenotype bestPhenotype;
+    public static double bestScore = 0;
     public static double averageFitness = -1;
     public static double standardDeviation = -1;
     public static int totalFitness = -1;
     public static int productionSize;
+
     public static int iterations = 0;
-
     public static int populationSize = 500;
-    public static int loopLimit = 50;
 
+    public static int loopLimit = 50;
     //0.2 Best for OneMax: 0.8f pop:300
     public static float crossoverRate = 0.8f;
     //Best for OneMax: 0.001f
@@ -45,25 +47,25 @@ public class Simulator {
     public static float perComponentMutationRate = 0.001f;
     //Best for OneMax: 0.1f
     //Best for LOLZ:0.2f
-    public static float elitism = 0.1f;
-    public static AdultSelection adultSelection = OVER_PRODUCED_GENERATIONAL_MIXING;
+    public static float elitism = 0.02f;
+    public static AdultSelection adultSelection = FULL_GENERATIONAL_REPLACEMENT;
     public static ParentSelection parentSelection = SIGMA;
-    public static Problem problem = SURPRISE;
 
+    public static Problem problem = SURPRISE;
     public static int oneMaxSize = 40;
     public static int lolzSize = 40;
     public static int lolzZ = 21;
     public static int surpriseLength = 600;
     public static int surpriseS = 20;
+
     public static boolean global = false;
 
     //RANK
     public static double RANK_MAX = 1.5;
-
     public static double RANK_MIN = 2-RANK_MAX;
+
     //TOURNAMENT
     public static int K = 5;
-
     public static float e = 0.3f;
 
     public enum  AdultSelection {
@@ -93,16 +95,17 @@ public class Simulator {
         agent = new Agent(staticRun, fiveRuns, false);
         network = new Network(6,3,0.5f,6);
         bestPhenotype = null;
-        generationalBest = new ArrayList<>();
+        generationalBestFitness = new ArrayList<>();
         avgFitnessList = new ArrayList<>();
         standardDeviationList = new ArrayList<>();
         globalBest = new ArrayList<>();
+        lastGenerationalBest = null;
         averageFitness = -1;
         standardDeviation = -1;
         totalFitness = -1;
         iterations = 0;
         productionSize = populationSize;
-        if (adultSelection == OVER_PRODUCTION || adultSelection == FULL_GENERATIONAL_REPLACEMENT){
+        if (adultSelection == OVER_PRODUCTION){
             productionSize = populationSize*2;
         }
         childPopulation = new ArrayList<>();
@@ -171,9 +174,27 @@ public class Simulator {
                 goalReached = true;
             }
         }
-        generationalBest.add((double) genBest.getFitness());
+        if (adultPopulation != null){
+            Collections.sort(adultPopulation);
+            List<Phenotype> bestParent = adultPopulation.subList(0, (int) (adultPopulation.size()*elitism));
+            for (Phenotype p: bestParent) {
+                int score = p.mature();
+                if (genBest == null || score>genBest.getFitness()){
+                    genBest = p;
+                }
+            }
+            int size = childPopulation.size();
+            childPopulation.addAll(bestParent);
+            Collections.sort(childPopulation);
+            childPopulation = childPopulation.subList(0, size);
+        }
+        lastGenerationalBest = genBest;
+        if (genBest.getFitness()>bestScore){
+            bestScore = genBest.getFitness();
+        }
+        generationalBestFitness.add((double) genBest.getFitness());
         if (bestPhenotype != null){
-            globalBest.add((double) bestPhenotype.getFitness());
+            globalBest.add(bestScore);
         }
         return goalReached;
     }
@@ -249,20 +270,20 @@ public class Simulator {
                 rank--;
             }
         }
-
-
-        for (int i = 0; i < productionSize /2; i++) {
-            Phenotype firstPick = rouletteWheel(totalFitness, averageFitness, standardDeviation, rankList, rankTotal);
-            Phenotype secondPick = null;
-            boolean duplicate = true;
-            while (duplicate){
-                secondPick = rouletteWheel(totalFitness, averageFitness, standardDeviation, rankList, rankTotal);
-                duplicate = secondPick == firstPick;
+        try {
+            for (int i = 0; i < productionSize /2; i++) {
+                Phenotype firstPick = rouletteWheel(totalFitness, averageFitness, standardDeviation, rankList, rankTotal);
+                Phenotype secondPick = null;
+                boolean duplicate = true;
+                while (duplicate){
+                    secondPick = rouletteWheel(totalFitness, averageFitness, standardDeviation, rankList, rankTotal);
+                    duplicate = secondPick == firstPick;
+                }
+                mate(firstPick, secondPick);
             }
-            mate(firstPick, secondPick);
+        }catch (Exception e){
+            e.printStackTrace();
         }
-
-
     }
 
     private static Phenotype rouletteWheel(int totalFitness, double averageFitness, double standardDeviation, ArrayList<RankWrapper> rankList, double rankTotal) {

@@ -5,8 +5,6 @@ import ea.core.Simulator.ParentSelection;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.chart.LineChart;
@@ -54,7 +52,7 @@ public class Main extends Application {
         XYChart.Series bestFitness = new XYChart.Series();
         bestFitness.setName("Best fitness");
         int generations = 0;
-        for(Double p: Simulator.generationalBest){
+        for(Double p: Simulator.generationalBestFitness){
             bestFitness.getData().add(new XYChart.Data(generations++, p));
         }
         XYChart.Series avgFitness = new XYChart.Series();
