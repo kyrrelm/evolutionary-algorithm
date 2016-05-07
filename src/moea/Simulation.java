@@ -17,6 +17,6 @@ public class Simulation {
 
     public static void main(String[] args) {
         new Simulation().run();
-        new TspGenom(5);
+        new Tour(new TspGenom(5)).develop();
     }
 }

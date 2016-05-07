@@ -25,4 +25,11 @@ public class TspGenom {
         }
     }
 
+    public int getCity(int index){
+        return order[index];
+    }
+
+    public int getLength() {
+        return order.length;
+    }
 }
