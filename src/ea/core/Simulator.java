@@ -167,7 +167,7 @@ public class Simulator {
             }
             if (bestPhenotype == null || score>bestPhenotype.getFitness()){
                 bestPhenotype = i;
-                System.out.println("Best Phenotype{ fitness: "+bestPhenotype.getFitness()+" phenome: "+bestPhenotype.getPhenome()+" }");
+                System.out.println("Best Tour{ fitness: "+bestPhenotype.getFitness()+" phenome: "+bestPhenotype.getPhenome()+" }");
             }
 
             if (i.isFit()){
