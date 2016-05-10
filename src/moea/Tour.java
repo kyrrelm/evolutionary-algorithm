@@ -5,8 +5,9 @@ import java.util.HashSet;
 /**
  * Created by Kyrre on 07.05.2016.
  */
-public class Tour {
+public class Tour implements Comparable<Tour> {
 
+    private int rank;
     private int totalDistance;
     private int totalCost;
     private TspGenom tspGenom;
@@ -19,6 +20,7 @@ public class Tour {
         this.tspGenom = tspGenom;
         this.dominatingSet = new HashSet<>();
         this.dominationCount = 0;
+        this.rank = Integer.MAX_VALUE;
     }
 
     public Tour develop(){
@@ -55,5 +57,14 @@ public class Tour {
 
     public int decrementDominationCount() {
         return --dominationCount;
+    }
+
+    @Override
+    public int compareTo(Tour o) {
+        return this.rank - o.rank;
+    }
+
+    public void setRank(int rank) {
+        this.rank = rank;
     }
 }

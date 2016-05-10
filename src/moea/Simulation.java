@@ -1,7 +1,7 @@
 package moea;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -29,6 +29,8 @@ public class Simulation {
     private void mainLoop() {
         adultPopulation.addAll(childPopulation);
         fastNonDominatedSort();
+        Collections.sort(adultPopulation);
+        adultPopulation.subList(populationSize, adultPopulation.size()).clear();
     }
 
     private void fastNonDominatedSort() {
@@ -51,21 +53,21 @@ public class Simulation {
                 currentFront.add(tour);
             }
         }
+        int rankCount = 1;
         ArrayList<Tour> nextFront = new ArrayList<>();
-        ArrayList<ArrayList<Tour>> fronts = new ArrayList<>();
         while (!currentFront.isEmpty()){
             for (Tour tour: currentFront) {
+                tour.setRank(rankCount);
                 for (Tour dominated: tour.getDominatingSet()){
                     if (dominated.decrementDominationCount() == 0){
                         nextFront.add(dominated);
                     }
                 }
             }
-            fronts.add(currentFront);
             currentFront = nextFront;
             nextFront = new ArrayList<>();
+            rankCount++;
         }
-        System.out.println();
     }
 
     private void init() {
