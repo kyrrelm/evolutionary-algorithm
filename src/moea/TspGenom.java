@@ -52,12 +52,12 @@ public class TspGenom {
             int[] inv = invert(order);
             int[] mateInv = invert(mate.order);
 
-//            int crossoverPoint = rnd.nextInt(inv.length-1)+1;
-//            for (int i = crossoverPoint; i < mateInv.length; i++) {
-//                int tmp = inv[i];
-//                inv[i] = mateInv[i];
-//                mateInv[i] = tmp;
-//            }
+            int crossoverPoint = rnd.nextInt(inv.length-2)+1;
+            for (int i = crossoverPoint; i < mateInv.length; i++) {
+                int tmp = inv[i];
+                inv[i] = mateInv[i];
+                mateInv[i] = tmp;
+            }
             int[] perm = unInvert(inv);
             int[] matePerm = unInvert(mateInv);
             System.out.println();
