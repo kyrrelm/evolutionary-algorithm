@@ -1,5 +1,7 @@
 package moea;
 
+import java.util.HashSet;
+
 /**
  * Created by Kyrre on 07.05.2016.
  */
@@ -8,32 +10,50 @@ public class Tour {
     private int totalDistance;
     private int totalCost;
     private TspGenom tspGenom;
+    HashSet<Tour> dominatingSet;
+    private int dominationCount;
 
     public Tour(TspGenom tspGenom) {
         this.totalDistance = 0;
         this.totalCost = 0;
         this.tspGenom = tspGenom;
+        this.dominatingSet = new HashSet<>();
+        this.dominationCount = 0;
     }
 
-    public void develop(){
-        int current = tspGenom.getCity(0);
-        for (int next = 1; next < tspGenom.getLength(); next++, current++) {
+    public Tour develop(){
+        for (int next = 1, current = 0; next < tspGenom.getLength(); next++, current++) {
             totalCost += Cities.coasts[current][tspGenom.getCity(next)];
             totalDistance += Cities.distances[current][tspGenom.getCity(next)];
-            current = next;
         }
-        totalCost += Cities.coasts[current][tspGenom.getCity(0)];
-        totalDistance += Cities.distances[current][tspGenom.getCity(0)];
-
+        totalCost += Cities.coasts[tspGenom.getLength()-1][tspGenom.getCity(0)];
+        totalDistance += Cities.distances[tspGenom.getLength()-1][tspGenom.getCity(0)];
+        return this;
     }
 
     public boolean isDomenating(Tour other){
-        if (this.totalCost > other.totalCost || this.totalDistance > totalDistance){
+        if (this.totalCost > other.totalCost || this.totalDistance > other.totalDistance){
             return false;
         }
-        if (this.totalCost < other.totalCost || this.totalDistance < totalDistance){
+        if (this.totalCost < other.totalCost || this.totalDistance < other.totalDistance){
             return true;
         }
         return false;
+    }
+
+    public HashSet<Tour> getDominatingSet() {
+        return dominatingSet;
+    }
+
+    public int incrementDominationCount() {
+        return ++this.dominationCount;
+    }
+
+    public int getDominationCount() {
+        return dominationCount;
+    }
+
+    public int decrementDominationCount() {
+        return --dominationCount;
     }
 }
