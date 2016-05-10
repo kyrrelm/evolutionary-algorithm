@@ -33,7 +33,7 @@ public class Tour implements Comparable<Tour> {
         return this;
     }
 
-    public boolean isDomenating(Tour other){
+    public boolean isDominating(Tour other){
         if (this.totalCost > other.totalCost || this.totalDistance > other.totalDistance){
             return false;
         }
@@ -66,5 +66,9 @@ public class Tour implements Comparable<Tour> {
 
     public void setRank(int rank) {
         this.rank = rank;
+    }
+
+    public Tour mate(Tour secondPick) {
+        return new Tour(tspGenom.crossover(secondPick.tspGenom));
     }
 }

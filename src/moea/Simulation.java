@@ -1,8 +1,6 @@
 package moea;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Kyrre on 07.05.2016.
@@ -10,15 +8,21 @@ import java.util.List;
 public class Simulation {
 
     private int TOUR_SIZE = 5;
+    private int K = 5;
+    private float crossoverRate;
+    private float mutationRate;
 
+    private float e = 0.3f;
     private List<Tour> childPopulation;
     private List<Tour> adultPopulation;
     private int populationSize;
 
-    public Simulation(int populationSize) {
+    public Simulation(int populationSize, float crossoverRate, float mutationRate) {
         this.childPopulation = new ArrayList<>();
         this.adultPopulation = new ArrayList<>();
         this.populationSize = populationSize;
+        this.crossoverRate = crossoverRate;
+        this.mutationRate = mutationRate;
     }
 
     public void run(){
@@ -28,9 +32,46 @@ public class Simulation {
 
     private void mainLoop() {
         adultPopulation.addAll(childPopulation);
+        childPopulation.clear();
         fastNonDominatedSort();
         Collections.sort(adultPopulation);
         adultPopulation.subList(populationSize, adultPopulation.size()).clear();
+        tournamentSelection();
+    }
+
+    private void tournamentSelection() {
+        for (int i = 0; i < populationSize /2; i++) {
+            Tour firstPick = pickChampion();
+            Tour secondPick = null;
+            boolean duplicate = true;
+            while (duplicate){
+                secondPick = pickChampion();
+                duplicate = secondPick == firstPick;
+            }
+            mate(firstPick, secondPick);
+        }
+    }
+
+    private Tour pickChampion() {
+        HashSet<Tour> fighters = new HashSet<>();
+        Random rnd = new Random();
+        while (fighters.size()<K){
+            int r = rnd.nextInt(adultPopulation.size());
+            fighters.add(adultPopulation.get(r));
+        }
+        Tour[] fightArray = fighters.toArray(new Tour[fighters.size()]);
+        Arrays.sort(fightArray);
+        if (1f-e>rnd.nextFloat()){
+            return fightArray[0];
+        }
+        return fightArray[rnd.nextInt(fightArray.length-1)+1];
+    }
+
+    private void mate(Tour firstPick, Tour secondPick) {
+        childPopulation.add(firstPick.mate(secondPick));
+        if (childPopulation.size()< populationSize){
+            childPopulation.add(secondPick.mate(firstPick));
+        }
     }
 
     private void fastNonDominatedSort() {
@@ -38,10 +79,10 @@ public class Simulation {
             for (int j = i+1; j < adultPopulation.size(); j++) {
                 Tour outer = adultPopulation.get(i);
                 Tour inner = adultPopulation.get(j);
-                if (outer.isDomenating(inner)){
+                if (outer.isDominating(inner)){
                     outer.getDominatingSet().add(inner);
                     inner.incrementDominationCount();
-                } else if (inner.isDomenating(outer)){
+                } else if (inner.isDominating(outer)){
                     inner.getDominatingSet().add(outer);
                     outer.incrementDominationCount();
                 }
@@ -72,12 +113,11 @@ public class Simulation {
 
     private void init() {
         for (int i = 0; i < populationSize; i++) {
-            adultPopulation.add(new Tour(new TspGenom(TOUR_SIZE)).develop());
+            adultPopulation.add(new Tour(new TspGenom(TOUR_SIZE, crossoverRate, mutationRate)).develop());
         }
     }
 
     public static void main(String[] args) {
-        new Simulation(20).run();
-        new Tour(new TspGenom(5)).develop();
+        new Simulation(20, 0.5f, 0.001f).run();
     }
 }
