@@ -61,8 +61,8 @@ public class Tour implements Comparable<Tour> {
 
     @Override
     public int compareTo(Tour o) {
-        return this.totalDistance -o.totalDistance;
-        //return this.rank - o.rank;
+        //return this.totalDistance -o.totalDistance;
+        return this.rank - o.rank;
     }
 
     public void setRank(int rank) {
@@ -81,5 +81,13 @@ public class Tour implements Comparable<Tour> {
             value += " "+(tspGenom.getCity(i)+1)+",";
         }
         return value;
+    }
+
+    public int getTotalCost() {
+        return totalCost;
+    }
+
+    public int getTotalDist() {
+        return totalDistance;
     }
 }

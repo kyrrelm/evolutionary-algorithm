@@ -99,13 +99,27 @@ public class Simulation {
         int rankCount = 1;
         ArrayList<Tour> nextFront = new ArrayList<>();
         while (!currentFront.isEmpty()){
+            int maxCost = -1;
+            int minCost = Integer.MAX_VALUE;
+
+            int maxDist = -1;
+            int minDist = Integer.MAX_VALUE;
+
             for (Tour tour: currentFront) {
                 tour.setRank(rankCount);
+                maxCost = Math.max(maxCost,tour.getTotalCost());
+                minCost = Math.min(minCost, tour.getTotalCost());
+                maxDist = Math.max(maxDist, tour.getTotalDist());
+                minDist = Math.min(minDist, tour.getTotalDist());
+
                 for (Tour dominated: tour.getDominatingSet()){
                     if (dominated.decrementDominationCount() == 0){
                         nextFront.add(dominated);
                     }
                 }
+            }
+            currentFront.sort((o1, o2) -> o2.getTotalCost()-o1.getTotalCost());
+            for (int i = 0; i < currentFront.size(); i++) {
             }
             currentFront = nextFront;
             nextFront = new ArrayList<>();
