@@ -10,11 +10,11 @@ public class Simulation {
 
     private  int iterations;
     private int TOUR_SIZE = 48;
-    private int K = 3;
+    private int K = 5;
     private float crossoverRate;
     private float mutationRate;
 
-    private float e = 0.6f;
+    private float e = 0.4f;
     private List<Tour> childPopulation;
     private List<Tour> adultPopulation;
     private int populationSize;
@@ -170,6 +170,6 @@ public class Simulation {
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-        new Simulation(1000, 2000, 0.7f, 0.02f).run();
+        new Simulation(1000, 2000, 0.6f, 0.01f).run();
     }
 }
