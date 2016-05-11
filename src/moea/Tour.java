@@ -13,6 +13,7 @@ public class Tour implements Comparable<Tour> {
     private TspGenom tspGenom;
     private HashSet<Tour> dominatingSet;
     private int dominationCount;
+    private double crowdDistance;
 
     public Tour(TspGenom tspGenom) {
         this.totalDistance = 0;
@@ -21,6 +22,7 @@ public class Tour implements Comparable<Tour> {
         this.dominatingSet = new HashSet<>();
         this.dominationCount = 0;
         this.rank = Integer.MAX_VALUE;
+        this.crowdDistance = -1;
     }
 
     public Tour develop(){
@@ -62,6 +64,12 @@ public class Tour implements Comparable<Tour> {
     @Override
     public int compareTo(Tour o) {
         //return this.totalDistance -o.totalDistance;
+        if (this.rank == o.rank){
+            if (this.crowdDistance > o.crowdDistance)
+                return -1;
+            if (this.crowdDistance < o.crowdDistance)
+                return 1;
+        }
         return this.rank - o.rank;
     }
 
@@ -89,5 +97,9 @@ public class Tour implements Comparable<Tour> {
 
     public int getTotalDist() {
         return totalDistance;
+    }
+
+    public void setCrowdDistance(double crowdDistance) {
+        this.crowdDistance = crowdDistance;
     }
 }
