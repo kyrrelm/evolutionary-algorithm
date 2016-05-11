@@ -8,7 +8,7 @@ import java.util.*;
 public class Simulation {
 
     private  int iterations;
-    private int TOUR_SIZE = 5;
+    private int TOUR_SIZE = 7;
     private int K = 5;
     private float crossoverRate;
     private float mutationRate;

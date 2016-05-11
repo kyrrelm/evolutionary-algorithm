@@ -11,12 +11,12 @@ public class Tour implements Comparable<Tour> {
     private int totalDistance;
     private int totalCost;
     private TspGenom tspGenom;
-    HashSet<Tour> dominatingSet;
+    private HashSet<Tour> dominatingSet;
     private int dominationCount;
 
     public Tour(TspGenom tspGenom) {
-        this.totalDistance = -1;
-        this.totalCost = -1;
+        this.totalDistance = 0;
+        this.totalCost = 0;
         this.tspGenom = tspGenom;
         this.dominatingSet = new HashSet<>();
         this.dominationCount = 0;
@@ -28,8 +28,8 @@ public class Tour implements Comparable<Tour> {
             totalCost += Cities.coasts[tspGenom.getCity(current)][tspGenom.getCity(next)];
             totalDistance += Cities.distances[tspGenom.getCity(current)][tspGenom.getCity(next)];
         }
-        totalCost += Cities.coasts[tspGenom.getLength()-1][tspGenom.getCity(0)];
-        totalDistance += Cities.distances[tspGenom.getLength()-1][tspGenom.getCity(0)];
+        totalCost += Cities.coasts[tspGenom.getCity(tspGenom.getLength()-1)][tspGenom.getCity(0)];
+        totalDistance += Cities.distances[tspGenom.getCity(tspGenom.getLength()-1)][tspGenom.getCity(0)];
         return this;
     }
 
@@ -61,7 +61,8 @@ public class Tour implements Comparable<Tour> {
 
     @Override
     public int compareTo(Tour o) {
-        return this.rank - o.rank;
+        return this.totalDistance -o.totalDistance;
+        //return this.rank - o.rank;
     }
 
     public void setRank(int rank) {
@@ -75,6 +76,10 @@ public class Tour implements Comparable<Tour> {
 
     @Override
     public String toString() {
-        return "Distance: "+totalDistance+"     Cost: "+totalCost;
+        String value = "Distance: "+totalDistance+"  Cost: "+totalCost+"  Cities:";
+        for (int i = 0; i < tspGenom.getLength(); i++) {
+            value += " "+(tspGenom.getCity(i)+1)+",";
+        }
+        return value;
     }
 }
