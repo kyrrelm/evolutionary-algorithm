@@ -29,10 +29,10 @@ public class Tour implements Comparable<Tour> {
 
     public Tour develop(){
         for (int next = 1, current = 0; next < tspGenom.getLength(); next++, current++) {
-            totalCost += Cities.coasts[tspGenom.getCity(current)][tspGenom.getCity(next)];
+            totalCost += Cities.costs[tspGenom.getCity(current)][tspGenom.getCity(next)];
             totalDistance += Cities.distances[tspGenom.getCity(current)][tspGenom.getCity(next)];
         }
-        totalCost += Cities.coasts[tspGenom.getCity(tspGenom.getLength()-1)][tspGenom.getCity(0)];
+        totalCost += Cities.costs[tspGenom.getCity(tspGenom.getLength()-1)][tspGenom.getCity(0)];
         totalDistance += Cities.distances[tspGenom.getCity(tspGenom.getLength()-1)][tspGenom.getCity(0)];
         return this;
     }

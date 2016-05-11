@@ -158,7 +158,7 @@ public class Simulation {
 
     public static void main(String[] args) {
         try {
-            Cities.populateFromFile("files/Cost.xlsx","");
+            Cities.populateFromFile("files/Cost.xlsx","files/Distance.xlsx");
         } catch (IOException e1) {
             e1.printStackTrace();
         }
