@@ -15,8 +15,8 @@ public class Tour implements Comparable<Tour> {
     private int dominationCount;
 
     public Tour(TspGenom tspGenom) {
-        this.totalDistance = 0;
-        this.totalCost = 0;
+        this.totalDistance = -1;
+        this.totalCost = -1;
         this.tspGenom = tspGenom;
         this.dominatingSet = new HashSet<>();
         this.dominationCount = 0;
@@ -25,8 +25,8 @@ public class Tour implements Comparable<Tour> {
 
     public Tour develop(){
         for (int next = 1, current = 0; next < tspGenom.getLength(); next++, current++) {
-            totalCost += Cities.coasts[current][tspGenom.getCity(next)];
-            totalDistance += Cities.distances[current][tspGenom.getCity(next)];
+            totalCost += Cities.coasts[tspGenom.getCity(current)][tspGenom.getCity(next)];
+            totalDistance += Cities.distances[tspGenom.getCity(current)][tspGenom.getCity(next)];
         }
         totalCost += Cities.coasts[tspGenom.getLength()-1][tspGenom.getCity(0)];
         totalDistance += Cities.distances[tspGenom.getLength()-1][tspGenom.getCity(0)];
@@ -71,5 +71,10 @@ public class Tour implements Comparable<Tour> {
     public Tour[] mate(Tour secondPick) {
         TspGenom[] childGenoms = tspGenom.crossover(secondPick.tspGenom);
         return new Tour[]{new Tour(childGenoms[0]), new Tour(childGenoms[1])};
+    }
+
+    @Override
+    public String toString() {
+        return "Distance: "+totalDistance+"     Cost: "+totalCost;
     }
 }

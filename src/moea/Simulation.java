@@ -34,10 +34,11 @@ public class Simulation {
 
     private void mainLoop() {
         for (int i = 0; i < iterations; i++) {
+            develop();
             adultPopulation.addAll(childPopulation);
             childPopulation.clear();
             fastNonDominatedSort();
-            Collections.sort(adultPopulation);
+            System.out.println("Best individual: "+ adultPopulation.get(0));
             adultPopulation.subList(populationSize, adultPopulation.size()).clear();
             tournamentSelection();
         }
@@ -110,6 +111,11 @@ public class Simulation {
             nextFront = new ArrayList<>();
             rankCount++;
         }
+        Collections.sort(adultPopulation);
+    }
+
+    private void develop() {
+        childPopulation.forEach(Tour::develop);
     }
 
     private void init() {
