@@ -33,14 +33,25 @@ public class Simulation {
     }
 
     private void mainLoop() {
-        for (int i = 0; i < iterations; i++) {
+        int count = 0;
+        while (true) {
+            adultPopulation.forEach(Tour::reset);
             develop();
             adultPopulation.addAll(childPopulation);
             childPopulation.clear();
             fastNonDominatedSort();
             System.out.println("Best individual: "+ adultPopulation.get(0));
             adultPopulation.subList(populationSize, adultPopulation.size()).clear();
+            if (count > iterations)
+                break;
             tournamentSelection();
+            count++;
+        }
+        System.out.println("------------------------------- DONE -------------------------------");
+        adultPopulation.sort((o1, o2) -> o2.getTotalCost()-o1.getTotalCost());
+        for (Tour tour:adultPopulation) {
+            if (tour.getRank() == 1)
+                System.out.println(tour);
         }
     }
 
@@ -73,7 +84,7 @@ public class Simulation {
     }
 
     private void mate(Tour firstPick, Tour secondPick) {
-        childPopulation.addAll(Arrays.asList(firstPick.mate(secondPick)));
+        childPopulation.addAll(firstPick.mate(secondPick));
     }
 
     private void fastNonDominatedSort() {
@@ -145,6 +156,6 @@ public class Simulation {
     }
 
     public static void main(String[] args) {
-        new Simulation(100, 20, 0.7f, 0.001f).run();
+        new Simulation(100, 200, 0.7f, 0.001f).run();
     }
 }

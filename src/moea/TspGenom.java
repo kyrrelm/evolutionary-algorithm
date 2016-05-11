@@ -1,5 +1,7 @@
 package moea;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
 
 /**
@@ -7,6 +9,7 @@ import java.util.Random;
  */
 public class TspGenom {
 
+    private static HashSet<String> duplicateCheck = new HashSet<>();
     private final float crossoverRate;
     private final float mutationRate;
     private int[] order;
@@ -46,7 +49,7 @@ public class TspGenom {
         return order.length;
     }
 
-    public TspGenom[] crossover(TspGenom mate) {
+    public ArrayList<TspGenom> crossover(TspGenom mate) {
         if (rnd.nextFloat()<crossoverRate){
 
             int[] inv = invert(order);
@@ -61,10 +64,16 @@ public class TspGenom {
             int[] perm = unInvert(inv);
             int[] matePerm = unInvert(mateInv);
             //MUTATE
-            return new TspGenom[]{new TspGenom(perm, crossoverRate, mutationRate), new TspGenom(matePerm, crossoverRate, mutationRate)};
+            ArrayList<TspGenom> output = new ArrayList<>();
+            if (duplicateCheck.add(getStringId(perm))){
+                output.add(new TspGenom(perm, crossoverRate, mutationRate));
+            }
+            if (duplicateCheck.add(getStringId(matePerm))){
+                output.add(new TspGenom(matePerm, crossoverRate, mutationRate));
+            }
+            return output;
         }
-        //mutate(copy);
-        return new TspGenom[]{this, mate};
+        return null;
     }
 
     private int[] invert(int[] perm){
@@ -79,6 +88,22 @@ public class TspGenom {
             }
         }
         return inv;
+    }
+
+    String stringId = null;
+    public String getStringId(int[] input){
+        if (stringId == null){
+            StringBuilder st = new StringBuilder();
+            for (int i = 0; i < input.length; i++) {
+                st.append(input[i]);
+                st.append(",");
+            }
+            stringId = st.toString();
+        }
+        return stringId;
+    }
+    public String getStringId(){
+        return getStringId(order);
     }
 
     private int[] unInvert(int[] inv){

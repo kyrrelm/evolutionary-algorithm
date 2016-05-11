@@ -1,6 +1,8 @@
 package moea;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * Created by Kyrre on 07.05.2016.
@@ -77,14 +79,21 @@ public class Tour implements Comparable<Tour> {
         this.rank = rank;
     }
 
-    public Tour[] mate(Tour secondPick) {
-        TspGenom[] childGenoms = tspGenom.crossover(secondPick.tspGenom);
-        return new Tour[]{new Tour(childGenoms[0]), new Tour(childGenoms[1])};
+    public List<Tour> mate(Tour secondPick) {
+        ArrayList<TspGenom> childGenoms = tspGenom.crossover(secondPick.tspGenom);
+        if (childGenoms == null){
+            return new ArrayList<>();
+        }
+        ArrayList<Tour> value = new ArrayList<>();
+        for (TspGenom genom: childGenoms) {
+            value.add(new Tour(genom));
+        }
+        return value;
     }
 
     @Override
     public String toString() {
-        String value = "Distance: "+totalDistance+"  Cost: "+totalCost+" Rank: "+rank+" CrowdDist: "+crowdDistance+"  Cities:";
+        String value = super.toString()+" Distance: "+totalDistance+"  Cost: "+totalCost+" Rank: "+rank+" CrowdDist: "+crowdDistance+"  Cities:";
         for (int i = 0; i < tspGenom.getLength(); i++) {
             value += " "+(tspGenom.getCity(i)+1)+",";
         }
@@ -101,5 +110,16 @@ public class Tour implements Comparable<Tour> {
 
     public void setCrowdDistance(double crowdDistance) {
         this.crowdDistance = crowdDistance;
+    }
+
+    public int getRank() {
+        return rank;
+    }
+
+    public void reset() {
+        this.dominatingSet.clear();
+        this.dominationCount = 0;
+        this.rank = Integer.MAX_VALUE;
+        this.crowdDistance = -1;
     }
 }
