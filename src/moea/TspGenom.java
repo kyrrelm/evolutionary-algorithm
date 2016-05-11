@@ -46,7 +46,7 @@ public class TspGenom {
         return order.length;
     }
 
-    public TspGenom crossover(TspGenom mate) {
+    public TspGenom[] crossover(TspGenom mate) {
         if (rnd.nextFloat()<crossoverRate){
 
             int[] inv = invert(order);
@@ -60,12 +60,11 @@ public class TspGenom {
             }
             int[] perm = unInvert(inv);
             int[] matePerm = unInvert(mateInv);
-            System.out.println();
+            //MUTATE
+            return new TspGenom[]{new TspGenom(perm, crossoverRate, mutationRate), new TspGenom(matePerm, crossoverRate, mutationRate)};
         }
-
-
         //mutate(copy);
-        return null;//return new TspGenom(copy, crossoverRate, mutationRate);
+        return new TspGenom[]{this, mate};
     }
 
     private int[] invert(int[] perm){

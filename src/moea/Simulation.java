@@ -7,6 +7,7 @@ import java.util.*;
  */
 public class Simulation {
 
+    private  int iterations;
     private int TOUR_SIZE = 5;
     private int K = 5;
     private float crossoverRate;
@@ -17,7 +18,8 @@ public class Simulation {
     private List<Tour> adultPopulation;
     private int populationSize;
 
-    public Simulation(int populationSize, float crossoverRate, float mutationRate) {
+    public Simulation(int iterations, int populationSize, float crossoverRate, float mutationRate) {
+        this.iterations = iterations;
         this.childPopulation = new ArrayList<>();
         this.adultPopulation = new ArrayList<>();
         this.populationSize = populationSize;
@@ -31,12 +33,14 @@ public class Simulation {
     }
 
     private void mainLoop() {
-        adultPopulation.addAll(childPopulation);
-        childPopulation.clear();
-        fastNonDominatedSort();
-        Collections.sort(adultPopulation);
-        adultPopulation.subList(populationSize, adultPopulation.size()).clear();
-        tournamentSelection();
+        for (int i = 0; i < iterations; i++) {
+            adultPopulation.addAll(childPopulation);
+            childPopulation.clear();
+            fastNonDominatedSort();
+            Collections.sort(adultPopulation);
+            adultPopulation.subList(populationSize, adultPopulation.size()).clear();
+            tournamentSelection();
+        }
     }
 
     private void tournamentSelection() {
@@ -49,7 +53,7 @@ public class Simulation {
                 duplicate = secondPick == firstPick;
             }
             mate(firstPick, secondPick);
-        }
+    }
     }
 
     private Tour pickChampion() {
@@ -68,10 +72,7 @@ public class Simulation {
     }
 
     private void mate(Tour firstPick, Tour secondPick) {
-        childPopulation.add(firstPick.mate(secondPick));
-        if (childPopulation.size()< populationSize){
-            childPopulation.add(secondPick.mate(firstPick));
-        }
+        childPopulation.addAll(Arrays.asList(firstPick.mate(secondPick)));
     }
 
     private void fastNonDominatedSort() {
@@ -118,6 +119,6 @@ public class Simulation {
     }
 
     public static void main(String[] args) {
-        new Simulation(20, 0.5f, 0.001f).run();
+        new Simulation(100, 20, 0.7f, 0.001f).run();
     }
 }

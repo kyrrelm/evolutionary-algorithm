@@ -68,7 +68,8 @@ public class Tour implements Comparable<Tour> {
         this.rank = rank;
     }
 
-    public Tour mate(Tour secondPick) {
-        return new Tour(tspGenom.crossover(secondPick.tspGenom));
+    public Tour[] mate(Tour secondPick) {
+        TspGenom[] childGenoms = tspGenom.crossover(secondPick.tspGenom);
+        return new Tour[]{new Tour(childGenoms[0]), new Tour(childGenoms[1])};
     }
 }
