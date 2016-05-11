@@ -21,12 +21,6 @@ public class Cities {
     public static int[][] distances = {{0,4727,1205,6363,3657,3130,2414},{4727,0,3588,2012,1842,6977,6501},{1205,3588,0,5163,2458,3678,3071},{6363,2012,5163,0,2799,8064,7727},{3657,1842,2458,2799,0,5330,4946},{3130,6977,3678,8064,5330,0,743},{2414,6501,3071,7727,4946,743,0}};
 
     public static void populateFromFile(String costs, String distances) throws IOException {
-        ClassLoader classloader =
-                org.apache.poi.poifs.filesystem.POIFSFileSystem.class.getClassLoader();
-        URL res = classloader.getResource(
-                "org/apache/poi/poifs/filesystem/POIFSFileSystem.class");
-        String path = res.getPath();
-        System.out.println("Core POI came from " + path);
 
         File inputCosts = new File(costs);
 
@@ -37,27 +31,27 @@ public class Cities {
         XSSFSheet mySheet = myWorkBook.getSheetAt(0);
 
         Iterator<Row> rowIterator = mySheet.iterator();
-
+        int[][] coasts = new int[48][48];
+        int rowCount = 0;
+        int cellCount = 0;
+        rowIterator.next();
         while (rowIterator.hasNext()) {
             Row row = rowIterator.next();
-
             Iterator<Cell> cellIterator = row.cellIterator();
+            cellIterator.next();
             while (cellIterator.hasNext()) {
                 Cell cell = cellIterator.next();
-                switch (cell.getCellType()){
-                    case Cell.CELL_TYPE_STRING:
-                        System.out.print(cell.getStringCellValue() + "\t");
-                        break;
-                    case Cell.CELL_TYPE_NUMERIC:
-                        System.out.print(cell.getNumericCellValue() + "\t");
-                        break;
-                    case Cell.CELL_TYPE_BOOLEAN:
-                        System.out.print(cell.getBooleanCellValue() + "\t");
-                        break;
-                    default:
+                if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC){
+                    System.out.print(cell.getNumericCellValue() + "\t");
+                    coasts[rowCount][cellCount] = (int) cell.getNumericCellValue();
+                    coasts[cellCount][rowCount] = (int) cell.getNumericCellValue();
+                    cellCount++;
                 }
             }
-
+            rowCount++;
+            cellCount = 0;
+            System.out.println();
         }
+        System.out.println();
     }
 }

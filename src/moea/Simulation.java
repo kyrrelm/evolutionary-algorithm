@@ -162,6 +162,6 @@ public class Simulation {
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-        new Simulation(100, 200, 0.7f, 0.001f).run();
+        //new Simulation(100, 200, 0.7f, 0.001f).run();
     }
 }
