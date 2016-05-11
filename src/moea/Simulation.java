@@ -1,5 +1,6 @@
 package moea;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -156,6 +157,11 @@ public class Simulation {
     }
 
     public static void main(String[] args) {
+        try {
+            Cities.populateFromFile("files/Cost.xlsx","");
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
         new Simulation(100, 200, 0.7f, 0.001f).run();
     }
 }
