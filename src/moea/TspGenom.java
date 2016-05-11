@@ -93,20 +93,13 @@ public class TspGenom {
         return inv;
     }
 
-    String stringId = null;
-    public String getStringId(int[] input){
-        if (stringId == null){
-            StringBuilder st = new StringBuilder();
-            for (int i = 0; i < input.length; i++) {
-                st.append(input[i]);
-                st.append(",");
-            }
-            stringId = st.toString();
+    public static String getStringId(int[] input){
+        StringBuilder st = new StringBuilder();
+        for (int i = 0; i < input.length; i++) {
+            st.append(input[i]);
+            st.append(",");
         }
-        return stringId;
-    }
-    public String getStringId(){
-        return getStringId(order);
+        return st.toString();
     }
 
     private int[] unInvert(int[] inv){

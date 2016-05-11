@@ -10,11 +10,11 @@ public class Simulation {
 
     private  int iterations;
     private int TOUR_SIZE = 48;
-    private int K = 5;
+    private int K = 3;
     private float crossoverRate;
     private float mutationRate;
 
-    private float e = 0.3f;
+    private float e = 0.6f;
     private List<Tour> childPopulation;
     private List<Tour> adultPopulation;
     private int populationSize;
@@ -41,7 +41,14 @@ public class Simulation {
             adultPopulation.addAll(childPopulation);
             childPopulation.clear();
             fastNonDominatedSort();
-            System.out.println("Best individual: "+ adultPopulation.get(0));
+            System.out.println("Best individual1: "+ adultPopulation.get(0));
+            System.out.println("Best individual2: "+ adultPopulation.get(1));
+            System.out.println("Best individual3: "+ adultPopulation.get(2));
+            System.out.println("Best individual4: "+ adultPopulation.get(3));
+            System.out.println("Best individual5: "+ adultPopulation.get(4));
+            System.out.println("Best individual6: "+ adultPopulation.get(5));
+            System.out.println("Best individual7: "+ adultPopulation.get(6));
+            System.out.println("----------------------------------------------------------------------------------------------");
             adultPopulation.subList(populationSize, adultPopulation.size()).clear();
             if (count > iterations)
                 break;
@@ -163,6 +170,6 @@ public class Simulation {
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-        new Simulation(1000, 200, 0.7f, 0.1f).run();
+        new Simulation(1000, 2000, 0.7f, 0.02f).run();
     }
 }
