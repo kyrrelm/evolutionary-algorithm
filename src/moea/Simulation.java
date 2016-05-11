@@ -120,12 +120,12 @@ public class Simulation {
             }
             currentFront.sort((o1, o2) -> o2.getTotalCost()-o1.getTotalCost());
             currentFront.get(0).setCrowdDistance(Integer.MAX_VALUE);
+            currentFront.get(currentFront.size()-1).setCrowdDistance(Integer.MAX_VALUE);
             for (int i = 1; i < currentFront.size()-1; i++) {
-                double sum = ((double)currentFront.get(i+1).getTotalCost() - (double)currentFront.get(i-1).getTotalCost())/(maxCost-minCost);
-                sum += ((double)currentFront.get(i+1).getTotalDist() - (double)currentFront.get(i-1).getTotalDist())/(maxDist-minDist);
+                double sum = Math.abs((double)currentFront.get(i+1).getTotalCost() - (double)currentFront.get(i-1).getTotalCost())/(maxCost-minCost);
+                sum += Math.abs((double)currentFront.get(i+1).getTotalDist() - (double)currentFront.get(i-1).getTotalDist())/(maxDist-minDist);
                 currentFront.get(i).setCrowdDistance(sum);
             }
-            currentFront.get(currentFront.size()-1).setCrowdDistance(Integer.MAX_VALUE);
 
             currentFront = nextFront;
             nextFront = new ArrayList<>();
