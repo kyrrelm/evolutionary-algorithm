@@ -9,7 +9,7 @@ import java.util.*;
 public class Simulation {
 
     private  int iterations;
-    private int TOUR_SIZE = 7;
+    private int TOUR_SIZE = 48;
     private int K = 5;
     private float crossoverRate;
     private float mutationRate;
@@ -108,6 +108,7 @@ public class Simulation {
                 currentFront.add(tour);
             }
         }
+        System.out.println("Size of Pareto Front: "+currentFront.size());
         int rankCount = 1;
         ArrayList<Tour> nextFront = new ArrayList<>();
         while (!currentFront.isEmpty()){
@@ -162,6 +163,6 @@ public class Simulation {
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-        //new Simulation(100, 200, 0.7f, 0.001f).run();
+        new Simulation(1000, 200, 0.7f, 0.1f).run();
     }
 }

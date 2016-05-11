@@ -64,6 +64,9 @@ public class TspGenom {
             int[] perm = unInvert(inv);
             int[] matePerm = unInvert(mateInv);
             //MUTATE
+            mutate(perm);
+            mutate(matePerm);
+
             ArrayList<TspGenom> output = new ArrayList<>();
             if (duplicateCheck.add(getStringId(perm))){
                 output.add(new TspGenom(perm, crossoverRate, mutationRate));
