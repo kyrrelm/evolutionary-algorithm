@@ -60,12 +60,15 @@ public class Simulation {
             count++;
         }
         System.out.println("------------------------------- DONE -------------------------------");
-        adultPopulation.sort((o1, o2) -> o2.getTotalCost()-o1.getTotalCost());
-        Collections.sort(adultPopulation);
-        for (Tour tour:adultPopulation) {
-            if (tour.getRank() == 1)
-                System.out.println(tour);
+        ArrayList<Tour> paretoFront = new ArrayList<>();
+        for (Tour t:adultPopulation) {
+            if (t.getRank() == 1){
+                paretoFront.add(t);
+            }
         }
+        paretoFront.sort((o1, o2) -> o2.getTotalCost()-o1.getTotalCost());
+        System.out.println("First:"+ paretoFront.get(0));
+        System.out.println("Last:"+ paretoFront.get(paretoFront.size()-1));
     }
 
     private void tournamentSelection() {
@@ -208,7 +211,6 @@ public class Simulation {
          final LineChart<Number, Number> lineChart =
                  new LineChart<Number, Number>(xAxis, yAxis);
          lineChart.setTitle("");
-
          ArrayList< XYChart.Series> fronts = new ArrayList<>();
          int rank = 1;
          XYChart.Series front = new XYChart.Series();

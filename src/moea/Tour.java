@@ -93,10 +93,7 @@ public class Tour implements Comparable<Tour> {
 
     @Override
     public String toString() {
-        String value = "Distance: "+totalDistance+"  Cost: "+totalCost+" Rank: "+rank+" CrowdDist: "+crowdDistance+"  Cities:";
-        for (int i = 0; i < tspGenom.getLength(); i++) {
-            value += " "+(tspGenom.getCity(i)+1)+",";
-        }
+        String value = "Distance: "+totalDistance+"  Cost: "+totalCost+" Rank: "+rank+" CrowdDist: "+crowdDistance;
         return value;
     }
 
