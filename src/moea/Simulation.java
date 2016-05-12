@@ -60,12 +60,12 @@ public class Simulation {
             count++;
         }
         System.out.println("------------------------------- DONE -------------------------------");
-        //adultPopulation.sort((o1, o2) -> o2.getTotalCost()-o1.getTotalCost());
-//        Collections.sort(adultPopulation);
-//        for (Tour tour:adultPopulation) {
-//            //if (tour.getRank() == 1)
-//                System.out.println(tour);
-//        }
+        adultPopulation.sort((o1, o2) -> o2.getTotalCost()-o1.getTotalCost());
+        Collections.sort(adultPopulation);
+        for (Tour tour:adultPopulation) {
+            if (tour.getRank() == 1)
+                System.out.println(tour);
+        }
     }
 
     private void tournamentSelection() {
@@ -120,11 +120,11 @@ public class Simulation {
                 currentFront.add(tour);
             }
         }
-//        System.out.println("Size of Pareto Front: "+currentFront.size());
-//        currentFront.sort((o1, o2) -> o2.getTotalCost()-o1.getTotalCost());
-//        System.out.println("First:"+ currentFront.get(0));
-//        System.out.println("Last:"+ currentFront.get(currentFront.size()-1));
-//        System.out.println("----------------------------------------------------------------");
+        System.out.println("Size of Pareto Front: "+currentFront.size());
+        currentFront.sort((o1, o2) -> o2.getTotalCost()-o1.getTotalCost());
+        System.out.println("First:"+ currentFront.get(0));
+        System.out.println("Last:"+ currentFront.get(currentFront.size()-1));
+        System.out.println("----------------------------------------------------------------");
         int rankCount = 1;
         ArrayList<Tour> nextFront = new ArrayList<>();
         while (!currentFront.isEmpty()){
@@ -215,7 +215,7 @@ public class Simulation {
          Collections.sort(population);
          fronts.add(front);
          for (Tour tour : population) {
-             System.out.println(tour);
+             //System.out.println(tour);
              if (tour.getRank() == rank){
                  front.getData().add(new XYChart.Data(tour.getTotalDist(), tour.getTotalCost()));
              }else {
