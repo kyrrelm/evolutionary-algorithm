@@ -68,12 +68,12 @@ public class TspGenom {
             mutate(matePerm);
 
             ArrayList<TspGenom> output = new ArrayList<>();
-            if (duplicateCheck.add(getStringId(perm))){
+            //if (duplicateCheck.add(getStringId(perm))){
                 output.add(new TspGenom(perm, crossoverRate, mutationRate));
-            }
-            if (duplicateCheck.add(getStringId(matePerm))){
+            //}
+            //if (duplicateCheck.add(getStringId(matePerm))){
                 output.add(new TspGenom(matePerm, crossoverRate, mutationRate));
-            }
+            //}
             return output;
         }
         return null;
