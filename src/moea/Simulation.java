@@ -1,5 +1,9 @@
 package moea;
 
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+
 import java.io.IOException;
 import java.util.*;
 
@@ -31,6 +35,7 @@ public class Simulation {
     public void run(){
         init();
         mainLoop();
+        createChart();
     }
 
     private void mainLoop() {
@@ -116,6 +121,7 @@ public class Simulation {
             }
         }
         System.out.println("Size of Pareto Front: "+currentFront.size());
+        currentFront.sort((o1, o2) -> o2.getTotalCost()-o1.getTotalCost());
         System.out.println("First:"+ currentFront.get(0));
         System.out.println("Last:"+ currentFront.get(currentFront.size()-1));
         System.out.println("----------------------------------------------------------------");
@@ -142,7 +148,6 @@ public class Simulation {
                 }
             }
             currentFront.sort((o1, o2) -> o2.getTotalCost()-o1.getTotalCost());
-
             currentFront.get(0).setCrowdDistance(Integer.MAX_VALUE);
             currentFront.get(currentFront.size()-1).setCrowdDistance(Integer.MAX_VALUE);
             for (int i = 1; i < currentFront.size()-1; i++) {
@@ -175,5 +180,34 @@ public class Simulation {
             e1.printStackTrace();
         }
         new Simulation(3000, 1000, 0.8f, 0.01f).run();
+    }
+
+     private LineChart<Number,Number> createChart(){
+         final NumberAxis xAxis = new NumberAxis();
+         final NumberAxis yAxis = new NumberAxis();
+         xAxis.setLabel("Distance");
+         yAxis.setLabel("Cost");
+         //creating the chart
+         final LineChart<Number, Number> lineChart =
+                 new LineChart<Number, Number>(xAxis, yAxis);
+         lineChart.setTitle("");
+
+         int generations = 0;
+         ArrayList< XYChart.Series> fronts = new ArrayList<>();
+         int rank = 1;
+         XYChart.Series front = new XYChart.Series();
+         for (Tour tour : adultPopulation) {
+             if (tour.getRank() == rank){
+                 front.getData().add(new XYChart.Data(tour.getTotalDist(), tour.getTotalCost()));
+             }else {
+                 fronts.add(front);
+                 front = new XYChart.Series();
+                 rank++;
+             }
+         }
+
+         lineChart.getData().addAll((XYChart.Series<Number, Number>[]) fronts.toArray());
+
+         return lineChart;
     }
 }
