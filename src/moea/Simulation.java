@@ -173,18 +173,9 @@ public class Simulation {
         }
     }
 
-    public static void main(String[] args) {
-        try {
-            Cities.populateFromFile("files/Cost.xlsx","files/Distance.xlsx");
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        new Simulation(3000, 1000, 0.8f, 0.01f).run();
-    }
-
-     private LineChart<Number,Number> createChart(){
-         final NumberAxis xAxis = new NumberAxis();
-         final NumberAxis yAxis = new NumberAxis();
+     protected LineChart<Number,Number> createChart(){
+         final NumberAxis xAxis = new NumberAxis(75000,200000,1000);
+         final NumberAxis yAxis = new NumberAxis(250, 2000, 10);
          xAxis.setLabel("Distance");
          yAxis.setLabel("Cost");
          //creating the chart
@@ -196,17 +187,21 @@ public class Simulation {
          ArrayList< XYChart.Series> fronts = new ArrayList<>();
          int rank = 1;
          XYChart.Series front = new XYChart.Series();
+         Collections.sort(adultPopulation);
+         fronts.add(front);
          for (Tour tour : adultPopulation) {
              if (tour.getRank() == rank){
                  front.getData().add(new XYChart.Data(tour.getTotalDist(), tour.getTotalCost()));
              }else {
-                 fronts.add(front);
                  front = new XYChart.Series();
+                 fronts.add(front);
                  rank++;
              }
          }
-
-         lineChart.getData().addAll((XYChart.Series<Number, Number>[]) fronts.toArray());
+         for (XYChart.Series f: fronts){
+             lineChart.getData().add(f);
+         }
+         //lineChart.getData().addAll((XYChart.Series<Number, Number>[]) fronts.toArray());
 
          return lineChart;
     }
