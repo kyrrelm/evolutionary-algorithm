@@ -35,7 +35,6 @@ public class Simulation {
     public void run(){
         init();
         mainLoop();
-        createChart();
     }
 
     private void mainLoop() {
@@ -61,11 +60,12 @@ public class Simulation {
             count++;
         }
         System.out.println("------------------------------- DONE -------------------------------");
-        adultPopulation.sort((o1, o2) -> o2.getTotalCost()-o1.getTotalCost());
-        for (Tour tour:adultPopulation) {
-            if (tour.getRank() == 1)
-                System.out.println(tour);
-        }
+        //adultPopulation.sort((o1, o2) -> o2.getTotalCost()-o1.getTotalCost());
+//        Collections.sort(adultPopulation);
+//        for (Tour tour:adultPopulation) {
+//            //if (tour.getRank() == 1)
+//                System.out.println(tour);
+//        }
     }
 
     private void tournamentSelection() {
@@ -120,11 +120,11 @@ public class Simulation {
                 currentFront.add(tour);
             }
         }
-        System.out.println("Size of Pareto Front: "+currentFront.size());
-        currentFront.sort((o1, o2) -> o2.getTotalCost()-o1.getTotalCost());
-        System.out.println("First:"+ currentFront.get(0));
-        System.out.println("Last:"+ currentFront.get(currentFront.size()-1));
-        System.out.println("----------------------------------------------------------------");
+//        System.out.println("Size of Pareto Front: "+currentFront.size());
+//        currentFront.sort((o1, o2) -> o2.getTotalCost()-o1.getTotalCost());
+//        System.out.println("First:"+ currentFront.get(0));
+//        System.out.println("Last:"+ currentFront.get(currentFront.size()-1));
+//        System.out.println("----------------------------------------------------------------");
         int rankCount = 1;
         ArrayList<Tour> nextFront = new ArrayList<>();
         while (!currentFront.isEmpty()){
@@ -174,8 +174,23 @@ public class Simulation {
     }
 
      protected LineChart<Number,Number> createChart(){
-         final NumberAxis xAxis = new NumberAxis(75000,200000,1000);
-         final NumberAxis yAxis = new NumberAxis(250, 2000, 10);
+         int maxDist = -1;
+         int minDist = Integer.MAX_VALUE;
+         int maxCost = -1;
+         int minCost = Integer.MAX_VALUE;
+         for(Tour t: adultPopulation){
+             if (t.getTotalDist()<minDist)
+                 minDist = t.getTotalDist();
+             if (t.getTotalDist()>maxDist)
+                 maxDist = t.getTotalDist();
+
+             if (t.getTotalCost()<minCost)
+                 minCost = t.getTotalCost();
+             if (t.getTotalCost()>maxCost)
+                 maxCost = t.getTotalCost();
+         }
+         final NumberAxis xAxis = new NumberAxis(minDist-1000,maxDist+1000,1000);
+         final NumberAxis yAxis = new NumberAxis(minCost-10, maxCost+10, 10);
          xAxis.setLabel("Distance");
          yAxis.setLabel("Cost");
          //creating the chart
@@ -190,11 +205,13 @@ public class Simulation {
          Collections.sort(adultPopulation);
          fronts.add(front);
          for (Tour tour : adultPopulation) {
+             System.out.println(tour);
              if (tour.getRank() == rank){
                  front.getData().add(new XYChart.Data(tour.getTotalDist(), tour.getTotalCost()));
              }else {
                  front = new XYChart.Series();
                  fronts.add(front);
+                 front.getData().add(new XYChart.Data(tour.getTotalDist(), tour.getTotalCost()));
                  rank++;
              }
          }
