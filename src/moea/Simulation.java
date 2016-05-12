@@ -173,12 +173,23 @@ public class Simulation {
         }
     }
 
-     protected LineChart<Number,Number> createChart(){
+     protected LineChart<Number,Number> createChart(boolean onlyPareto){
+         List<Tour> population;
+         if (onlyPareto){
+             population = new ArrayList<>();
+             for (Tour t:adultPopulation) {
+                 if (t.getRank() == 1){
+                     population.add(t);
+                 }
+             }
+         }else {
+             population = adultPopulation;
+         }
          int maxDist = -1;
          int minDist = Integer.MAX_VALUE;
          int maxCost = -1;
          int minCost = Integer.MAX_VALUE;
-         for(Tour t: adultPopulation){
+         for(Tour t: population){
              if (t.getTotalDist()<minDist)
                  minDist = t.getTotalDist();
              if (t.getTotalDist()>maxDist)
@@ -198,13 +209,12 @@ public class Simulation {
                  new LineChart<Number, Number>(xAxis, yAxis);
          lineChart.setTitle("");
 
-         int generations = 0;
          ArrayList< XYChart.Series> fronts = new ArrayList<>();
          int rank = 1;
          XYChart.Series front = new XYChart.Series();
-         Collections.sort(adultPopulation);
+         Collections.sort(population);
          fronts.add(front);
-         for (Tour tour : adultPopulation) {
+         for (Tour tour : population) {
              System.out.println(tour);
              if (tour.getRank() == rank){
                  front.getData().add(new XYChart.Data(tour.getTotalDist(), tour.getTotalCost()));

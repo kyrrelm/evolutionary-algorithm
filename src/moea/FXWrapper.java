@@ -12,11 +12,14 @@ import java.io.IOException;
 public class FXWrapper extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Simulation sim = new Simulation(30, 100, 0.8f, 0.01f);
+        Simulation sim = new Simulation(100, 200, 0.8f, 0.01f);
         sim.run();
         Stage graphStage = new Stage();
-        graphStage.setScene(new Scene(sim.createChart(),800,800));
+        graphStage.setScene(new Scene(sim.createChart(false),800,800));
         graphStage.show();
+        Stage graphStage2 = new Stage();
+        graphStage2.setScene(new Scene(sim.createChart(true),800,800));
+        graphStage2.show();
     }
 
     public static void main(String[] args) {
